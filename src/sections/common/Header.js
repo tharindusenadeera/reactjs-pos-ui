@@ -5,6 +5,8 @@ import Clock from "react-live-clock";
 import { ModalCustom } from "../../components/modal";
 import { PopoverCustom } from "../../components/popover";
 import { Calculator } from "../../components/calculator/index";
+import { DropdownCustom } from "../../components/dropdown";
+import { Menu } from "antd";
 
 const Wrapper = styled.header`
   padding: 15px 0;
@@ -51,14 +53,22 @@ export const Header = () => {
               <div className="date">Monday 5 July 2021</div>
             </TimeWrap>
             <NavControls>
-              <PopoverCustom btnTitle="Calculator">
+              <PopoverCustom btnTitle={Theme.icons.$calculator}>
                 <Calculator />
               </PopoverCustom>
-              <ModalCustom btnTitle="Orders">
+              <ModalCustom btnTitle={Theme.icons.$folder}>
                 <p>Some contents...</p>
                 <p>Some contents...</p>
                 <p>Some contents...</p>
               </ModalCustom>
+              <DropdownCustom btnTitle={Theme.icons.$user}>
+                <Menu>
+                  <Menu.Item key="0">
+                    <a href="#">1st menu item</a>
+                  </Menu.Item>
+                  <Menu.Item key="1">{Theme.icons.$logout} Logout</Menu.Item>
+                </Menu>
+              </DropdownCustom>
             </NavControls>
           </div>
         </div>

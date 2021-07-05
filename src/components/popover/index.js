@@ -6,7 +6,7 @@ export const PopoverCustom = (props) => {
 
   return (
     <Popover content={content} trigger="click">
-      <Button>{props.btnTitle}</Button>
+      <Button type="primary">{props.btnTitle}</Button>
     </Popover>
   );
 };
