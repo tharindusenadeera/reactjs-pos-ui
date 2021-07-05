@@ -17,7 +17,9 @@ const Wrapper = styled.header`
   z-index: 1;
 `;
 
-const Brand = styled.h1``;
+const Brand = styled.h1`
+  margin: unset;
+`;
 
 const TimeWrap = styled.div`
   display: flex;
@@ -35,15 +37,22 @@ const TimeWrap = styled.div`
   }
 `;
 
-const NavControls = styled.div``;
+const NavControls = styled.div`
+  display: flex;
+  .btn-nav {
+    padding: 6px;
+    height: unset;
+  }
+`;
 
 export const Header = () => {
   return (
     <Wrapper>
       <div className="container-fluid">
         <div className="row">
-          <div className="col d-flex justify-content-between">
-            <Brand>POS System</Brand>
+          <div className="col d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <Brand className="d-none d-md-block">POS System</Brand>
+
             <TimeWrap>
               <Clock
                 format={"hh:mm:ssa"}
@@ -52,16 +61,26 @@ export const Header = () => {
               />
               <div className="date">Monday 5 July 2021</div>
             </TimeWrap>
-            <NavControls>
-              <PopoverCustom btnTitle={Theme.icons.$calculator}>
+
+            <NavControls className="mt-3 mt-md-0">
+              <PopoverCustom
+                btnTitle={Theme.icons.$calculator}
+                btnClass="btn-nav"
+              >
                 <Calculator />
               </PopoverCustom>
-              <ModalCustom btnTitle={Theme.icons.$folder}>
+              <ModalCustom
+                btnTitle={Theme.icons.$folder}
+                btnClass="ml-3 btn-nav"
+              >
                 <p>Some contents...</p>
                 <p>Some contents...</p>
                 <p>Some contents...</p>
               </ModalCustom>
-              <DropdownCustom btnTitle={Theme.icons.$user}>
+              <DropdownCustom
+                btnTitle={Theme.icons.$user}
+                btnClass="ml-3 btn-nav"
+              >
                 <Menu>
                   <Menu.Item key="0">
                     <a href="#">1st menu item</a>

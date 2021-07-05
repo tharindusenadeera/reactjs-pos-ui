@@ -4,6 +4,9 @@ const colors = {
   $border: "#e9ecef",
   $grey: "#adb5bd",
   $background: "#f8f9fa",
+  $danger: "#fc2a2a",
+  $primary: "#ffbd3d",
+  $primaryHover: "#f7ab17",
 };
 
 const icons = {
@@ -59,9 +62,36 @@ const icons = {
   ),
 };
 
+const breakpoints = {
+  xs: 575, //Mobile devices
+  sm: 576, //Small screen start
+  md: 768, //Medium screen start
+  lg: 992, //Large screen start
+  xl: 1200, //Extra Large screen start
+  xxl: 1600, //Double Extra Large screen start
+};
+const device = {
+  xs: `(max-width: ${breakpoints.xs}px)`,
+  sm: `(min-width: ${breakpoints.sm}px)`,
+  md: `(min-width: ${breakpoints.md}px)`,
+  lg: `(min-width: ${breakpoints.lg}px)`,
+  xl: `(min-width: ${breakpoints.xl}px)`,
+  xxl: `(min-width: ${breakpoints.xxl}px)`,
+
+  mdMax: `(max-width: ${breakpoints.lg}px)`,
+};
+
+const space = {
+  InputFieldMargin: "1.875rem" /* 30px */,
+  FieldButtonHeight: "2.5rem" /* 40px */,
+  BorderRadius: "0.313rem" /* 6px */,
+};
+
 const Theme = {
   colors: colors,
   icons: icons,
+  device: device,
+  space: space,
 };
 
 export default Theme;

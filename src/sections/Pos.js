@@ -1,7 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import Theme from "../utils/Theme";
 
-const Section = styled.section``;
+const Section = styled.section`
+  @media ${Theme.device.xs} {
+    margin-top: 109px;
+  }
+  @media ${Theme.device.sm} {
+    margin-top: 68px;
+  }
+`;
 
 export const Pos = () => {
   return (

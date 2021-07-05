@@ -1,14 +1,18 @@
 import React from "react";
-import { Dropdown, Button } from "antd";
+import { Dropdown } from "antd";
+import { ButtonCustom } from "../button";
 
 export const DropdownCustom = (props) => {
   const menu = props.children;
 
   return (
     <Dropdown overlay={menu} trigger={["click"]}>
-      <Button type="primary" onClick={(e) => e.preventDefault()}>
-        {props.btnTitle}
-      </Button>
+      <ButtonCustom
+        type="primary"
+        btnTitle={props.btnTitle}
+        onClick={(e) => e.preventDefault()}
+        className={props.btnClass}
+      />
     </Dropdown>
   );
 };
