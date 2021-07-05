@@ -2,9 +2,9 @@ import React from "react";
 import Theme from "../../utils/Theme";
 import styled from "styled-components";
 import Clock from "react-live-clock";
-import { Button } from "antd";
 import { ModalCustom } from "../../components/modal";
 import { PopoverCustom } from "../../components/popover";
+import { Calculator } from "../../components/calculator/index";
 
 const Wrapper = styled.header`
   padding: 15px 0;
@@ -51,7 +51,9 @@ export const Header = () => {
               <div className="date">Monday 5 July 2021</div>
             </TimeWrap>
             <NavControls>
-              <PopoverCustom />
+              <PopoverCustom btnTitle="Calculator">
+                <Calculator />
+              </PopoverCustom>
               <ModalCustom btnTitle="Orders">
                 <p>Some contents...</p>
                 <p>Some contents...</p>
