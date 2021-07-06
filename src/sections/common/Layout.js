@@ -20,12 +20,22 @@ const Wrapper = styled.div`
   }
 `;
 
+const Section = styled.section`
+  padding-top: 30px;
+  @media ${Theme.device.xs} {
+    margin-top: 109px;
+  }
+  @media ${Theme.device.sm} {
+    margin-top: 68px;
+  }
+`;
+
 export const Layout = (props) => {
   return (
     <Wrapper>
       <GlobalStyle />
       <Header />
-      {props.children}
+      <Section>{props.children}</Section>
       <Footer />
     </Wrapper>
   );
