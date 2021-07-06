@@ -7,6 +7,8 @@ const colors = {
   $danger: "#fc2a2a",
   $primary: "#ffbd3d",
   $primaryHover: "#f7ab17",
+  $primaryShadow: "0 0 0 2px rgb(255 189 61 / 40%)",
+  $primaryLight: "#ffe7b9",
   $secondary: "#b7b7b7fa",
   $secondaryHover: "#797979fa",
   $greye9ecef: "#e9ecef",
@@ -96,6 +98,18 @@ const icons = {
       />
     </svg>
   ),
+  $plus: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      fill="currentColor"
+      class="bi bi-plus"
+      viewBox="0 0 16 16"
+    >
+      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+    </svg>
+  ),
 };
 
 const breakpoints = {
@@ -120,7 +134,7 @@ const device = {
 const space = {
   InputFieldMargin: "1.875rem" /* 30px */,
   FieldButtonHeight: "2.5rem" /* 40px */,
-  BorderRadius: "0.25rem;" /* 6px */,
+  BorderRadius: "0.25rem" /* 6px */,
 };
 
 const Theme = {

@@ -2,18 +2,12 @@ import { createGlobalStyle } from "styled-components";
 import Theme from "../utils/Theme";
 
 const GlobalStyle = createGlobalStyle`
-  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
-
   @media ${Theme.device.xxl}{ 
     .container, .container-lg, .container-md, .container-sm, .container-xl {
         max-width: 1320px;
     }
   }
   /* Boostrap 5 Media query */
-
-  body {
-  font-family: "Poppins", sans-serif;
-  }
 
   h1 {
     font-size: 1.25rem !important;
@@ -132,6 +126,11 @@ const GlobalStyle = createGlobalStyle`
         }
       }
   }
+}
+
+/* Ant Select */
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled){
+  background-color: ${Theme.colors.$primaryLight};
 }
 
 `;

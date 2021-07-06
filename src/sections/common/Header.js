@@ -29,7 +29,7 @@ const TimeWrap = styled.div`
   font-size: 1rem;
   time {
     width: 95px;
-    font-weight: 500;
+    font-weight: 600;
   }
   .date {
     border-left: 1px solid ${Theme.colors.$border};
