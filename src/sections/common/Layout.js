@@ -1,4 +1,5 @@
 import React from "react";
+import GlobalStyle from "../../utils/globalStyles";
 import Theme from "../../utils/Theme";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
@@ -17,16 +18,12 @@ const Wrapper = styled.div`
     padding-left: 30px;
     padding-right: 30px;
   }
-
-  h1 {
-    font-size: 20px !important;
-    font-weight: 700 !important;
-  }
 `;
 
 export const Layout = (props) => {
   return (
     <Wrapper>
+      <GlobalStyle />
       <Header />
       {props.children}
       <Footer />

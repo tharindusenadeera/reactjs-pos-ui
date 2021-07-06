@@ -7,6 +7,7 @@ import { PopoverCustom } from "../../components/popover";
 import { Calculator } from "../../components/calculator/index";
 import { DropdownCustom } from "../../components/dropdown";
 import { Menu } from "antd";
+import { OrderView } from "../orders/OrderView";
 
 const Wrapper = styled.header`
   padding: 15px 0;
@@ -14,6 +15,7 @@ const Wrapper = styled.header`
   width: 100%;
   top: 0;
   background-color: ${Theme.colors.$white};
+  box-shadow: 0 0 10px 0 rgb(0 0 0 / 10%);
   z-index: 1;
 `;
 
@@ -72,10 +74,10 @@ export const Header = () => {
               <ModalCustom
                 btnTitle={Theme.icons.$folder}
                 btnClass="ml-3 btn-nav"
+                count={5}
+                title="Draft Orders"
               >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                <OrderView />
               </ModalCustom>
               <DropdownCustom
                 btnTitle={Theme.icons.$user}
