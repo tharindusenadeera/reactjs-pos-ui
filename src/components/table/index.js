@@ -6,8 +6,10 @@ export const TableCustom = (props) => {
     <Table
       columns={props.columns}
       dataSource={props.dataSource}
-      //pagination={{ pageSize: 20 }}
-      scroll={{ y: 240 }}
+      // pagination={
+      //   props.pagination
+      // } /* Example :- pagination={{ pageSize: 20 }} */
+      scroll={props.scroll} /* Example :- scroll={{ x: 1500, y: 300 }} */
     />
   );
 };

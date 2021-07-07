@@ -46,8 +46,8 @@ const GlobalStyle = createGlobalStyle`
 /* Ant Btn */
 .ant-btn{
   height: unset;
-        padding: 6px 20px;
-        border-radius: ${Theme.space.BorderRadius};
+  padding: 6px 20px;
+  border-radius: ${Theme.space.BorderRadius};
 }
 
 /* Ant Popconfirm */
