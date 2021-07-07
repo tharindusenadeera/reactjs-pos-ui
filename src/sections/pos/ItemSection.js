@@ -11,6 +11,13 @@ import ProductImg5 from "../../assests/images/products/French-Fries.jpg";
 import ProductImg6 from "../../assests/images/products/Cheesy-Gordita-Crunch.jpg";
 import ProductImg7 from "../../assests/images/products/Cherry-Limeade.jpg";
 
+const itemArr = [
+  { key: 1, value: "Meat" },
+  { key: 2, value: "Vegan" },
+  { key: 3, value: "Glutan Free" },
+  { key: 4, value: "Soft Drinks" },
+];
+
 const Head = styled.div`
   padding-bottom: 1.25rem;
 `;
@@ -47,7 +54,11 @@ export const ItemSection = () => {
   return (
     <Fragment>
       <Head>
-        <SelectCustom showSearch={true} placeholder="Choose an item" />
+        <SelectCustom
+          showSearch={true}
+          placeholder="Choose an item"
+          options={itemArr}
+        />
       </Head>
 
       <Body>
@@ -68,7 +79,7 @@ export const ItemSection = () => {
             <a href="#">
               <ProductCard href="#">
                 <ProductImg src={ProductImg3} alt="product image" />
-                <span className="prod-title">Checken Nuggets</span>
+                <span className="prod-title">Chicken Nuggets</span>
               </ProductCard>
             </a>
           </div>

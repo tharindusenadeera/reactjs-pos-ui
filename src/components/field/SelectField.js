@@ -30,18 +30,19 @@ const LabelWrap = styled.div`
 `;
 
 export const SelectField = (props) => {
+  const { label, showSearch, placeholder, options, plusComp } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
   const ModalTitle = useRef("");
-  if (props.plusComp === "customer-create") {
+  if (plusComp === "customer-create") {
     ModalComponent.current = <CustomerCreateForm />;
     ModalTitle.current = "Add a customer";
-  } else if (props.plusComp === "shipping-create") {
+  } else if (plusComp === "shipping-create") {
     ModalComponent.current = <ShippingCreateForm />;
     ModalTitle.current = "Add a shipping address";
   }
 
-  if (!!props.plusComp) {
+  if (!!plusComp) {
     ModalStat.current = (
       <ModalCustom btnTitle={Theme.icons.$plus} title={ModalTitle.current}>
         {ModalComponent.current}
@@ -52,12 +53,13 @@ export const SelectField = (props) => {
   return (
     <Fragment>
       <LabelWrap>
-        <label>{props.label}</label>
+        <label>{label}</label>
         {ModalStat.current}
       </LabelWrap>
       <SelectCustom
-        showSearch={props.showSearch}
-        placeholder={props.placeholder}
+        showSearch={showSearch}
+        placeholder={placeholder}
+        options={options}
       />
     </Fragment>
   );
