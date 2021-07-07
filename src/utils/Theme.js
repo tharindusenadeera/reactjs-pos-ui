@@ -141,6 +141,7 @@ const Theme = {
   colors: colors,
   icons: icons,
   device: device,
+  breakpoints: breakpoints,
   space: space,
 };
 

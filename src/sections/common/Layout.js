@@ -36,7 +36,7 @@ export const Layout = (props) => {
       <GlobalStyle />
       <Header />
       <Section>{props.children}</Section>
-      <Footer />
+      {/* <Footer /> */}
     </Wrapper>
   );
 };

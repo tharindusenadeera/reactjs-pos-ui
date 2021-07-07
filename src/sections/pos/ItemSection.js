@@ -19,10 +19,26 @@ const itemArr = [
 ];
 
 const Head = styled.div`
-  padding-bottom: 1.25rem;
+  padding: 1.25rem;
 `;
 
-const Body = styled.div``;
+const Body = styled.div`
+  height: 72vh;
+  overflow: scroll;
+  overflow-x: hidden;
+  padding: 1.25rem;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${Theme.colors.$greyd3d7dc};
+    //outline: 1px solid ${Theme.colors.$greye9ecef};
+  }
+`;
 
 const ProductCard = styled.a`
   margin-bottom: 25px;
