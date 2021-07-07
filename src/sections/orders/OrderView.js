@@ -4,6 +4,94 @@ import Theme from "../../utils/Theme";
 import { EditButton } from "../../components/button/EditButton";
 import { DeleteButton } from "../../components/button/DeleteButton";
 
+const orderArr = [
+  {
+    title: "Order 1",
+    cutomer: {
+      name: "Sophia Hale",
+      address: "9825 Johnsaon Dr.Columbo,MD21044",
+    },
+    status: "Pending",
+    totalItems: "",
+    amount: "",
+  },
+  {
+    title: "Order 2",
+    cutomer: {
+      name: "Putram Jaya Isla",
+      address:
+        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
+    },
+    status: "Pending",
+    totalItems: "",
+    amount: "",
+  },
+  {
+    title: "Order 3",
+    cutomer: {
+      name: "Sophia Hale",
+      address: "9825 Johnsaon Dr.Columbo,MD21044",
+    },
+    status: "Pending",
+    totalItems: "",
+    amount: "",
+  },
+  {
+    title: "Order 4",
+    cutomer: {
+      name: "Putram Jaya Isla",
+      address:
+        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
+    },
+    status: "On Hold",
+    totalItems: "",
+    amount: "",
+  },
+  {
+    title: "Order 5",
+    cutomer: {
+      name: "Sophia Hale",
+      address: "9825 Johnsaon Dr.Columbo,MD21044",
+    },
+    status: "On Hold",
+    totalItems: "",
+    amount: "",
+  },
+  {
+    title: "Order 6",
+    cutomer: {
+      name: "Putram Jaya Isla",
+      address:
+        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
+    },
+    status: "Delevering",
+    totalItems: "",
+    amount: "",
+  },
+  {
+    title: "Order 7",
+    cutomer: {
+      name: "Sophia Hale",
+      address:
+        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
+    },
+    status: "Delevering",
+    totalItems: "",
+    amount: "",
+  },
+  {
+    title: "Order 8",
+    cutomer: {
+      name: "Putram Jaya Isla",
+      address:
+        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
+    },
+    status: "Pending",
+    totalItems: "",
+    amount: "",
+  },
+];
+
 const Wrapper = styled.div`
   .order-box {
     background-color: ${Theme.colors.$greye9ecef};
@@ -32,7 +120,7 @@ const ActionButtons = styled.div`
 export const OrderView = () => {
   const Card = (
     <div className="col col-sm-6 col-md-4">
-      <div className="order-box">
+      <div className="order-box">s
         <h3>Order 1</h3>
         <div className="d-flex">
           <p>
