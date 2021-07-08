@@ -23,7 +23,7 @@ export const Pos = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="col-12 col-xl-4 order-3 order-xl-1 mt-4 mt-xl-0">
+        <div className="col-12 col-xl-4 order-3 order-xl-1 mt-4 mt-xl-0 mb-4 mb-xl-0">
           <Wrap>
             <ItemSection />
           </Wrap>

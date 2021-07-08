@@ -19,6 +19,11 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 500 !important;
   }
 
+  h4 {
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+  }
+
   label {
     font-size: 0.813rem;
     font-weight: 600;
@@ -43,95 +48,99 @@ const GlobalStyle = createGlobalStyle`
     color: #f7e4e4;
   }
 
-/* Ant Btn */
-.ant-btn{
-  height: unset;
-  padding: 6px 20px;
-  border-radius: ${Theme.space.BorderRadius};
-}
+  .field-row{
+    margin-bottom: 15px;
+  }
 
-/* Ant Popconfirm */
-.ant-popover{
-  .ant-popover-inner{
+  /* Ant Btn */
+  .ant-btn{
+    height: unset;
+    padding: 6px 20px;
     border-radius: ${Theme.space.BorderRadius};
-    box-shadow: 0px 0px 8px rgb(1 1 1 / 15%);
-    .ant-popover-message{
-      .anticon{
-        display: none;
+  }
+
+  /* Ant Popconfirm */
+  .ant-popover{
+    .ant-popover-inner{
+      border-radius: ${Theme.space.BorderRadius};
+      box-shadow: 0px 0px 8px rgb(1 1 1 / 15%);
+      .ant-popover-message{
+        .anticon{
+          display: none;
+        }
+        .ant-popover-message-title{
+          font-size: 0.875rem;
+          color: ${Theme.colors.dark};
+          padding-left: unset;
+        }
       }
-      .ant-popover-message-title{
-        font-size: 0.875rem;
-        color: ${Theme.colors.dark};
-        padding-left: unset;
+      .ant-popover-buttons {
+        display: flex;
+        flex-direction: row-reverse;
+        .ant-btn{
+          &{
+            background: ${Theme.colors.$white};
+            border-color: ${Theme.colors.$secondary};
+            color: ${Theme.colors.$secondary};
+            &:hover {
+              background: ${Theme.colors.$white};
+              border-color: ${Theme.colors.$secondaryHover};
+              color: ${Theme.colors.$secondaryHover};
+            }
+          }
+          &.ant-btn-primary{
+            background: ${Theme.colors.$primary};
+            border-color: ${Theme.colors.$primary};
+            color: ${Theme.colors.$white};
+            &:hover {
+              background: ${Theme.colors.$primaryHover};
+              border-color: ${Theme.colors.$primaryHover};
+              color: ${Theme.colors.$white};
+            }
+          }
+        }
       }
     }
-    .ant-popover-buttons {
-      display: flex;
-      flex-direction: row-reverse;
+  }
+
+  /* Ant Message */
+  .ant-message-custom-content{
+    display: flex;
+    align-items: center;
+  }
+
+  /* Ant Modal */
+  .ant-modal{
+    .ant-modal-footer{
       .ant-btn{
-        &{
-          background: ${Theme.colors.$white};
-          border-color: ${Theme.colors.$secondary};
-          color: ${Theme.colors.$secondary};
-          &:hover {
+          &{
             background: ${Theme.colors.$white};
-            border-color: ${Theme.colors.$secondaryHover};
-            color: ${Theme.colors.$secondaryHover};
+            border-color: ${Theme.colors.$secondary};
+            color: ${Theme.colors.$secondary};
+            &:hover {
+              background: ${Theme.colors.$white};
+              border-color: ${Theme.colors.$secondaryHover};
+              color: ${Theme.colors.$secondaryHover};
+            }
           }
-        }
-        &.ant-btn-primary{
-          background: ${Theme.colors.$primary};
-          border-color: ${Theme.colors.$primary};
-          color: ${Theme.colors.$white};
-          &:hover {
-            background: ${Theme.colors.$primaryHover};
-            border-color: ${Theme.colors.$primaryHover};
+          &.ant-btn-primary{
+            background: ${Theme.colors.$primary};
+            border-color: ${Theme.colors.$primary};
             color: ${Theme.colors.$white};
+            &:hover {
+              background: ${Theme.colors.$primaryHover};
+              border-color: ${Theme.colors.$primaryHover};
+              color: ${Theme.colors.$white};
+            }
           }
         }
-      }
     }
   }
-}
 
-/* Ant Message */
-.ant-message-custom-content{
-  display: flex;
-  align-items: center;
-}
-
-/* Ant Modal */
-.ant-modal{
-  .ant-modal-footer{
-    .ant-btn{
-        &{
-          background: ${Theme.colors.$white};
-          border-color: ${Theme.colors.$secondary};
-          color: ${Theme.colors.$secondary};
-          &:hover {
-            background: ${Theme.colors.$white};
-            border-color: ${Theme.colors.$secondaryHover};
-            color: ${Theme.colors.$secondaryHover};
-          }
-        }
-        &.ant-btn-primary{
-          background: ${Theme.colors.$primary};
-          border-color: ${Theme.colors.$primary};
-          color: ${Theme.colors.$white};
-          &:hover {
-            background: ${Theme.colors.$primaryHover};
-            border-color: ${Theme.colors.$primaryHover};
-            color: ${Theme.colors.$white};
-          }
-        }
-      }
+  /* Ant Select */
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled){
+    background-color: ${Theme.colors.$primaryLight};
   }
-}
-
-/* Ant Select */
-.ant-select-item-option-selected:not(.ant-select-item-option-disabled){
-  background-color: ${Theme.colors.$primaryLight};
-}
 
 `;
 

@@ -1,11 +1,23 @@
 import React, { Fragment, useState, useRef } from "react";
 import { Modal } from "antd";
-import { ButtonCustom } from "../button";
+import { Button } from "antd";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 
-const ButtonWrap = styled.div`
+const ContentWrap = styled.div`
   position: relative;
+`;
+
+const ButtonAnt = styled(Button)`
+  &.ant-btn,
+  .ant-btn-ghost {
+    padding: unset;
+    border-radius: unset;
+    border: unset;
+    border-color: ${Theme.colors.$primaryHover};
+    background: unset;
+    box-shadow: unset;
+  }
 `;
 
 const ModalAnt = styled(Modal)`
@@ -50,7 +62,7 @@ const Count = styled.span`
   border-radius: 25px;
 `;
 
-export const ModalCustom = (props) => {
+export const ContentModal = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -72,15 +84,11 @@ export const ModalCustom = (props) => {
 
   return (
     <Fragment>
-      <ButtonWrap>
-        <ButtonCustom
-          type={props.type}
-          btnTitle={props.btnTitle}
-          onClick={showModal}
-          className={props.btnClass}
-        />
-        {CountComp.current}
-      </ButtonWrap>
+      <ContentWrap>
+        <ButtonAnt type="ghost" onClick={showModal}>
+          {props.btnContent}
+        </ButtonAnt>
+      </ContentWrap>
 
       <ModalAnt
         title={props.title}

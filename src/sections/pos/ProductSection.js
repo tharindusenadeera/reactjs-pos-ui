@@ -1,12 +1,13 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
+import Theme from "../../utils/Theme";
 import { SelectNInputField } from "../../components/field/SelectNInputField";
 import { TableCustom } from "../../components/table";
 import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
-import { InputNumberCustom } from "../../components/input/InputNumberCustom";
-import Theme from "../../utils/Theme";
 import { useWindowDimensions } from "../../utils/useWindowDimension";
+import { ModalCustom } from "../../components/modal";
+import { ItemView } from "../orders/ItemView";
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -32,12 +33,6 @@ const ButtonWarp = styled.div`
   margin-top: 15px;
 `;
 
-const InputWrap = styled.div`
-  .ant-input-number {
-    width: 80px;
-  }
-`;
-
 export const ProductSection = () => {
   const columns = [
     {
@@ -50,7 +45,7 @@ export const ProductSection = () => {
     {
       title: "Qty",
       dataIndex: "qty",
-      width: 90,
+      width: 80,
     },
     {
       title: "Discount",
@@ -67,7 +62,15 @@ export const ProductSection = () => {
       dataIndex: "",
       key: "x",
       width: 70,
-      render: () => <DeleteButton />,
+      render: () => (
+        <ModalCustom
+          btnTitle={Theme.icons.$edit}
+          type="primary"
+          title="Item Name here"
+        >
+          <ItemView />
+        </ModalCustom>
+      ),
     },
   ];
 
@@ -76,11 +79,7 @@ export const ProductSection = () => {
     data.push({
       key: i,
       name: `Checken Nuggets ${i}`,
-      qty: (
-        <InputWrap>
-          <InputNumberCustom min={0} max={1000} defaultValue={0} />
-        </InputWrap>
-      ),
+      qty: i,
       discount: `$ 20`,
       subtotal: `$ 280`,
     });
@@ -89,20 +88,13 @@ export const ProductSection = () => {
   const { width } = useWindowDimensions();
   const TableBodySize = useRef("");
   if (width < Theme.breakpoints.xs) {
-    TableBodySize.current = 120;
+    TableBodySize.current = 190;
   } else if (width > Theme.breakpoints.sm) {
-    TableBodySize.current = 200;
-  } else if (width > Theme.breakpoints.md) {
-    TableBodySize.current = 300;
-  } else if (width > Theme.breakpoints.lg) {
-    TableBodySize.current = 400;
-  } else if (width > Theme.breakpoints.xl) {
-    TableBodySize.current = 500;
+    TableBodySize.current = 195;
   }
 
   return (
     <div>
-      Width: {width} ~ Table Height: {TableBodySize.current}
       <SelectNInputField
         showSearch={false}
         label="Selected Product"
@@ -116,7 +108,7 @@ export const ProductSection = () => {
         />
       </TableWarp>
       <ButtonWarp>
-        <DeleteButton />
+        <DeleteButton btnTitle="Cancel Order" />
         <ButtonCustom type="primary" btnTitle="Draft Order" className="ml-2" />
       </ButtonWarp>
     </div>

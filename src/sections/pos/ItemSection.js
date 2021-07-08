@@ -2,6 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { SelectCustom } from "../../components/select";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
+import { ContentModal } from "../../components/modal/ContentModal";
+import { ItemView } from "../orders/ItemView";
 
 import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
 import ProductImg2 from "../../assests/images/products/Chicken-sandwich.jpg";
@@ -34,10 +36,16 @@ const Head = styled.div`
 `;
 
 const Body = styled.div`
-  height: 72vh;
   overflow: scroll;
   overflow-x: hidden;
   padding: 1.25rem;
+  @media ${Theme.device.sm} {
+    height: 42vh;
+  }
+
+  @media ${Theme.device.xl} {
+    height: 72vh;
+  }
 
   &::-webkit-scrollbar {
     width: 5px;
@@ -49,10 +57,14 @@ const Body = styled.div`
     background-color: ${Theme.colors.$greyd3d7dc};
     //outline: 1px solid ${Theme.colors.$greye9ecef};
   }
+
+  .ant-btn {
+    margin-bottom: 25px;
+    border-radius: 0.3rem;
+  }
 `;
 
-const ProductCard = styled.a`
-  margin-bottom: 25px;
+const ProductCard = styled.div`
   display: block;
   .prod-title {
     font-size: 0.875rem;
@@ -60,6 +72,7 @@ const ProductCard = styled.a`
     display: block;
     color: ${Theme.colors.$black};
     transition: color ease-in-out 0.3s;
+    white-space: break-spaces;
   }
   &:hover,
   :focus {
@@ -88,26 +101,35 @@ export const ItemSection = () => {
   const handleProducts = (data, value) => {
     let itemArr = [];
     if (value == 0) {
-        itemArr = data;
+      itemArr = data;
     } else {
-      itemArr = data.filter(item => { return item.category == value});
+      itemArr = data.filter((item) => {
+        return item.category == value;
+      });
     }
-    setProducts(itemArr)
+    setProducts(itemArr);
   };
 
   const handleItemSelect = (value) => {
     setSelectedItem(value);
-    handleProducts(productsArr, value)
+    handleProducts(productsArr, value);
   };
   return (
     <Fragment>
       <Head>
-        <SelectCustom
-          showSearch={true}
-          placeholder="Choose an item"
-          options={itemArr}
-          onChange={handleItemSelect}
-        />
+        <div className="row">
+          <div className="col-6">
+            <SelectCustom
+              showSearch={true}
+              placeholder="Choose an item"
+              options={itemArr}
+              onChange={handleItemSelect}
+            />
+          </div>
+          <div className="col-6">
+            <SelectCustom showSearch={true} placeholder="Type item to search" />
+          </div>
+        </div>
       </Head>
 
       <Body>
@@ -118,10 +140,17 @@ export const ItemSection = () => {
                 key={key}
                 className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6"
               >
-                <ProductCard>
-                  <ProductImg src={item.image} alt="product image" />
-                  <span className="prod-title">{item.name}</span>
-                </ProductCard>
+                <ContentModal
+                  title={item.name}
+                  btnContent={
+                    <ProductCard>
+                      <ProductImg src={item.image} alt="product image" />
+                      <span className="prod-title">{item.name}</span>
+                    </ProductCard>
+                  }
+                >
+                  <ItemView />
+                </ContentModal>
               </div>
             );
           })}
