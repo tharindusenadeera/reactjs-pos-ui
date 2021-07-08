@@ -5,17 +5,27 @@ import { ButtonCustom } from "../button";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 
+const Wrapper = styled.div`
+  max-width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const ButtonWrap = styled.div`
   .ant-btn {
     border-radius: 50%;
-    padding: 0px 1px;
-    margin-left: 8px;
+    padding: 6px 7px;
   }
 `;
 
 const InputAnt = styled(Input)`
   &.ant-input {
     background-color: ${Theme.colors.$background};
+    width: 65px;
+    margin: 0 10px;
+    text-align: center;
+    border-radius: ${Theme.space.BorderRadius};
     input.ant {
       background-color: ${Theme.colors.$background};
     }
@@ -35,14 +45,14 @@ export const InputNumberCustom = (props) => {
     console.log("changed", value);
   }
   return (
-    <div className="d-flex align-items-center">
+    <Wrapper>
+      <ButtonWrap>
+        <ButtonCustom btnTitle={Theme.icons.$minus} type="primary" />
+      </ButtonWrap>
+      <InputAnt defaultValue={props.defaultValue} formatter="number" />
       <ButtonWrap>
         <ButtonCustom btnTitle={Theme.icons.$plus} type="primary" />
       </ButtonWrap>
-      <InputAnt defaultValue={0} formatter="number" />
-      <ButtonWrap>
-        <ButtonCustom btnTitle={Theme.icons.$plus} type="primary" />
-      </ButtonWrap>
-    </div>
+    </Wrapper>
   );
 };

@@ -63,7 +63,12 @@ export const ProductSection = () => {
       key: "x",
       width: 80,
       render: () => (
-        <ModalCustom btnTitle="Edit" type="secondary" title="Item Name here">
+        <ModalCustom
+          btnTitle="Edit"
+          type="secondary"
+          title="Item Name here"
+          okText="Update item"
+        >
           <ItemView />
         </ModalCustom>
       ),
