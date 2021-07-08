@@ -3,13 +3,14 @@ import { ModalCustom } from "../modal";
 import Theme from "../../utils/Theme";
 
 export const EditButton = (props) => {
+  const { title, children, btnClass } = props;
   return (
     <ModalCustom
       btnTitle={Theme.icons.$edit}
-      btnClass={props.btnClass}
-      title={props.title}
+      btnClass={btnClass}
+      title={title}
     >
-      {props.children}
+      {children}
     </ModalCustom>
   );
 };

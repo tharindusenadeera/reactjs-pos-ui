@@ -4,15 +4,8 @@ import { ButtonCustom } from "../button";
 import Theme from "../../utils/Theme";
 
 export const DeleteButton = (props) => {
-  function confirm(e) {
-    console.log(e);
-    message.success("Record has been deleted");
-  }
+  const { confirm, cancel } = props;
 
-  function cancel(e) {
-    console.log(e);
-    message.error("Delete operation canceld");
-  }
   return (
     <Popconfirm
       title="Are you sure to delete this record?"
