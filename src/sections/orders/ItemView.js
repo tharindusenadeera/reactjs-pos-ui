@@ -25,7 +25,6 @@ const ItemForm = styled.div`
 `;
 
 export const ItemView = ({item}) => {
-  console.log(item);
   return (
     <div>
       <ItemDetail className="d-sm-flex">
