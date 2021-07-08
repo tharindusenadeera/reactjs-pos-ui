@@ -40,12 +40,12 @@ export const ProductSection = () => {
       dataIndex: "name",
       key: "name",
       //fixed: "left",
-      width: 110,
+      width: 120,
     },
     {
       title: "Qty",
       dataIndex: "qty",
-      width: 80,
+      width: 60,
     },
     {
       title: "Discount",
@@ -61,13 +61,9 @@ export const ProductSection = () => {
       title: "",
       dataIndex: "",
       key: "x",
-      width: 70,
+      width: 80,
       render: () => (
-        <ModalCustom
-          btnTitle={Theme.icons.$edit}
-          type="primary"
-          title="Item Name here"
-        >
+        <ModalCustom btnTitle="Edit" type="secondary" title="Item Name here">
           <ItemView />
         </ModalCustom>
       ),

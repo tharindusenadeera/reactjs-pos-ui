@@ -27,7 +27,6 @@ const GlobalStyle = createGlobalStyle`
   label {
     font-size: 0.813rem;
     font-weight: 600;
-    color: #212529;
   }
 
   p {
@@ -49,7 +48,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .field-row{
-    margin-bottom: 15px;
+    margin-bottom: 6px;
   }
 
   /* Ant Btn */

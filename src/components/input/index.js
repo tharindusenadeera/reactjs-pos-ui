@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Input } from "antd";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
@@ -8,6 +8,9 @@ const InputAnt = styled(Input)`
     background-color: ${Theme.colors.$background};
     input.ant-input {
       background-color: ${Theme.colors.$background};
+    }
+    .ant-input-clear-icon {
+      color: ${Theme.colors.$grey};
     }
   }
   &.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
@@ -20,15 +23,25 @@ const InputAnt = styled(Input)`
   }
 `;
 
-export const InputCustom = () => {
+export const InputCustom = (props) => {
   const onChange = (e) => {
     console.log(e);
   };
+
+  const DisableState = useRef("");
+  if (props.disabled === true) {
+    DisableState.current = "disabled";
+  } else {
+    DisableState.current = "";
+  }
+
   return (
     <InputAnt
-      placeholder="input with clear icon"
+      placeholder={props.placeholder}
+      value={props.value}
       allowClear
       onChange={onChange}
+      disabled={DisableState.current}
     />
   );
 };

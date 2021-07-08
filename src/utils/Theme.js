@@ -3,6 +3,7 @@ const colors = {
   $white: "#ffffff",
   $border: "#d9dde0",
   $grey: "#adb5bd",
+  $darkGrey: "#3a4046",
   $background: "#f8f9fa",
   $danger: "#fc2a2a",
   $primary: "#ffbd3d",

@@ -77,9 +77,24 @@ export const ContentModal = (props) => {
     setIsModalVisible(false);
   };
 
+  /* Prop Handle */
   const CountComp = useRef("");
+  const PrimaryButtonText = useRef("");
+  const SecondaryButtonText = useRef("");
   if (!!props.count) {
     CountComp.current = <Count>{props.count}</Count>;
+  }
+
+  if (!props.okText) {
+    PrimaryButtonText.current = "Submit";
+  } else {
+    PrimaryButtonText.current = props.okText;
+  }
+
+  if (!props.cancelText) {
+    SecondaryButtonText.current = "Cancel";
+  } else {
+    SecondaryButtonText.current = props.cancelText;
   }
 
   return (
@@ -96,6 +111,8 @@ export const ContentModal = (props) => {
         onOk={handleOk}
         onCancel={handleCancel}
         width={800}
+        okText={PrimaryButtonText.current}
+        cancelText={SecondaryButtonText.current}
       >
         {props.children}
       </ModalAnt>

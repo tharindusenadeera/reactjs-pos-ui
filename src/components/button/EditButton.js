@@ -9,6 +9,7 @@ export const EditButton = (props) => {
       btnTitle={Theme.icons.$edit}
       btnClass={btnClass}
       title={title}
+      type={props.type}
     >
       {children}
     </ModalCustom>

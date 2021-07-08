@@ -45,7 +45,7 @@ const orderArr = [
     },
     status: "On Hold",
     totalItems: 12,
-    amount: 455
+    amount: 455,
   },
   {
     title: "Order 5",
@@ -55,7 +55,7 @@ const orderArr = [
     },
     status: "On Hold",
     totalItems: 11,
-    amount: 232
+    amount: 232,
   },
   {
     title: "Order 6",
@@ -66,7 +66,7 @@ const orderArr = [
     },
     status: "Delevering",
     totalItems: 15,
-    amount: 1456
+    amount: 1456,
   },
   {
     title: "Order 7",
@@ -77,7 +77,7 @@ const orderArr = [
     },
     status: "Delevering",
     totalItems: 6,
-    amount: 320
+    amount: 320,
   },
   {
     title: "Order 8",
@@ -88,7 +88,7 @@ const orderArr = [
     },
     status: "Pending",
     totalItems: 8,
-    amount: 769
+    amount: 769,
   },
 ];
 
@@ -122,65 +122,64 @@ export const OrderView = () => {
 
   useEffect(() => {
     setOrders(orderArr);
-  }, [])
+  }, []);
 
   const handleConfirm = () => {};
 
   const handleCancel = () => {};
-  
+
   return (
     <Wrapper>
       <div className="row">
-        {orders && orders.map((order) => (
-          <div className="col col-sm-6 col-md-4">
-            <div className="order-box">
-              <h3>{order.title}</h3>
-              
-              <div className="d-flex">
-                <p>
-                  <label>Name</label>
-                 {order.customer.name}
-                </p>
-              </div>
+        {orders &&
+          orders.map((order) => (
+            <div className="col col-sm-6 col-md-4">
+              <div className="order-box">
+                <h3>{order.title}</h3>
 
-              <div className="d-flex">
-                <p>
-                  <label>Address</label>
-                 {order.customer.address}
-                </p>
-              </div>
+                <div className="d-flex">
+                  <p>
+                    <label>Name</label>
+                    {order.customer.name}
+                  </p>
+                </div>
 
-              <div className="d-flex">
-                <p>
-                  <label>Payment Status</label>
-                 {order.status}
-                </p>
-              </div>
-              
-              <div className="d-flex">
-                <p>
-                  <label>Total Items</label>
-                  {order.totalItems}
-                </p>
-              </div>
+                <div className="d-flex">
+                  <p>
+                    <label>Address</label>
+                    {order.customer.address}
+                  </p>
+                </div>
 
-              <div className="d-flex">
-                <p>
-                  <label>Amount to Pay</label>
-                  $ {order.amount}
-                </p>
-              </div>
+                <div className="d-flex">
+                  <p>
+                    <label>Payment Status</label>
+                    {order.status}
+                  </p>
+                </div>
 
-              <ActionButtons>
-                <EditButton btnClass="mr-2" title="Edit Order">
-                  Edit Orders Here
-                </EditButton>
-                <DeleteButton confirm={handleConfirm} cancel={handleCancel}/>
-              </ActionButtons>
+                <div className="d-flex">
+                  <p>
+                    <label>Total Items</label>
+                    {order.totalItems}
+                  </p>
+                </div>
+
+                <div className="d-flex">
+                  <p>
+                    <label>Amount to Pay</label>$ {order.amount}
+                  </p>
+                </div>
+
+                <ActionButtons>
+                  <EditButton type="primary" btnClass="mr-2" title="Edit Order">
+                    Edit Orders Here
+                  </EditButton>
+                  <DeleteButton confirm={handleConfirm} cancel={handleCancel} />
+                </ActionButtons>
+              </div>
             </div>
-          </div>
-        ))}
-
+          ))}
       </div>
     </Wrapper>
   );

@@ -1,10 +1,7 @@
 import React from "react";
 import { SelectField } from "../../components/field/SelectField";
 
-const customerArr = [
-  { key: 1, value: 'Walk in Customer'}
-];
-
+const customerArr = [{ key: 1, value: "Walk in Customer" }];
 
 export const CustomerSection = () => {
   return (
@@ -16,6 +13,7 @@ export const CustomerSection = () => {
           plusComp="customer-create"
           placeholder="Select customer"
           options={customerArr}
+          okText="Add Customer"
         />
       </div>
       <div className="col-6">
@@ -24,6 +22,7 @@ export const CustomerSection = () => {
           label="Shipping Address"
           plusComp="shipping-create"
           placeholder="Select Address"
+          okText="Add Address"
         />
       </div>
     </div>

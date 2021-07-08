@@ -72,7 +72,12 @@ export const BillingSection = () => {
         </FieldRow>
 
         <FieldRow>
-          <Label label="Discount (10%)" className="label" plusComp="discount" />
+          <Label
+            label="Discount (10%)"
+            className="label"
+            plusComp="discount"
+            okText="Apply Discount"
+          />
           <p>$90</p>
         </FieldRow>
 
@@ -86,6 +91,7 @@ export const BillingSection = () => {
             label="Shipping Cost"
             className="label"
             plusComp="shipping-cost"
+            okText="Apply Shipping Cost"
           />
           <p>$1</p>
         </FieldRow>
