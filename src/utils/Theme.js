@@ -22,7 +22,7 @@ const icons = {
       width="24"
       height="24"
       fill="currentColor"
-      class="bi bi-calculator"
+      className="bi bi-calculator"
       viewBox="0 0 16 16"
     >
       <path d="M12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z" />
@@ -35,7 +35,7 @@ const icons = {
       width="24"
       height="24"
       fill="currentColor"
-      class="bi bi-person"
+      className="bi bi-person"
       viewBox="0 0 16 16"
     >
       <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
@@ -47,7 +47,7 @@ const icons = {
       width="24"
       height="24"
       fill="currentColor"
-      class="bi bi-folder"
+      className="bi bi-folder"
       viewBox="0 0 16 16"
     >
       <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4H2.19zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707z" />
@@ -59,7 +59,7 @@ const icons = {
       width="16"
       height="16"
       fill="currentColor"
-      class="bi bi-power"
+      className="bi bi-power"
       viewBox="0 0 16 16"
     >
       <path d="M7.5 1v7h1V1h-1z" />
@@ -72,7 +72,7 @@ const icons = {
       width="16"
       height="16"
       fill="currentColor"
-      class="bi bi-pencil-square"
+      className="bi bi-pencil-square"
       viewBox="0 0 16 16"
     >
       <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -88,7 +88,7 @@ const icons = {
       width="16"
       height="16"
       fill="currentColor"
-      class="bi bi-trash"
+      className="bi bi-trash"
       viewBox="0 0 16 16"
     >
       <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
@@ -104,7 +104,7 @@ const icons = {
       width="20"
       height="20"
       fill="currentColor"
-      class="bi bi-plus"
+      className="bi bi-plus"
       viewBox="0 0 16 16"
     >
       <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
