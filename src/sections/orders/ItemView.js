@@ -24,14 +24,14 @@ const ItemForm = styled.div`
   }
 `;
 
-export const ItemView = () => {
+export const ItemView = ({item}) => {
   return (
     <div>
       <ItemDetail className="d-sm-flex">
-        <img src={ProductImg1} alt="Item" />
+        <img src={item.image} alt="Item" />
 
         <ItemForm className="mt-3 mt-sm-0">
-          <h4>Item Name Here</h4>
+          <h4>{item.name}</h4>
           <div className="row">
             <div className="col-6">
               <SelectField
