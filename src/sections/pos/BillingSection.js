@@ -49,16 +49,16 @@ const FieldRow = styled.div`
 export const BillingSection = () => {
   return (
     <Fragment>
-      <ShopDetail>
+      {/* <ShopDetail>
         <ShopImg src={ShopLogo} alt="Shop Logo" />
         <div>
           <h4>Shop Name Here</h4>
           <p>02199+(070)234-4569</p>
           <p>Russel st 50,Bostron,MA USA</p>
         </div>
-      </ShopDetail>
+      </ShopDetail> */}
 
-      <hr />
+      {/* <hr /> */}
 
       <BillDetail>
         <FieldRow>
