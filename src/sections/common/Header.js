@@ -76,6 +76,7 @@ export const Header = () => {
                 btnClass="ml-3 btn-nav"
                 count={5}
                 title="Draft Orders"
+                type="primary"
               >
                 <OrderView />
               </ModalCustom>

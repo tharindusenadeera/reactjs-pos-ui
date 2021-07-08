@@ -1,9 +1,33 @@
 import React from "react";
 import { Table } from "antd";
+import styled from "styled-components";
+import Theme from "../../utils/Theme";
+
+const TableAnt = styled(Table)`
+  .ant-table-thead {
+    tr {
+      th {
+        background-color: ${Theme.colors.$greye9ecef};
+      }
+    }
+  }
+  .ant-table-body {
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: ${Theme.colors.$greyd3d7dc};
+      //outline: 1px solid ${Theme.colors.$greye9ecef};
+    }
+  }
+`;
 
 export const TableCustom = (props) => {
   return (
-    <Table
+    <TableAnt
       columns={props.columns}
       dataSource={props.dataSource}
       // pagination={

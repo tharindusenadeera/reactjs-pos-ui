@@ -13,6 +13,18 @@ const ButtonAnt = styled(Button)`
       border-color: ${Theme.colors.$primaryHover};
     }
   }
+
+  &.ant-btn-secondary {
+    background: ${Theme.colors.$white};
+    border-color: ${Theme.colors.$primary};
+    color: ${Theme.colors.$primary};
+    &:hover,
+    :focus {
+      background: ${Theme.colors.$primaryLight};
+      border-color: ${Theme.colors.$primaryHover};
+      color: ${Theme.colors.$primaryHover};
+    }
+  }
 `;
 
 export const ButtonCustom = (props) => {
