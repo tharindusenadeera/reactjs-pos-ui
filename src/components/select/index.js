@@ -30,28 +30,13 @@ const SelectAnt = styled(Select)`
 `;
 
 export const SelectCustom = (props) => {
+  const { showSearch, placeholder, onChange, onBlur, onFocus, onSearch, options } = props;
   const { Option } = Select;
-
-  function onChange(value) {
-    console.log(`selected ${value}`);
-  }
-
-  function onBlur() {
-    console.log("blur");
-  }
-
-  function onFocus() {
-    console.log("focus");
-  }
-
-  function onSearch(val) {
-    console.log("search:", val);
-  }
 
   return (
     <SelectAnt
-      showSearch={props.showSearch}
-      placeholder={props.placeholder}
+      showSearch={showSearch}
+      placeholder={placeholder}
       optionFilterProp="children"
       onChange={onChange}
       onFocus={onFocus}
@@ -61,9 +46,11 @@ export const SelectCustom = (props) => {
         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }
     >
-      <Option value="jack">Jack</Option>
-      <Option value="lucy">Lucy</Option>
-      <Option value="tom">Tom</Option>
+      {options && options.map((item, key) => {
+        return (
+          <Option key={key} value={item.key}>{item.value}</Option>
+        )
+      })}
     </SelectAnt>
   );
 };

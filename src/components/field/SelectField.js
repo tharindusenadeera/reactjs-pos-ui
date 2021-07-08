@@ -9,12 +9,15 @@ plusComp = plus button modal component
 */
 
 export const SelectField = (props) => {
+  const { showSearch, placeholder, options } = props;
+
   return (
     <Fragment>
       <Label label={props.label} plusComp={props.plusComp} />
       <SelectCustom
-        showSearch={props.showSearch}
-        placeholder={props.placeholder}
+        showSearch={showSearch}
+        placeholder={placeholder}
+        options={options}
       />
     </Fragment>
   );

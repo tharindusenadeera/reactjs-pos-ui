@@ -4,15 +4,7 @@ import { ButtonCustom } from "../button";
 import Theme from "../../utils/Theme";
 
 export const DeleteButton = (props) => {
-  function confirm(e) {
-    console.log(e);
-    message.success("Record has been deleted");
-  }
-
-  function cancel(e) {
-    console.log(e);
-    message.error("Delete operation canceld");
-  }
+  const { confirm, cancel } = props;
 
   const Title = useRef("");
   if (!!props.btnTitle) {

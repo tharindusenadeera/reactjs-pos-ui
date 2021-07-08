@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { SelectCustom } from "../../components/select";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
@@ -12,6 +12,24 @@ import ProductImg4 from "../../assests/images/products/Chicken-Submarine.jpg";
 import ProductImg5 from "../../assests/images/products/French-Fries.jpg";
 import ProductImg6 from "../../assests/images/products/Cheesy-Gordita-Crunch.jpg";
 import ProductImg7 from "../../assests/images/products/Cherry-Limeade.jpg";
+
+const itemArr = [
+  { key: 0, value: "All" },
+  { key: 1, value: "Meat" },
+  { key: 2, value: "Vegan" },
+  { key: 3, value: "Gluten Free" },
+  { key: 4, value: "Soft Drinks" },
+];
+
+const productsArr = [
+  { key: 1, category: 1, name: "Chicken Burger", image: ProductImg1 },
+  { key: 2, category: 1, name: "Chicken Sandwich", image: ProductImg2 },
+  { key: 3, category: 1, name: "Chicken Nuggets", image: ProductImg3 },
+  { key: 4, category: 1, name: "Chicken Submarine", image: ProductImg4 },
+  { key: 5, category: 2, name: "French Fries", image: ProductImg5 },
+  { key: 6, category: 3, name: "Cheesy Gordita Crunch", image: ProductImg6 },
+  { key: 7, category: 4, name: "Cherry Limeade", image: ProductImg7 },
+];
 
 const Head = styled.div`
   padding: 1.25rem;
@@ -73,12 +91,40 @@ const ProductImg = styled.img`
 `;
 
 export const ItemSection = () => {
+  const [products, setProducts] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(0);
+
+  useEffect(() => {
+    handleProducts(productsArr, selectedItem);
+  }, []);
+
+  const handleProducts = (data, value) => {
+    let itemArr = [];
+    if (value == 0) {
+      itemArr = data;
+    } else {
+      itemArr = data.filter((item) => {
+        return item.category == value;
+      });
+    }
+    setProducts(itemArr);
+  };
+
+  const handleItemSelect = (value) => {
+    setSelectedItem(value);
+    handleProducts(productsArr, value);
+  };
   return (
     <Fragment>
       <Head>
         <div className="row">
           <div className="col-6">
-            <SelectCustom placeholder="Choose a catagory" showSearch={false} />
+            <SelectCustom
+              showSearch={true}
+              placeholder="Choose an item"
+              options={itemArr}
+              onChange={handleItemSelect}
+            />
           </div>
           <div className="col-6">
             <SelectCustom showSearch={true} placeholder="Type item to search" />
@@ -88,97 +134,26 @@ export const ItemSection = () => {
 
       <Body>
         <div className="row">
-          <div className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6">
-            <ContentModal
-              title="Chicken Burger"
-              btnContent={
-                <ProductCard>
-                  <ProductImg src={ProductImg1} alt="product image" />
-                  <span className="prod-title">Chicken Burger</span>
-                </ProductCard>
-              }
-            >
-              <ItemView />
-            </ContentModal>
-          </div>
-          <div className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6">
-            <ContentModal
-              title="Chicken Burger"
-              btnContent={
-                <ProductCard>
-                  <ProductImg src={ProductImg2} alt="product image" />
-                  <span className="prod-title">Chicken Sandwich</span>
-                </ProductCard>
-              }
-            >
-              <ItemView />
-            </ContentModal>
-          </div>
-          <div className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6">
-            <ContentModal
-              title="Chicken Burger"
-              btnContent={
-                <ProductCard>
-                  <ProductImg src={ProductImg3} alt="product image" />
-                  <span className="prod-title">Checken Nuggets</span>
-                </ProductCard>
-              }
-            >
-              <ItemView />
-            </ContentModal>
-          </div>
-          <div className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6">
-            <ContentModal
-              title="Chicken Burger"
-              btnContent={
-                <ProductCard>
-                  <ProductImg src={ProductImg4} alt="product image" />
-                  <span className="prod-title">Chicken Submarine</span>
-                </ProductCard>
-              }
-            >
-              <ItemView />
-            </ContentModal>
-          </div>
-          <div className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6">
-            <ContentModal
-              title="Chicken Burger"
-              btnContent={
-                <ProductCard>
-                  <ProductImg src={ProductImg5} alt="product image" />
-                  <span className="prod-title">French Fries</span>
-                </ProductCard>
-              }
-            >
-              <ItemView />
-            </ContentModal>
-          </div>
-          <div className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6">
-            <ContentModal
-              title="Chicken Burger"
-              btnContent={
-                <ProductCard>
-                  <ProductImg src={ProductImg6} alt="product image" />
-                  <span className="prod-title">Cheesy Gordita Crunch</span>
-                </ProductCard>
-              }
-            >
-              <ItemView />
-            </ContentModal>
-          </div>
-          <div className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6">
-            <ContentModal
-              title="Chicken Burger"
-              btnContent={
-                <ProductCard>
-                  <ProductImg src={ProductImg7} alt="product image" />
-                  <span className="prod-title">Cherry Limeade</span>
-                </ProductCard>
-              }
-            >
-              <ItemView />
-            </ContentModal>
-          </div>
+          {products.map((item, key) => {
+            return (
+              <div
+                key={key}
+                className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6"
+              >
+                <ContentModal
+                  title={item.name}
+                  btnContent={
+                    <ProductCard>
+                      <ProductImg src={item.image} alt="product image" />
+                      <span className="prod-title">{item.name}</span>
+                    </ProductCard>
+                  }
+                >
+                  <ItemView />
+                </ContentModal>
+              </div>
+            );
+          })}
         </div>
       </Body>
     </Fragment>

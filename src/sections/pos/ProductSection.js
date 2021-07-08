@@ -97,7 +97,7 @@ export const ProductSection = () => {
     <div>
       <SelectNInputField
         showSearch={false}
-        label="Select Product"
+        label="Selected Product"
         Selectplaceholder="Choose Type"
       />
       <TableWarp>
