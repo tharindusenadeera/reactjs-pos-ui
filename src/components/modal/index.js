@@ -4,6 +4,16 @@ import { ButtonCustom } from "../button";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 
+/* Props
+
+count = Intiger (Show count as label top of the button)
+
+title = Model Title
+okText = String (Modal Submit button text)
+cancelText = String (Modal Cancel button Text)
+
+*/
+
 const ButtonWrap = styled.div`
   position: relative;
 `;
@@ -65,9 +75,24 @@ export const ModalCustom = (props) => {
     setIsModalVisible(false);
   };
 
+  /* Prop Handle */
   const CountComp = useRef("");
+  const PrimaryButtonText = useRef("");
+  const SecondaryButtonText = useRef("");
   if (!!props.count) {
     CountComp.current = <Count>{props.count}</Count>;
+  }
+
+  if (!props.okText) {
+    PrimaryButtonText.current = "Submit";
+  } else {
+    PrimaryButtonText.current = props.okText;
+  }
+
+  if (!props.cancelText) {
+    SecondaryButtonText.current = "Cancel";
+  } else {
+    SecondaryButtonText.current = props.cancelText;
   }
 
   return (
@@ -88,6 +113,8 @@ export const ModalCustom = (props) => {
         onOk={handleOk}
         onCancel={handleCancel}
         width={800}
+        okText={PrimaryButtonText.current}
+        cancelText={SecondaryButtonText.current}
       >
         {props.children}
       </ModalAnt>

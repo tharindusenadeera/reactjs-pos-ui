@@ -148,6 +148,7 @@ export const ItemSection = () => {
                       <span className="prod-title">{item.name}</span>
                     </ProductCard>
                   }
+                  okText="Add to order"
                 >
                   <ItemView />
                 </ContentModal>

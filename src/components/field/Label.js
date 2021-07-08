@@ -24,6 +24,7 @@ const LabelWrap = styled.div`
 
   label {
     margin-bottom: unset;
+    color: ${Theme.colors.$darkGrey};
   }
 
   .ant-btn {
@@ -45,10 +46,10 @@ export const Label = (props) => {
     ModalTitle.current = "Add a shipping address";
   } else if (props.plusComp === "discount") {
     ModalComponent.current = <DiscountForm />;
-    ModalTitle.current = "Bill Discount";
+    ModalTitle.current = "Add Discount";
   } else if (props.plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;
-    ModalTitle.current = "Bill Shipping Cost";
+    ModalTitle.current = "Add Shipping Cost";
   }
 
   if (!!props.plusComp) {
@@ -57,6 +58,8 @@ export const Label = (props) => {
         btnTitle={Theme.icons.$plus}
         title={ModalTitle.current}
         type="primary"
+        okText={props.okText}
+        cancelText={props.cancelText}
       >
         {ModalComponent.current}
       </ModalCustom>

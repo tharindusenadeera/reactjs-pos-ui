@@ -16,6 +16,7 @@ const ButtonAnt = styled(Button)`
 
   &.ant-btn-secondary {
     background: ${Theme.colors.$white};
+    border: 1.8px solid transparent;
     border-color: ${Theme.colors.$primary};
     color: ${Theme.colors.$primary};
     &:hover,
