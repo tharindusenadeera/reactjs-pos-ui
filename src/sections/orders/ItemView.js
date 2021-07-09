@@ -18,7 +18,7 @@ const ItemDetail = styled.div`
     }
     @media ${Theme.device.sm} {
       width: 275px;
-      height: 260px;
+      height: 270px;
     }
   }
 `;
