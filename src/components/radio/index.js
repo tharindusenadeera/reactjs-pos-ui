@@ -7,7 +7,10 @@ export const RadioCustom = (props) => {
   const onChange = (e) => {
     console.log("radio checked", e.target.value);
     setValue(e.target.value);
+
+    props.onChecked(e.target.value);
   };
+  
   return (
     <Radio.Group onChange={onChange} value={value}>
       {props.children}
