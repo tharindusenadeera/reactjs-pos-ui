@@ -1,10 +1,10 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { SelectField } from "../../components/field/SelectField";
 import { InputNumberField } from "../../components/field/InputNumberField";
 import styled from "styled-components";
+import Theme from "../../utils/Theme";
 
 import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
-import Theme from "../../utils/Theme";
 
 const ItemDetail = styled.div`
   img {
