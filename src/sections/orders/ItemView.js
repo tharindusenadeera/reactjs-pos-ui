@@ -28,10 +28,10 @@ export const ItemView = ({item}) => {
   return (
     <div>
       <ItemDetail className="d-sm-flex">
-        <img src={item.image} alt="Item" />
+        <img src={item && item.image} alt="Item" />
 
         <ItemForm className="mt-3 mt-sm-0">
-          <h4>{item.name}</h4>
+          <h4>{item && item.name}</h4>
           <div className="row">
             <div className="col-6">
               <SelectField
