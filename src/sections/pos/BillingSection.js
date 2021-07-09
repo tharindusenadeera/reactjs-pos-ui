@@ -4,6 +4,7 @@ import ShopLogo from "../../assests/images/grill-logo.png";
 import Theme from "../../utils/Theme";
 import { ModalCustom } from "../../components/modal";
 import { Label } from "../../components/field/Label";
+import { Payment } from "../billing/Payment";
 
 const ShopDetail = styled.div`
   display: flex;
@@ -109,21 +110,15 @@ export const BillingSection = () => {
 
       <hr />
 
-      <div className="d-flex flex-column">
+      <div className="d-flex flex-column mt-4">
         <ModalCustom
-          btnTitle="Pay with cash"
+          btnTitle="Pay the bill"
           type="primary"
           btnClass="mb-3 w-100"
+          title="Payment"
+          okText="Pay Now"
         >
-          Cash Modal
-        </ModalCustom>
-
-        <ModalCustom
-          btnTitle="Pay with Card"
-          type="secondary"
-          btnClass="ml-1 w-100"
-        >
-          Card Modal
+          <Payment />
         </ModalCustom>
       </div>
     </Fragment>

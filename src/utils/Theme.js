@@ -7,6 +7,7 @@ const colors = {
   $background: "#f8f9fa",
   $danger: "#fc2a2a",
   $primary: "#ffbd3d",
+  $primaryBorder: "#efab29",
   $primaryHover: "#f7ab17",
   $primaryShadow: "0 0 0 2px rgb(255 189 61 / 40%)",
   $primaryLight: "#ffe7b9",
