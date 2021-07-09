@@ -45,6 +45,12 @@ const ModalAnt = styled(Modal)`
       //outline: 1px solid ${Theme.colors.$greye9ecef};
     }
   }
+
+  &.body-nonpadding {
+    .ant-modal-body {
+      padding: 0;
+    }
+  }
 `;
 
 const Count = styled.span`
@@ -115,6 +121,7 @@ export const ModalCustom = (props) => {
         width={800}
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
+        className={props.className}
       >
         {props.children}
       </ModalAnt>

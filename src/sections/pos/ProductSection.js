@@ -66,8 +66,9 @@ export const ProductSection = () => {
         <ModalCustom
           btnTitle="Edit"
           type="secondary"
-          title="Item Name here"
+          title="Edit item in order"
           okText="Update item"
+          className="body-nonpadding"
         >
           <ItemView />
         </ModalCustom>

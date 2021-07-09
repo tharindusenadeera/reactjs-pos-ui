@@ -144,13 +144,14 @@ export const ItemSection = () => {
                   title={item.name}
                   btnContent={
                     <ProductCard>
-                      <ProductImg src={item.image} alt="product image"/>
+                      <ProductImg src={item.image} alt="product image" />
                       <span className="prod-title">{item.name}</span>
                     </ProductCard>
                   }
                   okText="Add to order"
+                  className="body-nonpadding"
                 >
-                  <ItemView item={item}/>
+                  <ItemView item={item} />
                 </ContentModal>
               </div>
             );

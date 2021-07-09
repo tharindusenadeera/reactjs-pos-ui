@@ -4,6 +4,11 @@ import { Button } from "antd";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 
+/*Props
+
+className = "body-nonpadding" (Remove modal body padding)
+*/
+
 const ContentWrap = styled.div`
   position: relative;
 `;
@@ -45,6 +50,12 @@ const ModalAnt = styled(Modal)`
     &::-webkit-scrollbar-thumb {
       background-color: ${Theme.colors.$greyd3d7dc};
       //outline: 1px solid ${Theme.colors.$greye9ecef};
+    }
+  }
+
+  &.body-nonpadding {
+    .ant-modal-body {
+      padding: 0;
     }
   }
 `;
@@ -113,6 +124,7 @@ export const ContentModal = (props) => {
         width={800}
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
+        className={props.className}
       >
         {props.children}
       </ModalAnt>
