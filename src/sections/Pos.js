@@ -23,12 +23,12 @@ export const Pos = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <div className="col-12 col-xl-4 order-3 order-xl-1 mt-4 mt-xl-0 mb-4 mb-xl-0">
+        <div className="col-12 col-xl-4 mb-4 mb-xl-0">
           <Wrap>
             <ItemSection />
           </Wrap>
         </div>
-        <div className="col-md-8 col-lg-8 col-xl-5  order-1 order-xl-2">
+        <div className="col-md-8 col-lg-8 col-xl-5 mb-4">
           <Wrap className="padding gutter-b">
             <CustomerSection />
           </Wrap>
@@ -36,7 +36,7 @@ export const Pos = () => {
             <ProductSection />
           </Wrap>
         </div>
-        <div className="col-md-4 col-lg-4 col-xl-3 order-2 order-xl-3 mt-4 mt-md-0">
+        <div className="col-md-4 col-lg-4 col-xl-3 mb-4">
           <Wrap className="padding">
             <BillingSection />
           </Wrap>

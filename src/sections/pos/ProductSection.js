@@ -29,6 +29,9 @@ const TableWarp = styled.div`
       max-height: calc(100vh - 418px) !important;
     }
     @media ${Theme.device.sm} {
+      max-height: calc(100vh - 345px) !important;
+    }
+    @media ${Theme.device.md} {
       max-height: calc(100vh - 698px) !important;
     }
     @media ${Theme.device.lg} {

@@ -51,6 +51,9 @@ const Body = styled.div`
     max-height: calc(100vh - 232px) !important;
   }
   @media ${Theme.device.sm} {
+    max-height: calc(100vh - 248px) !important;
+  }
+  @media ${Theme.device.md} {
     max-height: calc(100vh - 630px) !important;
   }
   @media ${Theme.device.lg} {
