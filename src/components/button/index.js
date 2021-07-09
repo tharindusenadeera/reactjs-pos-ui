@@ -6,7 +6,7 @@ import Theme from "../../utils/Theme";
 const ButtonAnt = styled(Button)`
   &.ant-btn-primary {
     background: ${Theme.colors.$primary};
-    border-color: ${Theme.colors.$primary};
+    border-color: ${Theme.colors.$primaryBorder};
     &:hover,
     :focus {
       background: ${Theme.colors.$primaryHover};

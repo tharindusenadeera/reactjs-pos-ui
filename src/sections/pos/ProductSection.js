@@ -24,7 +24,19 @@ const TableWarp = styled.div`
     display: none;
   }
 
-  @media ${Theme.device.xs} {
+  .ant-table-body {
+    @media ${Theme.device.xs} {
+      max-height: calc(100vh - 418px) !important;
+    }
+    @media ${Theme.device.sm} {
+      max-height: calc(100vh - 345px) !important;
+    }
+    @media ${Theme.device.md} {
+      max-height: calc(100vh - 698px) !important;
+    }
+    @media ${Theme.device.lg} {
+      max-height: calc(100vh - 496px) !important;
+    }
   }
 `;
 
@@ -66,8 +78,9 @@ export const ProductSection = () => {
         <ModalCustom
           btnTitle="Edit"
           type="secondary"
-          title="Item Name here"
+          title="Edit item in order"
           okText="Update item"
+          className="body-nonpadding"
         >
           <ItemView />
         </ModalCustom>
@@ -86,14 +99,6 @@ export const ProductSection = () => {
     });
   }
 
-  const { width } = useWindowDimensions();
-  const TableBodySize = useRef("");
-  if (width < Theme.breakpoints.xs) {
-    TableBodySize.current = 190;
-  } else if (width > Theme.breakpoints.sm) {
-    TableBodySize.current = 195;
-  }
-
   return (
     <div>
       <SelectNInputField
@@ -102,11 +107,7 @@ export const ProductSection = () => {
         Selectplaceholder="Choose Type"
       />
       <TableWarp>
-        <TableCustom
-          columns={columns}
-          dataSource={data}
-          scroll={{ y: TableBodySize.current }}
-        />
+        <TableCustom columns={columns} dataSource={data} scroll={{ y: 100 }} />
       </TableWarp>
       <ButtonWarp>
         <DeleteButton btnTitle="Cancel Order" />

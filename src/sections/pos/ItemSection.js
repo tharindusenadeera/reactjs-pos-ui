@@ -29,6 +29,13 @@ const productsArr = [
   { key: 5, category: 2, name: "French Fries", image: ProductImg5 },
   { key: 6, category: 3, name: "Cheesy Gordita Crunch", image: ProductImg6 },
   { key: 7, category: 4, name: "Cherry Limeade", image: ProductImg7 },
+  { key: 1, category: 1, name: "Chicken Burger", image: ProductImg1 },
+  { key: 2, category: 1, name: "Chicken Sandwich", image: ProductImg2 },
+  { key: 3, category: 1, name: "Chicken Nuggets", image: ProductImg3 },
+  { key: 4, category: 1, name: "Chicken Submarine", image: ProductImg4 },
+  { key: 5, category: 2, name: "French Fries", image: ProductImg5 },
+  { key: 6, category: 3, name: "Cheesy Gordita Crunch", image: ProductImg6 },
+  { key: 7, category: 4, name: "Cherry Limeade", image: ProductImg7 },
 ];
 
 const Head = styled.div`
@@ -39,12 +46,18 @@ const Body = styled.div`
   overflow: scroll;
   overflow-x: hidden;
   padding: 1.25rem;
-  @media ${Theme.device.sm} {
-    height: 42vh;
-  }
 
-  @media ${Theme.device.xl} {
-    height: 72vh;
+  @media ${Theme.device.xs} {
+    max-height: calc(100vh - 232px) !important;
+  }
+  @media ${Theme.device.sm} {
+    max-height: calc(100vh - 248px) !important;
+  }
+  @media ${Theme.device.md} {
+    max-height: calc(100vh - 630px) !important;
+  }
+  @media ${Theme.device.lg} {
+    max-height: calc(100vh - 190px) !important;
   }
 
   &::-webkit-scrollbar {
@@ -144,13 +157,14 @@ export const ItemSection = () => {
                   title={item.name}
                   btnContent={
                     <ProductCard>
-                      <ProductImg src={item.image} alt="product image"/>
+                      <ProductImg src={item.image} alt="product image" />
                       <span className="prod-title">{item.name}</span>
                     </ProductCard>
                   }
                   okText="Add to order"
+                  className="body-nonpadding"
                 >
-                  <ItemView item={item}/>
+                  <ItemView item={item} />
                 </ContentModal>
               </div>
             );

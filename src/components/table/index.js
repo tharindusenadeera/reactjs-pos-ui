@@ -14,6 +14,7 @@ const TableAnt = styled(Table)`
   .ant-table-body {
     &::-webkit-scrollbar {
       width: 5px;
+      height: 5px;
     }
     &::-webkit-scrollbar-track {
       box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
