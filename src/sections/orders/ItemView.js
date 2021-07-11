@@ -7,19 +7,23 @@ import Theme from "../../utils/Theme";
 import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
 
 const ItemDetail = styled.div`
-  img {
-    object-fit: cover;
-    object-position: center;
-    margin-right: 30px;
+  @media ${Theme.device.sm} {
+    display: flex;
+  }
+`;
 
-    @media ${Theme.device.xs} {
-      width: 100%;
-      height: 200px;
-    }
-    @media ${Theme.device.sm} {
-      width: 275px;
-      height: 270px;
-    }
+const Image = styled.div`
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  @media ${Theme.device.xs} {
+    width: 100%;
+    height: 25vh;
+  }
+  @media ${Theme.device.sm} {
+    width: 375px;
+    margin-right: 30px;
   }
 `;
 
@@ -28,14 +32,19 @@ const ItemForm = styled.div`
   padding: 20px;
 
   h3 {
-    margin-bottom: 15px;
+    margin-bottom: 35px;
   }
 `;
 
 export const ItemView = ({ item }) => {
   return (
-    <ItemDetail className="d-sm-flex">
-      <img src={item && item.image} alt="Item" />
+    <ItemDetail>
+      <Image
+        style={{
+          backgroundImage: `url(${item && item.image})`,
+        }}
+      />
+      {/* <img src={item && item.image} alt="Item" /> */}
 
       <ItemForm className="mt-3 mt-sm-0">
         <h3>{item && item.name}</h3>

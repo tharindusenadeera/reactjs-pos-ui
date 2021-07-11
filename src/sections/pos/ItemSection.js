@@ -154,7 +154,7 @@ export const ItemSection = () => {
                 className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6"
               >
                 <ContentModal
-                  title={item.name}
+                  //title={item.name}
                   btnContent={
                     <ProductCard>
                       <ProductImg src={item.image} alt="product image" />
