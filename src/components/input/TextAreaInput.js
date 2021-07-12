@@ -6,8 +6,9 @@ import Theme from "../../utils/Theme";
 const Wrapper = styled.div`
   .ant-input-affix-wrapper {
     background-color: ${Theme.colors.$background};
-    input.ant-input {
+    textarea.ant-input {
       background-color: ${Theme.colors.$background};
+      border-radius: ${Theme.space.BorderRadius};
     }
     .ant-input-clear-icon {
       color: ${Theme.colors.$grey};

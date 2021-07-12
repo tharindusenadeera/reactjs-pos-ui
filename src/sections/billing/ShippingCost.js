@@ -44,7 +44,7 @@ export const ShippingCost = () => {
 
         <div className="col-12">
           <TextAreaField
-            label="Shipping Charges"
+            label="Note (If have)"
             placeholder="Describe charges"
             errorMsg="This is an error"
           />
