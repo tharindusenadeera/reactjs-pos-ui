@@ -7,6 +7,7 @@ import "antd/dist/antd.css";
 import App from "./App";
 
 import { Dashboard } from "./pages/Dashboard";
+import { Login } from "./pages/Login";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,6 +16,7 @@ ReactDOM.render(
         <Switch>
           <React.Fragment>
             <Route exact path="/" component={Dashboard} />
+            <Route exact path="/login" component={Login} />
           </React.Fragment>
         </Switch>
       </Router>
