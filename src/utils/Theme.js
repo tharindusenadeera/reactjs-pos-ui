@@ -15,6 +15,8 @@ const colors = {
   $secondaryHover: "#797979fa",
   $greye9ecef: "#e9ecef",
   $greyd3d7dc: "#d3d7dc",
+  $gradientBackground:
+    "linear-gradient(295deg, rgba(33,80,161,1) 0%, rgba(89,101,152,1) 100%)",
 };
 
 const icons = {
