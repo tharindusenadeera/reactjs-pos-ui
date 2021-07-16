@@ -4,11 +4,11 @@ import { ButtonCustom } from "../button";
 import Theme from "../../utils/Theme";
 
 export const DeleteButton = (props) => {
-  const { confirm, cancel } = props;
+  const { confirm, cancel, btnTitle } = props;
 
   const Title = useRef("");
-  if (!!props.btnTitle) {
-    Title.current = props.btnTitle;
+  if (!!btnTitle) {
+    Title.current = btnTitle;
   } else {
     Title.current = Theme.icons.$delete;
   }

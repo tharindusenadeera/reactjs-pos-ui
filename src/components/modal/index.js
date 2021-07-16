@@ -67,6 +67,17 @@ const Count = styled.span`
 `;
 
 export const ModalCustom = (props) => {
+  const {
+    count,
+    type,
+    okText,
+    cancelText,
+    btnTitle,
+    btnClass,
+    title,
+    className,
+    children,
+  } = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -85,45 +96,45 @@ export const ModalCustom = (props) => {
   const CountComp = useRef("");
   const PrimaryButtonText = useRef("");
   const SecondaryButtonText = useRef("");
-  if (!!props.count) {
-    CountComp.current = <Count>{props.count}</Count>;
+  if (!!count) {
+    CountComp.current = <Count>{count}</Count>;
   }
 
-  if (!props.okText) {
+  if (!okText) {
     PrimaryButtonText.current = "Submit";
   } else {
-    PrimaryButtonText.current = props.okText;
+    PrimaryButtonText.current = okText;
   }
 
-  if (!props.cancelText) {
+  if (!cancelText) {
     SecondaryButtonText.current = "Cancel";
   } else {
-    SecondaryButtonText.current = props.cancelText;
+    SecondaryButtonText.current = cancelText;
   }
 
   return (
     <Fragment>
       <ButtonWrap>
         <ButtonCustom
-          type={props.type}
-          btnTitle={props.btnTitle}
+          type={type}
+          btnTitle={btnTitle}
           onClick={showModal}
-          className={props.btnClass}
+          className={btnClass}
         />
         {CountComp.current}
       </ButtonWrap>
 
       <ModalAnt
-        title={props.title}
+        title={title}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         width={800}
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
-        className={props.className}
+        className={className}
       >
-        {props.children}
+        {children}
       </ModalAnt>
     </Fragment>
   );
