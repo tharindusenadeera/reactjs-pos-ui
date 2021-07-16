@@ -16,16 +16,17 @@ errorMsg = String {Error message}
 */
 
 export const InputNumberField = (props) => {
+  const { label, plusComp, placeholder, value, defaultValue, disabled, errorMsg } = props;
   return (
     <div className="field-row">
-      <Label label={props.label} plusComp={props.plusComp} />
+      <Label label={label} plusComp={plusComp} />
       <InputNumberCustom
-        placeholder={props.placeholder}
-        value={props.value}
-        defaultValue={props.defaultValue}
-        disabled={props.disabled}
+        placeholder={placeholder}
+        value={value}
+        defaultValue={defaultValue}
+        disabled={disabled}
       />
-      <Error errorMsg={props.errorMsg} />
+      <Error errorMsg={errorMsg} />
     </div>
   );
 };

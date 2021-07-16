@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "antd";
 
 import { ButtonCustom } from "../button";
@@ -41,17 +41,33 @@ const InputAnt = styled(Input)`
 `;
 
 export const InputNumberCustom = (props) => {
-  function onChange(value) {
-    console.log("changed", value);
+  const { defaultValue } = props;
+  const [value, setValue] = useState(defaultValue);
+
+  const onClickMinus = () => {
+    if (value == 0) {
+      return ;
+    } else {
+      setValue(value-1);
+    }
   }
+
+  const onClickPlus = () => {
+    setValue(value+1);
+  }
+
+  const handleOnchange = (e) => {
+    setValue(e.target.value)
+  }
+
   return (
     <Wrapper>
       <ButtonWrap>
-        <ButtonCustom btnTitle={Theme.icons.$minus} type="primary" />
+        <ButtonCustom btnTitle={Theme.icons.$minus} type="primary" onClick={onClickMinus}/>
       </ButtonWrap>
-      <InputAnt defaultValue={props.defaultValue} formatter="number" />
+      <InputAnt defaultValue={value} formatter="number" value={value} />
       <ButtonWrap>
-        <ButtonCustom btnTitle={Theme.icons.$plus} type="primary" />
+        <ButtonCustom btnTitle={Theme.icons.$plus} type="primary" onClick={onClickPlus}/>
       </ButtonWrap>
     </Wrapper>
   );

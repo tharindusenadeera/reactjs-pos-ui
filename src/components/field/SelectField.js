@@ -17,21 +17,22 @@ errorMsg = String {Error message}
 */
 
 export const SelectField = (props) => {
-  const { showSearch, placeholder, options } = props;
+  const { showSearch, placeholder, options, label, plusComp, okText, errorMsg, onChange } = props;
 
   return (
     <div className="field-row">
       <Label
-        label={props.label}
-        plusComp={props.plusComp}
-        okText={props.okText}
+        label={label}
+        plusComp={plusComp}
+        okText={okText}
       />
       <SelectCustom
         showSearch={showSearch}
         placeholder={placeholder}
         options={options}
+        onChange={onChange}
       />
-      <Error errorMsg={props.errorMsg} />
+      <Error errorMsg={errorMsg} />
     </div>
   );
 };
