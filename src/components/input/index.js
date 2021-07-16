@@ -24,12 +24,10 @@ const InputAnt = styled(Input)`
 `;
 
 export const InputCustom = (props) => {
-  const onChange = (e) => {
-    console.log(e);
-  };
+  const { placeholder, value, disabled, onChange } = props;
 
   const DisableState = useRef("");
-  if (props.disabled === true) {
+  if (disabled === true) {
     DisableState.current = "disabled";
   } else {
     DisableState.current = "";
@@ -37,8 +35,8 @@ export const InputCustom = (props) => {
 
   return (
     <InputAnt
-      placeholder={props.placeholder}
-      value={props.value}
+      placeholder={placeholder}
+      value={value}
       allowClear
       onChange={onChange}
       disabled={DisableState.current}

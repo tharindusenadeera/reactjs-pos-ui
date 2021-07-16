@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Theme from "../utils/Theme";
 import GlobalStyle from "../utils/globalStyles";
@@ -31,6 +31,17 @@ const Body = styled.div`
 `;
 
 export const Login = () => {
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = () => {
+    if (!name || !password) {
+      return ;
+    } else {
+      
+    }
+  }
+
   return (
     <Wrapper>
       <GlobalStyle />
@@ -38,13 +49,13 @@ export const Login = () => {
         <Title>Sign In</Title>
         <Body>
           <div className="field-row">
-            <InputField label="User Name" errorMsg="this is error" />
+            <InputField label="User Name" errorMsg="this is error" onChange={e => setName(e.target.value)}/>
           </div>
           <div className="field-row">
-            <PasswordField label="Password" />
+            <PasswordField label="Password" onChange={e => setPassword(e.target.value)}/>
           </div>
         </Body>
-        <ButtonCustom type="primary" btnTitle="Login" className="w-100" />
+        <ButtonCustom type="primary" btnTitle="Login" className="w-100" onClick={handleSubmit}/>
       </Box>
     </Wrapper>
   );

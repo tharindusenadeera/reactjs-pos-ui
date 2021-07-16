@@ -24,12 +24,9 @@ const Wrapper = styled.div`
 `;
 
 export const PasswordCustom = (props) => {
-  const onChange = (e) => {
-    console.log(e);
-  };
-
+  const { placeholder, value, disabled, onChange } = props;
   const DisableState = useRef("");
-  if (props.disabled === true) {
+  if (disabled === true) {
     DisableState.current = "disabled";
   } else {
     DisableState.current = "";
@@ -38,8 +35,8 @@ export const PasswordCustom = (props) => {
   return (
     <Wrapper>
       <Input.Password
-        placeholder={props.placeholder}
-        value={props.value}
+        placeholder={placeholder}
+        value={value}
         allowClear
         onChange={onChange}
         disabled={DisableState.current}

@@ -29,13 +29,14 @@ const ButtonAnt = styled(Button)`
 `;
 
 export const ButtonCustom = (props) => {
+  const { type, className, btnTitle, onClick } = props;
   return (
     <ButtonAnt
-      type={props.type}
-      onClick={props.onClick}
-      className={props.className}
+      type={type}
+      onClick={onClick}
+      className={className}
     >
-      {props.btnTitle}
+      {btnTitle}
     </ButtonAnt>
   );
 };

@@ -16,15 +16,17 @@ errorMsg = String {Error message}
 */
 
 export const PasswordField = (props) => {
+  const { label, plusComp, placeholder, value, disabled, errorMsg, onChange } = props;
   return (
     <div className="field-row">
-      <Label label={props.label} plusComp={props.plusComp} />
+      <Label label={label} plusComp={plusComp} />
       <PasswordCustom
-        placeholder={props.placeholder}
-        value={props.value}
-        disabled={props.disabled}
+        placeholder={placeholder}
+        value={value}
+        disabled={disabled}
+        onChange={onChange}
       />
-      <Error errorMsg={props.errorMsg} />
+      <Error errorMsg={errorMsg} />
     </div>
   );
 };
