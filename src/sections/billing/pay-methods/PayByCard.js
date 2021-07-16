@@ -35,7 +35,20 @@ const FieldRow = styled.div`
   }
 `;
 
-const PayByCard = () => {
+const PayByCard = (props) => {
+
+  const handleReceivedAmount = e => {
+
+  }
+
+  const handleCardNo = e => {
+
+  }
+
+  const handleComments = e => {
+
+  }
+
   return (
     <Fragment>
       <FieldRow className="total">
@@ -47,15 +60,16 @@ const PayByCard = () => {
         <InputField
           label="Recived Amount ($)"
           errorMsg="This is error message"
+          onChange={handleReceivedAmount}
         />
       </FieldRow>
 
       <FieldRow>
-        <InputField label="Card No" />
+        <InputField label="Card No" onChange={handleCardNo}/>
       </FieldRow>
 
       <FieldRow>
-        <TextAreaField label="Note (If have)" />
+        <TextAreaField label="Note (If Any)" onChange={handleComments}/>
       </FieldRow>
     </Fragment>
   );

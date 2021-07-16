@@ -16,11 +16,12 @@ errorMsg = String {Error message}
 */
 
 export const TextAreaField = (props) => {
+  const { label, plusComp, placeholder, errorMsg, onChange } = props;
   return (
     <div className="field-row">
-      <Label label={props.label} plusComp={props.plusComp} />
-      <TextAreaInput placeholder={props.placeholder} />
-      <Error errorMsg={props.errorMsg} />
+      <Label label={label} plusComp={plusComp} />
+      <TextAreaInput placeholder={placeholder} onChange={onChange}/>
+      <Error errorMsg={errorMsg} />
     </div>
   );
 };

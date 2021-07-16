@@ -35,31 +35,32 @@ const LabelWrap = styled.div`
 `;
 
 export const Label = (props) => {
+  const { plusComp, okText, cancelText, className, label } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
   const ModalTitle = useRef("");
-  if (props.plusComp === "customer-create") {
+  if (plusComp === "customer-create") {
     ModalComponent.current = <CustomerCreateForm />;
     ModalTitle.current = "Add a customer";
-  } else if (props.plusComp === "shipping-create") {
+  } else if (plusComp === "shipping-create") {
     ModalComponent.current = <ShippingCreateForm />;
     ModalTitle.current = "Add a shipping address";
-  } else if (props.plusComp === "discount") {
+  } else if (plusComp === "discount") {
     ModalComponent.current = <DiscountForm />;
     ModalTitle.current = "Add Discount";
-  } else if (props.plusComp === "shipping-cost") {
+  } else if (plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;
     ModalTitle.current = "Add Shipping Cost";
   }
 
-  if (!!props.plusComp) {
+  if (!!plusComp) {
     ModalStat.current = (
       <ModalCustom
         btnTitle={Theme.icons.$plus}
         title={ModalTitle.current}
         type="primary"
-        okText={props.okText}
-        cancelText={props.cancelText}
+        okText={okText}
+        cancelText={cancelText}
       >
         {ModalComponent.current}
       </ModalCustom>
@@ -67,8 +68,8 @@ export const Label = (props) => {
   }
 
   return (
-    <LabelWrap className={props.className}>
-      <label>{props.label}</label>
+    <LabelWrap className={className}>
+      <label>{label}</label>
       {ModalStat.current}
     </LabelWrap>
   );
