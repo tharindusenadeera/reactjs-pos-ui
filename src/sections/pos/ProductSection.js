@@ -43,6 +43,21 @@ const TableWarp = styled.div`
 const ButtonWarp = styled.div`
   text-align: end;
   margin-top: 15px;
+
+  .ant-btn {
+    &:last-child {
+      margin-left: 10px;
+    }
+
+    @media ${Theme.device.xs} {
+      width: 100%;
+
+      &:last-child {
+        margin-left: unset;
+        margin-top: 15px;
+      }
+    }
+  }
 `;
 
 export const ProductSection = () => {
@@ -111,7 +126,7 @@ export const ProductSection = () => {
       </TableWarp>
       <ButtonWarp>
         <DeleteButton btnTitle="Cancel Order" />
-        <ButtonCustom type="primary" btnTitle="Draft Order" className="ml-2" />
+        <ButtonCustom type="primary" btnTitle="Draft Order" />
       </ButtonWarp>
     </div>
   );

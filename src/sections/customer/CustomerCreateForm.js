@@ -6,7 +6,7 @@ export const CustomerCreateForm = () => {
   return (
     <Fragment>
       <div className="row">
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <SelectField
             label="Customer Group"
             placeholder="Choose an item"
@@ -15,7 +15,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <InputField
             label="Customer Name"
             placeholder="Type a name"
@@ -23,7 +23,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <InputField
             label="Company Name"
             placeholder="Type a name"
@@ -31,7 +31,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <InputField
             label="Tax Number"
             placeholder="Input a number"
@@ -39,7 +39,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <InputField
             label="Email"
             placeholder="Enter email address"
@@ -47,7 +47,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <InputField
             label="Phone Number"
             placeholder="Enter valid phone number"
@@ -55,7 +55,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <SelectField
             label="Country"
             placeholder="Choose a country"
@@ -64,7 +64,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <InputField
             label="Estate"
             placeholder="Enter state name"
@@ -72,7 +72,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <SelectField
             label="City"
             placeholder="Choose a city"
@@ -81,7 +81,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <InputField
             label="Postal code"
             placeholder="Enter postal code"
@@ -89,7 +89,7 @@ export const CustomerCreateForm = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-12 col-sm-6">
           <InputField
             label="Address"
             placeholder="Enter an address"

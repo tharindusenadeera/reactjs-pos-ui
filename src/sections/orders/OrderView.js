@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
-import { EditButton } from "../../components/button/EditButton";
 import { DeleteButton } from "../../components/button/DeleteButton";
+import { ModalCustom } from "../../components/modal";
+import { Warning } from "../../sections/common/Warning";
 
 const orderArr = [
   {
@@ -172,9 +173,19 @@ export const OrderView = () => {
                 </div>
 
                 <ActionButtons>
-                  <EditButton type="primary" btnClass="mr-2" title="Edit Order">
-                    Edit Orders Here
-                  </EditButton>
+                  <ModalCustom
+                    btnTitle={Theme.icons.$edit}
+                    type="primary"
+                    btnClass="mr-2"
+                    okText="Draft/Save current order"
+                    cancelText="Discard current order"
+                  >
+                    <Warning
+                      title="Save current order"
+                      text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                    />
+                  </ModalCustom>
+
                   <DeleteButton confirm={handleConfirm} cancel={handleCancel} />
                 </ActionButtons>
               </div>
