@@ -86,13 +86,31 @@ export const ProductSection = () => {
       title: "",
       dataIndex: "",
       key: "x",
-      width: 60,
+      width: 40,
       render: () => (
         <ModalCustom
-          btnTitle="Edit"
+          btnTitle={Theme.icons.$edit}
           type="secondary"
           title="Edit item in order"
           okText="Update item"
+          className="body-nonpadding"
+        >
+          <ItemView />
+        </ModalCustom>
+      ),
+    },
+
+    {
+      title: "",
+      dataIndex: "",
+      key: "y",
+      width: 40,
+      render: () => (
+        <ModalCustom
+          btnTitle={Theme.icons.$delete}
+          type="secondary"
+          title="Delete item in order"
+          okText="Delete item"
           className="body-nonpadding"
         >
           <ItemView />
