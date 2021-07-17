@@ -1,9 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
 import { SelectCustom } from "../../components/select";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { ContentModal } from "../../components/modal/ContentModal";
 import { ItemView } from "../orders/ItemView";
+import {addItem} from '../../actions/selectedItems';
+
 
 import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
 import ProductImg2 from "../../assests/images/products/Chicken-sandwich.jpg";
@@ -105,10 +108,15 @@ const ProductImg = styled.img`
 
 export const ItemSection = () => {
   const [products, setProducts] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(0);
+  const [selectedItems, setSelectedItems] = useState(0);
+
+  // selected item state from modal (set from child comp and dispatch in here
+  // since modal ok handle happen in here)
+  const [selectedItem, setSelectedItem] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    handleProducts(productsArr, selectedItem);
+    handleProducts(productsArr, selectedItems);
   }, []);
 
   const handleProducts = (data, value) => {
@@ -123,10 +131,25 @@ export const ItemSection = () => {
     setProducts(itemArr);
   };
 
-  const handleItemSelect = (value) => {
-    setSelectedItem(value);
+  const handleItemsSelect = (value) => {
+    setSelectedItems(value);
     handleProducts(productsArr, value);
   };
+
+  const handlePriceCalculation = (item) => {
+    // disounted value and total value should update with services
+    return {...item, discount: 100, subtotal: 1000};
+  }
+
+  const clickOk = () => {
+    const item =  handlePriceCalculation(selectedItem);
+    dispatch(addItem(item));
+  }
+
+  const clickCancel = () => {
+    setSelectedItem({});
+  }
+
   return (
     <Fragment>
       <Head>
@@ -136,7 +159,7 @@ export const ItemSection = () => {
               showSearch={true}
               placeholder="Choose an item"
               options={itemArr}
-              onChange={handleItemSelect}
+              onChange={handleItemsSelect}
             />
           </div>
           <div className="col-6">
@@ -163,8 +186,10 @@ export const ItemSection = () => {
                   }
                   okText="Add to order"
                   className="body-nonpadding"
+                  clickOk={clickOk}
+                  clickCancel={clickCancel}
                 >
-                  <ItemView item={item} />
+                  <ItemView item={item} selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
                 </ContentModal>
               </div>
             );

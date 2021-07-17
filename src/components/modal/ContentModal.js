@@ -74,6 +74,7 @@ const Count = styled.span`
 `;
 
 export const ContentModal = (props) => {
+  const {clickOk, clickCancel} = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -82,10 +83,12 @@ export const ContentModal = (props) => {
 
   const handleOk = () => {
     setIsModalVisible(false);
+    clickOk();
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    clickCancel();
   };
 
   /* Prop Handle */
