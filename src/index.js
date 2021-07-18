@@ -1,16 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import {createStore, applyMiddleware, compose} from 'redux';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import thunk  from 'redux-thunk';
+
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "antd/dist/antd.css";
-import App from "./App";
 
+import App from "./App";
 import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
+import reducers from './reducers';
+
+const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App>
       <Router>
         <Switch>
@@ -21,7 +28,7 @@ ReactDOM.render(
         </Switch>
       </Router>
     </App>
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById("root")
 );
 
