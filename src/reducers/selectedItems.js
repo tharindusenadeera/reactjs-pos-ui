@@ -6,7 +6,6 @@ const selectedItemReducer = (selectedItems = [] , action) =>{
             return [...selectedItems, action.payload];
 
         case UPDATE_ITEM:
-            // console.log(selectedItems)
             return selectedItems.map((item) => (item.key === action.payload.key) ? action.payload : item);
         
         case DELETE_ITEM:

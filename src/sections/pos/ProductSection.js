@@ -50,23 +50,21 @@ const ButtonWarp = styled.div`
 export const ProductSection = () => {
   const selectedItems = useSelector((state) => state.selectedItems);
 
-  // selected item state from modal (set from child comp and dispatch in here
-  // since modal item add, edit, delete handle happen in here)
-  const [selectedItem, setSelectedItem] = useState({});
+  const [selectedProperties, setSelectedProperties] = useState({});
   const dispatch = useDispatch();
 
   const clickUpdate = () => {
-    dispatch(updateItem(selectedItem));
+    dispatch(updateItem(selectedProperties));
   }
 
   const clickDelete = () => {
-    dispatch(deleteItem(selectedItem));
+    dispatch(deleteItem(selectedProperties));
   }
 
   const clickCancel = () => {}
 
-  const updateSelectedItem = (updatedItem) => {
-    setSelectedItem(updatedItem);
+  const updateSelectedproperties = (updatedItem) => {
+    setSelectedProperties(updatedItem);
   }
 
   const columns = [
@@ -117,7 +115,7 @@ export const ProductSection = () => {
           clickOk={clickUpdate}
           clickCancel={clickCancel}
         >
-          <ItemView item={record} selectedItem={selectedItem} updateSelectedItem={updateSelectedItem}/>
+          <ItemView item={record} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
         </ModalCustom>
       ),
     },
@@ -137,7 +135,7 @@ export const ProductSection = () => {
           clickOk={clickDelete}
           clickCancel={clickCancel}
         >
-          <ItemView item={record} selectedItem={selectedItem} updateSelectedItem={updateSelectedItem}/>
+          <ItemView item={record} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
         </ModalCustom>
       ),
     },

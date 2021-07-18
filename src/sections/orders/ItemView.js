@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect } from "react";
 import { SelectField } from "../../components/field/SelectField";
 import { InputNumberField } from "../../components/field/InputNumberField";
 import styled from "styled-components";
@@ -48,32 +48,41 @@ const SizeList = [
   { key: 3, value: "Large" },
 ];
 
-export const ItemView = ({ item, selectedItem, updateSelectedItem }) => {
+export const ItemView = ({ item, selectedProperties, updateSelectedproperties }) => {
 
-  // set initil item as selectedItem
   useEffect(() => {
-    console.log('calling');
-    updateSelectedItem(item);
+    if (item) {
+      updateSelectedproperties(item);
+    }
   }, [item]);
   
   const onChangeTaste = (key) => {
     if (key) {
       const  taste = TasteList.find((itm) => itm.key === key);
-      updateSelectedItem({...selectedItem, tasteKey: taste.key, taste: taste.value});
+      updateSelectedproperties({...item, ...{...selectedProperties, tasteKey: taste.key, taste: taste.value}});
     }
   }
 
   const onChangeSize = (key) => {
     if (key) {
       const  size = SizeList.find((itm) => itm.key === key);
-      updateSelectedItem({...selectedItem, sizeKey: size.key, size: size.value});
+      updateSelectedproperties({...item, ...{...selectedProperties, sizeKey: size.key, size: size.value}});
     }
   }
 
+  const onClickPlus = () => {
+    const newQty = selectedProperties?.qty ? selectedProperties?.qty + 1 : 1;
+    console.log(newQty)
+    updateSelectedproperties({...item, ...{...selectedProperties, qty: newQty}});
+  }
+
+  const onClickMinus = () => {
+    const newQty = (!selectedProperties?.qty || selectedProperties?.qty === 0) ? 0 : selectedProperties?.qty -1;
+    updateSelectedproperties({...item, ...{...selectedProperties, qty: newQty}});
+  }
+
   const onChangeQuantity = (qty) => {
-    if (qty) {
-      updateSelectedItem({...selectedItem, qty: qty});
-    }
+    updateSelectedproperties({...item, ...{...selectedProperties, qty: qty}});
   }
 
   return (
@@ -94,7 +103,7 @@ export const ItemView = ({ item, selectedItem, updateSelectedItem }) => {
               placeholder="Choose a taste"
               options={TasteList}
               onChange={onChangeTaste}
-              value={selectedItem.taste}
+              value={selectedProperties.taste}
             />
           </div>
           <div className="col-6">
@@ -103,11 +112,11 @@ export const ItemView = ({ item, selectedItem, updateSelectedItem }) => {
               placeholder="Choose a size"
               options={SizeList}
               onChange={onChangeSize}
-              value={selectedItem.size}
+              value={selectedProperties.size}
             />
           </div>
           <div className="col-6">
-            <InputNumberField label="Quantity" defaultValue={item.qty ? item.qty : 0} changeHandle={onChangeQuantity}/>
+            <InputNumberField label="Quantity" defaultValue={0} value={selectedProperties.qty} onClickPlus={onClickPlus} onClickMinus={onClickMinus} onChange={onChangeQuantity}/>
           </div>
         </div>
       </ItemForm>
