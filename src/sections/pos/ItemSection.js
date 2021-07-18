@@ -127,9 +127,8 @@ export const ItemSection = () => {
   const [products, setProducts] = useState([]);
   const [selectedItems, setSelectedItems] = useState(0);
   const [categories, setCategories] = useState([]);
-  // selected item state from modal (set from child comp and dispatch in here
-  // since modal ok handle happen in here)
-  const [selectedItem, setSelectedItem] = useState({});
+
+  const [selectedProperties, setSelectedProperties] = useState({});
   const alreadyAddedItems = useSelector((state) => state.selectedItems);
   const dispatch = useDispatch();
 
@@ -195,43 +194,32 @@ export const ItemSection = () => {
     });
   };
 
-  const handlePriceCalculation = (item) => {
+  const handlePriceCalculation = (item, itemKey) => {
     // disounted value and total value should update with services
-    return {
-      ...item,
-      discount: 100,
-      subtotal: 1000,
-      key: generateUniqueId(item),
-    };
-  };
+    return {...item, discount: 100, subtotal: 1000, key: itemKey};
+  }
 
   const clickOk = () => {
-    const item = handlePriceCalculation(selectedItem);
-    // addedItem -> already added in table & selectedItem -> newly select item
-    const addedItem = alreadyAddedItems.find(
-      (addedItem) => addedItem.key === item.key
-    );
+    const itemKey = generateUniqueId(selectedProperties);
+    const newItem = handlePriceCalculation(selectedProperties, itemKey);
+    const addedItem = alreadyAddedItems.find((addedItem) => addedItem.key === itemKey);
 
     if (addedItem) {
-      const updatedItem = handlePriceCalculation({
-        ...addedItem,
-        qty: item.qty + addedItem.qty,
-      });
+      const updatedItem = handlePriceCalculation({...addedItem, qty : newItem.qty + addedItem.qty}, itemKey);
       dispatch(updateItem(updatedItem));
     } else {
-      dispatch(addItem(item));
+      dispatch(addItem(newItem));
     }
-
-    setSelectedItem({});
-  };
+    setSelectedProperties({});
+  }
 
   const clickCancel = () => {
-    setSelectedItem({});
-  };
+    setSelectedProperties({});
+  }
 
-  const updateSelectedItem = (updatedItem) => {
-    setSelectedItem(updatedItem);
-  };
+  const updateSelectedproperties = (updatedItem) => {
+    setSelectedProperties(updatedItem);
+  }
 
   const handleCategories = (data) => {
     let newArr = [];
@@ -305,11 +293,7 @@ export const ItemSection = () => {
                   clickOk={clickOk}
                   clickCancel={clickCancel}
                 >
-                  <ItemView
-                    item={item}
-                    selectedItem={selectedItem}
-                    updateSelectedItem={updateSelectedItem}
-                  />
+                  <ItemView item={item} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
                 </ContentModal>
               </div>
             );

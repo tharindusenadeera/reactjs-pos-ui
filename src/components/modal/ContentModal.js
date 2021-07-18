@@ -82,13 +82,13 @@ export const ContentModal = (props) => {
   };
 
   const handleOk = () => {
-    setIsModalVisible(false);
     clickOk();
+    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
     clickCancel();
+    setIsModalVisible(false);
   };
 
   /* Prop Handle */
