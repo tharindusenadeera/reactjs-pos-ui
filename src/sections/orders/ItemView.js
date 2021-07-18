@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SelectField } from "../../components/field/SelectField";
 import { InputNumberField } from "../../components/field/InputNumberField";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
-
-import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
 
 const ItemDetail = styled.div`
   @media ${Theme.device.sm} {
@@ -36,7 +34,58 @@ const ItemForm = styled.div`
   }
 `;
 
-export const ItemView = ({ item }) => {
+const TasteList = [
+  { key: 1, value: "Sweet" },
+  { key: 2, value: "Sour" },
+  { key: 3, value: "Salty" },
+  { key: 4, value: "Bitter" },
+  { key: 5, value: "Savory" },
+];
+
+const SizeList = [
+  { key: 1, value: "Small" },
+  { key: 2, value: "Medium" },
+  { key: 3, value: "Large" },
+];
+
+export const ItemView = ({ item, selectedProperties, updateSelectedproperties }) => {
+
+  useEffect(() => {
+    if (item) {
+      updateSelectedproperties(item);
+    }
+  }, [item]);
+  
+  const onChangeTaste = (key) => {
+    if (key) {
+      const  taste = TasteList.find((itm) => itm.key === key);
+      updateSelectedproperties({...item, ...{...selectedProperties, tasteKey: taste.key, taste: taste.value}});
+    }
+  }
+
+  const onChangeSize = (key) => {
+    if (key) {
+      const  size = SizeList.find((itm) => itm.key === key);
+      updateSelectedproperties({...item, ...{...selectedProperties, sizeKey: size.key, size: size.value}});
+    }
+  }
+
+  const onClickPlus = () => {
+    const newQty = selectedProperties?.quantity ? selectedProperties?.quantity + 1 : 1;
+    updateSelectedproperties({...item, ...{...selectedProperties, quantity: newQty}});
+  }
+
+  const onClickMinus = () => {
+    const newQty = (!selectedProperties || !selectedProperties?.quantity || selectedProperties?.quantity === 0) ? 0 : selectedProperties?.quantity -1;
+    updateSelectedproperties({...item, ...{...selectedProperties, quantity: newQty}});
+  }
+
+  const onChangeQuantity = (quantity) => {
+    if(!isNaN(quantity)) {
+      updateSelectedproperties({...item, ...{...selectedProperties, quantity: parseInt(quantity)}});
+    }
+  }
+
   return (
     <ItemDetail>
       <Image
@@ -53,18 +102,22 @@ export const ItemView = ({ item }) => {
             <SelectField
               label="Taste"
               placeholder="Choose a taste"
-              errorMsg="This is an error"
+              options={TasteList}
+              onChange={onChangeTaste}
+              value={selectedProperties.taste}
             />
           </div>
           <div className="col-6">
             <SelectField
               label="Size"
               placeholder="Choose a size"
-              errorMsg="This is an error"
+              options={SizeList}
+              onChange={onChangeSize}
+              value={selectedProperties.size}
             />
           </div>
           <div className="col-6">
-            <InputNumberField label="Quantity" defaultValue={0} />
+            <InputNumberField label="Quantity" defaultValue={0} value={selectedProperties?.quantity ? selectedProperties?.quantity : 0} onClickPlus={onClickPlus} onClickMinus={onClickMinus} onChange={onChangeQuantity}/>
           </div>
         </div>
       </ItemForm>

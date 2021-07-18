@@ -17,7 +17,7 @@ errorMsg = String {Error message}
 */
 
 export const SelectField = (props) => {
-  const { showSearch, placeholder, options, label, plusComp, okText, errorMsg, onChange } = props;
+  const { showSearch, placeholder, options, label, plusComp, okText, errorMsg, onChange, value} = props;
 
   return (
     <div className="field-row">
@@ -31,6 +31,7 @@ export const SelectField = (props) => {
         placeholder={placeholder}
         options={options}
         onChange={onChange}
+        value={value}
       />
       <Error errorMsg={errorMsg} />
     </div>

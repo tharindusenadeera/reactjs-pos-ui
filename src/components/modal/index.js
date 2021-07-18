@@ -90,6 +90,8 @@ export const ModalCustom = (props) => {
     title,
     className,
     children,
+    clickOk,
+    clickCancel,
   } = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -99,10 +101,12 @@ export const ModalCustom = (props) => {
 
   const handleOk = () => {
     setIsModalVisible(false);
+    clickOk();
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    clickCancel();
   };
 
   /* Prop Handle */
