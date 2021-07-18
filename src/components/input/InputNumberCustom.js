@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Input } from "antd";
 
 import { ButtonCustom } from "../button";
@@ -41,8 +41,12 @@ const InputAnt = styled(Input)`
 `;
 
 export const InputNumberCustom = (props) => {
-  const { defaultValue } = props;
+  const { defaultValue, changeHandle } = props;
   const [value, setValue] = useState(defaultValue);
+
+  useEffect(() => {
+      changeHandle(value);
+  }, [value])
 
   const onClickMinus = () => {
     if (value == 0) {

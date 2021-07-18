@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { SelectNInputField } from "../../components/field/SelectNInputField";
@@ -8,6 +9,7 @@ import { DeleteButton } from "../../components/button/DeleteButton";
 import { useWindowDimensions } from "../../utils/useWindowDimension";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
+import { updateItem, deleteItem } from '../../actions/selectedItems';
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -46,58 +48,100 @@ const ButtonWarp = styled.div`
 `;
 
 export const ProductSection = () => {
+  const selectedItems = useSelector((state) => state.selectedItems);
+
+  // selected item state from modal (set from child comp and dispatch in here
+  // since modal item add, edit, delete handle happen in here)
+  const [selectedItem, setSelectedItem] = useState({});
+  const dispatch = useDispatch();
+
+  const clickUpdate = () => {
+    dispatch(updateItem(selectedItem));
+  }
+
+  const clickDelete = () => {
+    dispatch(deleteItem(selectedItem));
+  }
+
+  const clickCancel = () => {}
+
+  const updateSelectedItem = (updatedItem) => {
+    setSelectedItem(updatedItem);
+  }
+
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       //fixed: "left",
-      width: 120,
+      width: 110,
+    },
+    {
+      title: "Taste",
+      dataIndex: "taste",
+      width: 60,
+    },
+    {
+      title: "Size",
+      dataIndex: "size",
+      width: 60,
     },
     {
       title: "Qty",
       dataIndex: "qty",
-      width: 60,
+      width: 40,
     },
     {
       title: "Discount",
       dataIndex: "discount",
-      width: 80,
+      width: 60,
     },
     {
       title: "Subtotal",
       dataIndex: "subtotal",
-      width: 80,
+      width: 60,
     },
     {
       title: "",
       dataIndex: "",
       key: "x",
-      width: 80,
-      render: () => (
+      width: 40,
+      render: (text, record) => (
         <ModalCustom
-          btnTitle="Edit"
+          btnTitle={Theme.icons.$edit}
           type="secondary"
           title="Edit item in order"
           okText="Update item"
           className="body-nonpadding"
+          clickOk={clickUpdate}
+          clickCancel={clickCancel}
         >
-          <ItemView />
+          <ItemView item={record} selectedItem={selectedItem} updateSelectedItem={updateSelectedItem}/>
+        </ModalCustom>
+      ),
+    },
+
+    {
+      title: "",
+      dataIndex: "",
+      key: "y",
+      width: 40,
+      render: (text, record) => (
+        <ModalCustom
+          btnTitle={Theme.icons.$delete}
+          type="secondary"
+          title="Delete item in order"
+          okText="Delete item"
+          className="body-nonpadding"
+          clickOk={clickDelete}
+          clickCancel={clickCancel}
+        >
+          <ItemView item={record} selectedItem={selectedItem} updateSelectedItem={updateSelectedItem}/>
         </ModalCustom>
       ),
     },
   ];
-
-  const data = [];
-  for (let i = 0; i < 20; i++) {
-    data.push({
-      key: i,
-      name: `Checken Nuggets ${i}`,
-      qty: i,
-      discount: `$ 20`,
-      subtotal: `$ 280`,
-    });
-  }
 
   return (
     <div>
@@ -107,7 +151,7 @@ export const ProductSection = () => {
         Selectplaceholder="Choose Type"
       />
       <TableWarp>
-        <TableCustom columns={columns} dataSource={data} scroll={{ y: 100 }} />
+        <TableCustom columns={columns} dataSource={selectedItems} scroll={{ y: 100 }} />
       </TableWarp>
       <ButtonWarp>
         <DeleteButton btnTitle="Cancel Order" />

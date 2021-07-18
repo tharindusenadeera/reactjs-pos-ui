@@ -1,10 +1,8 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import { SelectField } from "../../components/field/SelectField";
 import { InputNumberField } from "../../components/field/InputNumberField";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
-
-import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
 
 const ItemDetail = styled.div`
   @media ${Theme.device.sm} {
@@ -36,7 +34,48 @@ const ItemForm = styled.div`
   }
 `;
 
-export const ItemView = ({ item }) => {
+const TasteList = [
+  { key: 1, value: "Sweet" },
+  { key: 2, value: "Sour" },
+  { key: 3, value: "Salty" },
+  { key: 4, value: "Bitter" },
+  { key: 5, value: "Savory" },
+];
+
+const SizeList = [
+  { key: 1, value: "Small" },
+  { key: 2, value: "Medium" },
+  { key: 3, value: "Large" },
+];
+
+export const ItemView = ({ item, selectedItem, updateSelectedItem }) => {
+
+  // set initil item as selectedItem
+  useEffect(() => {
+    console.log('calling');
+    updateSelectedItem(item);
+  }, [item]);
+  
+  const onChangeTaste = (key) => {
+    if (key) {
+      const  taste = TasteList.find((itm) => itm.key === key);
+      updateSelectedItem({...selectedItem, tasteKey: taste.key, taste: taste.value});
+    }
+  }
+
+  const onChangeSize = (key) => {
+    if (key) {
+      const  size = SizeList.find((itm) => itm.key === key);
+      updateSelectedItem({...selectedItem, sizeKey: size.key, size: size.value});
+    }
+  }
+
+  const onChangeQuantity = (qty) => {
+    if (qty) {
+      updateSelectedItem({...selectedItem, qty: qty});
+    }
+  }
+
   return (
     <ItemDetail>
       <Image
@@ -53,18 +92,22 @@ export const ItemView = ({ item }) => {
             <SelectField
               label="Taste"
               placeholder="Choose a taste"
-              errorMsg="This is an error"
+              options={TasteList}
+              onChange={onChangeTaste}
+              value={selectedItem.taste}
             />
           </div>
           <div className="col-6">
             <SelectField
               label="Size"
               placeholder="Choose a size"
-              errorMsg="This is an error"
+              options={SizeList}
+              onChange={onChangeSize}
+              value={selectedItem.size}
             />
           </div>
           <div className="col-6">
-            <InputNumberField label="Quantity" defaultValue={0} />
+            <InputNumberField label="Quantity" defaultValue={item.qty ? item.qty : 0} changeHandle={onChangeQuantity}/>
           </div>
         </div>
       </ItemForm>
