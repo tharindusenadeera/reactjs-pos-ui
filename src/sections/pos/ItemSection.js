@@ -7,7 +7,7 @@ import { ContentModal } from "../../components/modal/ContentModal";
 import { ItemView } from "../orders/ItemView";
 import { addItem, updateItem } from '../../actions/selectedItems';
 import generateUniqueId from '../../utils/generateUniqueId';
-
+import { categoryList } from "../../api/category";
 
 import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
 import ProductImg2 from "../../assests/images/products/Chicken-sandwich.jpg";
@@ -16,6 +16,7 @@ import ProductImg4 from "../../assests/images/products/Chicken-Submarine.jpg";
 import ProductImg5 from "../../assests/images/products/French-Fries.jpg";
 import ProductImg6 from "../../assests/images/products/Cheesy-Gordita-Crunch.jpg";
 import ProductImg7 from "../../assests/images/products/Cherry-Limeade.jpg";
+
 
 const itemArr = [
   { key: 0, value: "All" },
@@ -110,7 +111,7 @@ const ProductImg = styled.img`
 export const ItemSection = () => {
   const [products, setProducts] = useState([]);
   const [selectedItems, setSelectedItems] = useState(0);
-
+  const [categories, setCategories] = useState([]);
   // selected item state from modal (set from child comp and dispatch in here
   // since modal ok handle happen in here)
   const [selectedItem, setSelectedItem] = useState({});
@@ -118,6 +119,9 @@ export const ItemSection = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    categoryList().then((res) => {
+      handleCategories(res.data.data);
+    })
     handleProducts(productsArr, selectedItems);
   }, []);
 
@@ -167,6 +171,21 @@ export const ItemSection = () => {
     setSelectedItem(updatedItem);
   }
 
+  const handleCategories = data => {
+    let newArr = [];
+    data.forEach(element => {
+      let obj = {
+        key: element.id,
+        value: element.category_name,
+        status: element.status,
+        created_at: element.created_at,
+        updated_at: element.updated_at
+      };
+      newArr.push(obj);
+    });
+    setCategories(newArr);
+  }
+console.log("categoriesss", categories);
   return (
     <Fragment>
       <Head>
@@ -175,7 +194,7 @@ export const ItemSection = () => {
             <SelectCustom
               showSearch={true}
               placeholder="Choose an item"
-              options={itemArr}
+              options={categories && categories}
               onChange={handleItemsSelect}
             />
           </div>
