@@ -42,7 +42,8 @@ const InputAnt = styled(Input)`
 
 export const InputNumberCustom = (props) => {
   const {onClickPlus, onClickMinus,onChange, value, defaultValue} = props;
-
+  // console.log(value)
+  // console.log(defaultValue)
    return (
     <Wrapper>
       <ButtonWrap>
