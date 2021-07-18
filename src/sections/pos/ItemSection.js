@@ -257,7 +257,6 @@ export const ItemSection = () => {
   };
 
   const handleSearch = value => {
-    console.log("Searched Value", value);
     let strLength = value.length;
 
     if (strLength % 3 == 0) {
