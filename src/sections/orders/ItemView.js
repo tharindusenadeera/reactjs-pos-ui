@@ -71,17 +71,19 @@ export const ItemView = ({ item, selectedProperties, updateSelectedproperties })
   }
 
   const onClickPlus = () => {
-    const newQty = selectedProperties?.qty ? selectedProperties?.qty + 1 : 1;
-    updateSelectedproperties({...item, ...{...selectedProperties, qty: newQty}});
+    const newQty = selectedProperties?.quantity ? selectedProperties?.quantity + 1 : 1;
+    updateSelectedproperties({...item, ...{...selectedProperties, quantity: newQty}});
   }
 
   const onClickMinus = () => {
-    const newQty = (!selectedProperties?.qty || selectedProperties?.qty === 0) ? 0 : selectedProperties?.qty -1;
-    updateSelectedproperties({...item, ...{...selectedProperties, qty: newQty}});
+    const newQty = (!selectedProperties || !selectedProperties?.quantity || selectedProperties?.quantity === 0) ? 0 : selectedProperties?.quantity -1;
+    updateSelectedproperties({...item, ...{...selectedProperties, quantity: newQty}});
   }
 
-  const onChangeQuantity = (qty) => {
-    updateSelectedproperties({...item, ...{...selectedProperties, qty: qty}});
+  const onChangeQuantity = (quantity) => {
+    if(!isNaN(quantity)) {
+      updateSelectedproperties({...item, ...{...selectedProperties, quantity: parseInt(quantity)}});
+    }
   }
 
   return (
@@ -115,7 +117,7 @@ export const ItemView = ({ item, selectedProperties, updateSelectedproperties })
             />
           </div>
           <div className="col-6">
-            <InputNumberField label="Quantity" defaultValue={0} value={selectedProperties.qty} onClickPlus={onClickPlus} onClickMinus={onClickMinus} onChange={onChangeQuantity}/>
+            <InputNumberField label="Quantity" defaultValue={0} value={selectedProperties?.quantity ? selectedProperties?.quantity : 0} onClickPlus={onClickPlus} onClickMinus={onClickMinus} onChange={onChangeQuantity}/>
           </div>
         </div>
       </ItemForm>

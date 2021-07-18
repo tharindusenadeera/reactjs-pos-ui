@@ -205,7 +205,7 @@ export const ItemSection = () => {
     const addedItem = alreadyAddedItems.find((addedItem) => addedItem.key === itemKey);
 
     if (addedItem) {
-      const updatedItem = handlePriceCalculation({...addedItem, qty : newItem.qty + addedItem.qty}, itemKey);
+      const updatedItem = handlePriceCalculation({...addedItem, quantity : newItem.quantity + addedItem.quantity}, itemKey);
       dispatch(updateItem(updatedItem));
     } else {
       dispatch(addItem(newItem));

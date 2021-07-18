@@ -102,7 +102,7 @@ export const ProductSection = () => {
     },
     {
       title: "Qty",
-      dataIndex: "qty",
+      dataIndex: "quantity",
       width: 40,
     },
     {
