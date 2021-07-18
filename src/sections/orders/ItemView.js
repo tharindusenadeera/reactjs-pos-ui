@@ -72,7 +72,6 @@ export const ItemView = ({ item, selectedProperties, updateSelectedproperties })
 
   const onClickPlus = () => {
     const newQty = selectedProperties?.qty ? selectedProperties?.qty + 1 : 1;
-    console.log(newQty)
     updateSelectedproperties({...item, ...{...selectedProperties, qty: newQty}});
   }
 

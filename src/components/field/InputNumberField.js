@@ -17,8 +17,6 @@ errorMsg = String {Error message}
 
 export const InputNumberField = (props) => {
   const { label, plusComp, placeholder, value, defaultValue, disabled, errorMsg, onClickPlus, onClickMinus, onChange } = props;
-  console.log('value :', value);
-  console.log('DV :', defaultValue);
   return ( 
     <div className="field-row">
       <Label label={label} plusComp={plusComp} />
