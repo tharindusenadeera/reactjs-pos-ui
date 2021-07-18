@@ -52,7 +52,6 @@ export const ItemView = ({ item, selectedProperties, updateSelectedproperties })
 
   useEffect(() => {
     if (item) {
-      console.log(item)
       updateSelectedproperties(item);
     }
   }, [item]);
