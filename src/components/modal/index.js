@@ -46,6 +46,19 @@ const ModalAnt = styled(Modal)`
     }
   }
 
+  .ant-modal-footer {
+    display: flex;
+    justify-content: center;
+
+    @media ${Theme.device.xs} {
+      flex-direction: column-reverse;
+
+      .ant-btn:last-child {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
   &.body-nonpadding {
     .ant-modal-body {
       padding: 0;
