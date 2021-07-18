@@ -30,11 +30,12 @@ const SelectAnt = styled(Select)`
 `;
 
 export const SelectCustom = (props) => {
-  const { showSearch, placeholder, onChange, onBlur, onFocus, onSearch, options } = props;
+  const { showSearch, placeholder, onChange, onBlur, onFocus, onSearch, options, value } = props;
   const { Option } = Select;
 
   return (
     <SelectAnt
+      value={value}
       showSearch={showSearch}
       placeholder={placeholder}
       optionFilterProp="children"

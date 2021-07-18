@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import { SelectField } from "../../components/field/SelectField";
 import { InputNumberField } from "../../components/field/InputNumberField";
 import styled from "styled-components";
@@ -48,30 +48,31 @@ const SizeList = [
   { key: 3, value: "Large" },
 ];
 
-export const ItemView = ({ item, selectedItem, setSelectedItem }) => {
+export const ItemView = ({ item, selectedItem, updateSelectedItem }) => {
 
   // set initil item as selectedItem
   useEffect(() => {
-    setSelectedItem(item);
-  }, []);
+    console.log('calling');
+    updateSelectedItem(item);
+  }, [item]);
   
   const onChangeTaste = (key) => {
     if (key) {
       const  taste = TasteList.find((itm) => itm.key === key);
-      setSelectedItem({...selectedItem, tasteKey: taste.key, taste: taste.value});
+      updateSelectedItem({...selectedItem, tasteKey: taste.key, taste: taste.value});
     }
   }
 
   const onChangeSize = (key) => {
     if (key) {
       const  size = SizeList.find((itm) => itm.key === key);
-      setSelectedItem({...selectedItem, sizeKey: size.key, size: size.value});
+      updateSelectedItem({...selectedItem, sizeKey: size.key, size: size.value});
     }
   }
 
   const onChangeQuantity = (qty) => {
     if (qty) {
-      setSelectedItem({...selectedItem, qty: qty});
+      updateSelectedItem({...selectedItem, qty: qty});
     }
   }
 
@@ -93,6 +94,7 @@ export const ItemView = ({ item, selectedItem, setSelectedItem }) => {
               placeholder="Choose a taste"
               options={TasteList}
               onChange={onChangeTaste}
+              value={selectedItem.taste}
             />
           </div>
           <div className="col-6">
@@ -101,10 +103,11 @@ export const ItemView = ({ item, selectedItem, setSelectedItem }) => {
               placeholder="Choose a size"
               options={SizeList}
               onChange={onChangeSize}
+              value={selectedItem.size}
             />
           </div>
           <div className="col-6">
-            <InputNumberField label="Quantity" defaultValue={0} changeHandle={onChangeQuantity}/>
+            <InputNumberField label="Quantity" defaultValue={item.qty ? item.qty : 0} changeHandle={onChangeQuantity}/>
           </div>
         </div>
       </ItemForm>
