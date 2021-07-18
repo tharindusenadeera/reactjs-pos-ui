@@ -6,7 +6,7 @@ const customerArr = [{ key: 1, value: "Walk in Customer" }];
 export const CustomerSection = () => {
   return (
     <div className="row">
-      <div className="col-6">
+      <div className="col-12 col-sm-6">
         <SelectField
           showSearch={true}
           label="Choose a Customer"
@@ -16,7 +16,7 @@ export const CustomerSection = () => {
           okText="Add Customer"
         />
       </div>
-      <div className="col-6">
+      <div className="col-12 col-sm-6">
         <SelectField
           showSearch={true}
           label="Shipping Address"

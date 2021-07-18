@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { SelectCustom } from "../../components/select";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { ContentModal } from "../../components/modal/ContentModal";
 import { ItemView } from "../orders/ItemView";
-import { addItem, updateItem } from '../../actions/selectedItems';
-import generateUniqueId from '../../utils/generateUniqueId';
-
+import { addItem, updateItem } from "../../actions/selectedItems";
+import generateUniqueId from "../../utils/generateUniqueId";
+import { categoryList } from "../../api/category";
 
 import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
 import ProductImg2 from "../../assests/images/products/Chicken-sandwich.jpg";
@@ -16,6 +16,7 @@ import ProductImg4 from "../../assests/images/products/Chicken-Submarine.jpg";
 import ProductImg5 from "../../assests/images/products/French-Fries.jpg";
 import ProductImg6 from "../../assests/images/products/Cheesy-Gordita-Crunch.jpg";
 import ProductImg7 from "../../assests/images/products/Cherry-Limeade.jpg";
+import { productsList } from "../../api/products";
 
 const itemArr = [
   { key: 0, value: "All" },
@@ -31,14 +32,29 @@ const productsArr = [
   { productKey: 3, category: 1, name: "Chicken Nuggets", image: ProductImg3 },
   { productKey: 4, category: 1, name: "Chicken Submarine", image: ProductImg4 },
   { productKey: 5, category: 2, name: "French Fries", image: ProductImg5 },
-  { productKey: 6, category: 3, name: "Cheesy Gordita Crunch", image: ProductImg6 },
+  {
+    productKey: 6,
+    category: 3,
+    name: "Cheesy Gordita Crunch",
+    image: ProductImg6,
+  },
   { productKey: 7, category: 4, name: "Cherry Limeade", image: ProductImg7 },
   { productKey: 8, category: 1, name: "Chicken Burger", image: ProductImg1 },
   { productKey: 9, category: 1, name: "Chicken Sandwich", image: ProductImg2 },
   { productKey: 10, category: 1, name: "Chicken Nuggets", image: ProductImg3 },
-  { productKey: 11, category: 1, name: "Chicken Submarine", image: ProductImg4 },
+  {
+    productKey: 11,
+    category: 1,
+    name: "Chicken Submarine",
+    image: ProductImg4,
+  },
   { productKey: 12, category: 2, name: "French Fries", image: ProductImg5 },
-  { productKey: 13, category: 3, name: "Cheesy Gordita Crunch", image: ProductImg6 },
+  {
+    productKey: 13,
+    category: 3,
+    name: "Cheesy Gordita Crunch",
+    image: ProductImg6,
+  },
   { productKey: 14, category: 4, name: "Cherry Limeade", image: ProductImg7 },
 ];
 
@@ -110,31 +126,72 @@ const ProductImg = styled.img`
 export const ItemSection = () => {
   const [products, setProducts] = useState([]);
   const [selectedItems, setSelectedItems] = useState(0);
+  const [categories, setCategories] = useState([]);
 
   const [selectedProperties, setSelectedProperties] = useState({});
-
   const alreadyAddedItems = useSelector((state) => state.selectedItems);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    handleProducts(productsArr, selectedItems);
+    getAllProducts();
+    categoryList().then((res) => {
+      handleCategories(res.data.data);
+    });
+    // handleProducts(productsArr, selectedItems);
   }, []);
 
-  const handleProducts = (data, value) => {
+  const handleProducts = (data) => {
     let itemArr = [];
-    if (value == 0) {
-      itemArr = data;
-    } else {
-      itemArr = data.filter((item) => {
-        return item.category == value;
-      });
-    }
+    // if (value == 0) {
+    //   itemArr = data;
+    // } else {
+    //   itemArr = data.filter((item) => {
+    //     return item.category == value;
+    //   });
+    // }
+    data.forEach((element) => {
+      let obj = {
+        productKey: element.id,
+        category: element.menu_category,
+        name: element.name,
+        image: element.image,
+        price: element.price,
+        qty: element.qty,
+        branch_id: element.branch_id,
+        status: element.status,
+        created_at: element.created_at,
+        updated_at: element.updated_at,
+      };
+      itemArr.push(obj);
+    });
     setProducts(itemArr);
   };
 
   const handleItemsSelect = (value) => {
+    if (value == 0) {
+      getAllProducts();
+    } else {
+      getFilteredProducts("id", value);
+    }
     setSelectedItems(value);
-    handleProducts(productsArr, value);
+  };
+
+  const getAllProducts = () => {
+    productsList().then((res) => {
+      handleProducts(res.data.data);
+    });
+  };
+
+  const getFilteredProducts = (type, value) => {
+    let obj = {};
+    if (type == "id") {
+      obj.id = value;
+    } else {
+      obj.item = value;
+    }
+    productsList(obj).then((res) => {
+      handleProducts(res.data.data);
+    });
   };
 
   const handlePriceCalculation = (item, itemKey) => {
@@ -164,6 +221,39 @@ export const ItemSection = () => {
     setSelectedProperties(updatedItem);
   }
 
+  const handleCategories = (data) => {
+    let newArr = [];
+    let allSampleObj = {
+      key: 0,
+      value: "All",
+      status: "",
+      created_at: "",
+      updated_at: "",
+    };
+    data.forEach((element) => {
+      let obj = {
+        key: element.id,
+        value: element.category_name,
+        status: element.status,
+        created_at: element.created_at,
+        updated_at: element.updated_at,
+      };
+      newArr.push(obj);
+    });
+    newArr.unshift(allSampleObj);
+    setCategories(newArr);
+  };
+
+  const handleSearch = value => {
+    let strLength = value.length;
+
+    if (strLength % 3 == 0) {
+      getFilteredProducts("item", value);
+    } else {
+      return;
+    }
+  }
+
   return (
     <Fragment>
       <Head>
@@ -172,12 +262,12 @@ export const ItemSection = () => {
             <SelectCustom
               showSearch={true}
               placeholder="Choose an item"
-              options={itemArr}
+              options={categories && categories}
               onChange={handleItemsSelect}
             />
           </div>
           <div className="col-6">
-            <SelectCustom showSearch={true} placeholder="Type item to search" />
+            <SelectCustom showSearch={true} placeholder="Type item to search" onSearch={handleSearch}/>
           </div>
         </div>
       </Head>
