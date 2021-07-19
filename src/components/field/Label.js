@@ -35,10 +35,12 @@ const LabelWrap = styled.div`
 `;
 
 export const Label = (props) => {
-  const { plusComp, okText, cancelText, className, label } = props;
+  const { plusComp, okText, cancelText, className, label, clickOk, clickCancel, onChange } = props;
+
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
   const ModalTitle = useRef("");
+
   if (plusComp === "customer-create") {
     ModalComponent.current = <CustomerCreateForm />;
     ModalTitle.current = "Add a customer";
@@ -46,7 +48,7 @@ export const Label = (props) => {
     ModalComponent.current = <ShippingCreateForm />;
     ModalTitle.current = "Add a shipping address";
   } else if (plusComp === "discount") {
-    ModalComponent.current = <DiscountForm />;
+    ModalComponent.current = <DiscountForm onChange={onChange}/>;
     ModalTitle.current = "Add Discount";
   } else if (plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;
@@ -61,6 +63,8 @@ export const Label = (props) => {
         type="primary"
         okText={okText}
         cancelText={cancelText}
+        clickOk={clickOk}
+        clickCancel={clickCancel}
       >
         {ModalComponent.current}
       </ModalCustom>

@@ -77,8 +77,14 @@ export const ProductSection = () => {
     }
   }, [selectedProperties]);
 
+  const handlePriceCalculation = (item) => {
+    // disounted value and total value should update with services
+    return {...item, subtotal: (item?.price * item?.quantity)};
+  }
+
   const clickUpdate = () => {
-    dispatch(updateItem(selectedProperties));
+    const updatedItem = handlePriceCalculation(selectedProperties)
+    dispatch(updateItem(updatedItem));
   }
 
   const clickDelete = () => {
@@ -98,38 +104,33 @@ export const ProductSection = () => {
       dataIndex: "name",
       key: "name",
       //fixed: "left",
-      width: 110,
+      width: 120,
     },
     {
       title: "Taste",
       dataIndex: "taste",
-      width: 60,
+      width: 70,
     },
     {
       title: "Size",
       dataIndex: "size",
-      width: 60,
+      width: 70,
     },
     {
       title: "Qty",
       dataIndex: "quantity",
-      width: 40,
-    },
-    {
-      title: "Discount",
-      dataIndex: "discount",
-      width: 60,
+      width: 50,
     },
     {
       title: "Subtotal",
       dataIndex: "subtotal",
-      width: 60,
+      width: 70,
     },
     {
       title: "",
       dataIndex: "",
       key: "x",
-      width: 40,
+      width: 35,
       render: (text, record) => (
         <ModalCustom
           btnTitle={Theme.icons.$edit}
@@ -150,7 +151,7 @@ export const ProductSection = () => {
       title: "",
       dataIndex: "",
       key: "y",
-      width: 40,
+      width: 35,
       render: (text, record) => (
         <ModalCustom
           btnTitle={Theme.icons.$delete}

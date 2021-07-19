@@ -38,7 +38,7 @@ export const InputCustom = (props) => {
       placeholder={placeholder}
       value={value}
       allowClear
-      onChange={onChange}
+      onChange={(e) => onChange(e)}
       disabled={DisableState.current}
     />
   );
