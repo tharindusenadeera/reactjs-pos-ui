@@ -77,8 +77,14 @@ export const ProductSection = () => {
     }
   }, [selectedProperties]);
 
+  const handlePriceCalculation = (item) => {
+    // disounted value and total value should update with services
+    return {...item, subtotal: (item?.price * item?.quantity)};
+  }
+
   const clickUpdate = () => {
-    dispatch(updateItem(selectedProperties));
+    const updatedItem = handlePriceCalculation(selectedProperties)
+    dispatch(updateItem(updatedItem));
   }
 
   const clickDelete = () => {
@@ -114,11 +120,6 @@ export const ProductSection = () => {
       title: "Qty",
       dataIndex: "quantity",
       width: 40,
-    },
-    {
-      title: "Discount",
-      dataIndex: "discount",
-      width: 60,
     },
     {
       title: "Subtotal",

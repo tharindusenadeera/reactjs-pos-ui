@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { useSelector } from 'react-redux';
 import styled from "styled-components";
 import ShopLogo from "../../assests/images/grill-logo.png";
 import Theme from "../../utils/Theme";
@@ -47,7 +48,32 @@ const FieldRow = styled.div`
   }
 `;
 
+const calculateOrderSummary = (selectedItems) => {
+  let subTot = 0;
+  
+  selectedItems.forEach((item) => {
+    subTot += item?.subtotal;
+  })
+
+  const discountPer = 0.1; // discount hardcodeed as 10%
+  const taxPer = 0.03; // tax harcoded as 3%
+  const shipping = subTot === 0 ? 0 : 5; // tax harcoded as 10
+
+  return {
+    totItems : selectedItems.length,
+    subTot : subTot,
+    discount : subTot * discountPer,
+    tax : subTot * taxPer,
+    shipping : shipping,
+    tot : subTot - (subTot * discountPer) + (subTot * taxPer) + shipping,
+  }
+}
+
 export const BillingSection = () => {
+
+  const selectedItems = useSelector((state) => state.selectedItems);
+  const  {totItems, subTot, discount, tax, shipping, tot} = calculateOrderSummary(selectedItems);
+
   return (
     <Fragment>
       {/* <ShopDetail>
@@ -64,12 +90,12 @@ export const BillingSection = () => {
       <BillDetail>
         <FieldRow>
           <Label label="Total Items" className="label" />
-          <p>6</p>
+          <p>{totItems}</p>
         </FieldRow>
 
         <FieldRow>
           <Label label="Subtotal" className="label" />
-          <p>$900</p>
+          <p>${subTot}</p>
         </FieldRow>
 
         <FieldRow>
@@ -79,12 +105,12 @@ export const BillingSection = () => {
             plusComp="discount"
             okText="Apply Discount"
           />
-          <p>$90</p>
+          <p>${discount}</p>
         </FieldRow>
 
         <FieldRow>
           <Label label="Tax" className="label" />
-          <p>$6</p>
+          <p>${tax}</p>
         </FieldRow>
 
         <FieldRow>
@@ -94,17 +120,17 @@ export const BillingSection = () => {
             plusComp="shipping-cost"
             okText="Apply Shipping Cost"
           />
-          <p>$1</p>
+          <p>${shipping}</p>
         </FieldRow>
 
-        <FieldRow>
+        {/* <FieldRow>
           <Label label="Additional Discount(5%)" className="label" />
           <p>$35</p>
-        </FieldRow>
+        </FieldRow> */}
 
         <FieldRow>
           <Label label="Total" className="label" />
-          <p>$855</p>
+          <p>${tot}</p>
         </FieldRow>
       </BillDetail>
 
