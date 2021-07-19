@@ -45,6 +45,7 @@ export const Label = (props) => {
     hideSubmit,
     disableCancel,
     disableOk,
+    onChange
   } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
@@ -69,7 +70,7 @@ export const Label = (props) => {
     ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel}/>;
     ModalTitle.current = "Add a shipping address";
   } else if (plusComp === "discount") {
-    ModalComponent.current = <DiscountForm />;
+    ModalComponent.current = <DiscountForm onChange={onChange}/>;
     ModalTitle.current = "Add Discount";
   } else if (plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;

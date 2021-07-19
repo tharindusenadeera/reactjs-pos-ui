@@ -1,4 +1,5 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState} from "react";
+import { useSelector } from 'react-redux';
 import styled from "styled-components";
 import ShopLogo from "../../assests/images/grill-logo.png";
 import Theme from "../../utils/Theme";
@@ -47,7 +48,50 @@ const FieldRow = styled.div`
   }
 `;
 
+const calculateOrderSummary = (selectedItems, discountPer) => {
+  let subTot = 0;
+  
+  selectedItems.forEach((item) => {
+    subTot += item?.subtotal;
+  })
+
+  const taxPer = 0.03; // tax harcoded as 3%
+  const shipping = subTot === 0 ? 0 : 0; // shipping harcoded as 0
+
+  return {
+    totItems : selectedItems.length,
+    subTot : subTot,
+    discount : subTot * (discountPer/100),
+    tax : subTot * taxPer,
+    shipping : shipping,
+    tot : subTot - (subTot * discountPer/100) + (subTot * taxPer) + shipping,
+  }
+}
+
 export const BillingSection = () => {
+  const [perc, setPerc] = useState(0);
+  const [savedPerc, setSavedPerc] = useState(0);
+
+  const selectedItems = useSelector((state) => state.selectedItems);
+  
+  const clickOk = () => {
+    setSavedPerc(perc);
+  }
+  
+  const clickCancel = () => {
+  }
+  
+  const onChange = (e) => {
+    const per = e.target.value;
+    
+    if(!isNaN(per)) {
+      setPerc(parseInt(per));
+    }
+  }
+
+  const  {totItems, subTot, discount, tax, shipping, tot} = calculateOrderSummary(selectedItems, savedPerc);
+  const DiscountLabel =  `Discount  (${savedPerc}) %`;
+
   return (
     <Fragment>
       {/* <ShopDetail>
@@ -64,27 +108,30 @@ export const BillingSection = () => {
       <BillDetail>
         <FieldRow>
           <Label label="Total Items" className="label" />
-          <p>6</p>
+          <p>{totItems}</p>
         </FieldRow>
 
         <FieldRow>
           <Label label="Subtotal" className="label" />
-          <p>$900</p>
+          <p>${subTot}</p>
         </FieldRow>
 
         <FieldRow>
           <Label
-            label="Discount (10%)"
+            label={DiscountLabel}
             className="label"
             plusComp="discount"
             okText="Apply Discount"
+            onChange={onChange}
+            clickOk={clickOk}
+            clickCancel={clickCancel}
           />
-          <p>$90</p>
+          <p>${discount}</p>
         </FieldRow>
 
         <FieldRow>
           <Label label="Tax" className="label" />
-          <p>$6</p>
+          <p>${tax}</p>
         </FieldRow>
 
         <FieldRow>
@@ -94,17 +141,17 @@ export const BillingSection = () => {
             plusComp="shipping-cost"
             okText="Apply Shipping Cost"
           />
-          <p>$1</p>
+          <p>${shipping}</p>
         </FieldRow>
 
-        <FieldRow>
+        {/* <FieldRow>
           <Label label="Additional Discount(5%)" className="label" />
           <p>$35</p>
-        </FieldRow>
+        </FieldRow> */}
 
         <FieldRow>
           <Label label="Total" className="label" />
-          <p>$855</p>
+          <p>${tot}</p>
         </FieldRow>
       </BillDetail>
 
