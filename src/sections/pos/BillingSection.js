@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState} from "react";
 import { useSelector } from 'react-redux';
 import styled from "styled-components";
 import ShopLogo from "../../assests/images/grill-logo.png";
@@ -48,31 +48,49 @@ const FieldRow = styled.div`
   }
 `;
 
-const calculateOrderSummary = (selectedItems) => {
+const calculateOrderSummary = (selectedItems, discountPer) => {
   let subTot = 0;
   
   selectedItems.forEach((item) => {
     subTot += item?.subtotal;
   })
 
-  const discountPer = 0.1; // discount hardcodeed as 10%
   const taxPer = 0.03; // tax harcoded as 3%
   const shipping = subTot === 0 ? 0 : 5; // tax harcoded as 10
 
   return {
     totItems : selectedItems.length,
     subTot : subTot,
-    discount : subTot * discountPer,
+    discount : subTot * (discountPer/100),
     tax : subTot * taxPer,
     shipping : shipping,
-    tot : subTot - (subTot * discountPer) + (subTot * taxPer) + shipping,
+    tot : subTot - (subTot * discountPer/100) + (subTot * taxPer) + shipping,
   }
 }
 
 export const BillingSection = () => {
+  const [perc, setPerc] = useState(0);
+  const [savedPerc, setSavedPerc] = useState(0);
 
   const selectedItems = useSelector((state) => state.selectedItems);
-  const  {totItems, subTot, discount, tax, shipping, tot} = calculateOrderSummary(selectedItems);
+  
+  const clickOk = () => {
+    setSavedPerc(perc);
+  }
+  
+  const clickCancel = () => {
+  }
+  
+  const onChange = (e) => {
+    const per = e.target.value;
+    
+    if(!isNaN(per)) {
+      setPerc(parseInt(per));
+    }
+  }
+
+  const  {totItems, subTot, discount, tax, shipping, tot} = calculateOrderSummary(selectedItems, savedPerc);
+  const DiscountLabel =  `Discount  (${savedPerc}) %`;
 
   return (
     <Fragment>
@@ -100,10 +118,13 @@ export const BillingSection = () => {
 
         <FieldRow>
           <Label
-            label="Discount (10%)"
+            label={DiscountLabel}
             className="label"
             plusComp="discount"
             okText="Apply Discount"
+            onChange={onChange}
+            clickOk={clickOk}
+            clickCancel={clickCancel}
           />
           <p>${discount}</p>
         </FieldRow>
