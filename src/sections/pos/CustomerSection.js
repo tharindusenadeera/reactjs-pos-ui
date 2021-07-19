@@ -4,6 +4,8 @@ import { SelectField } from "../../components/field/SelectField";
 const customerArr = [{ key: 1, value: "Walk in Customer" }];
 
 export const CustomerSection = () => {
+
+  
   return (
     <div className="row">
       <div className="col-12 col-sm-6">
@@ -14,8 +16,8 @@ export const CustomerSection = () => {
           placeholder="Select customer"
           options={customerArr}
           okText="Add Customer"
-          disableCancel={true}
-          disableSubmit={true}
+          hideCancel={true}
+          hideSubmit={true}
         />
       </div>
       <div className="col-12 col-sm-6">
@@ -25,8 +27,8 @@ export const CustomerSection = () => {
           plusComp="shipping-create"
           placeholder="Select Address"
           okText="Add Address"
-          disableCancel={true}
-          disableSubmit={true}
+          hideCancel={true}
+          hideSubmit={true}
         />
       </div>
     </div>

@@ -41,25 +41,32 @@ export const Label = (props) => {
     cancelText,
     className,
     label,
-    clickOk,
-    clickCancel,
+    hideCancel,
+    hideSubmit,
     disableCancel,
-    disableSubmit
+    disableOk,
   } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
   const ModalTitle = useRef("");
-  const [isModalVisibleAgain, setIsModalVisible] = useState(false);
-  const handleClose = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
     setIsModalVisible(false);
-  }
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   if (plusComp === "customer-create") {
-    ModalComponent.current = (
-      <CustomerCreateForm handleClose={handleClose}/>
-    );
+    ModalComponent.current = <CustomerCreateForm handleCancel={handleCancel}/>;
     ModalTitle.current = "Add a customer";
   } else if (plusComp === "shipping-create") {
-    ModalComponent.current = <ShippingCreateForm />;
+    ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel}/>;
     ModalTitle.current = "Add a shipping address";
   } else if (plusComp === "discount") {
     ModalComponent.current = <DiscountForm />;
@@ -77,11 +84,14 @@ export const Label = (props) => {
         type="primary"
         okText={okText}
         cancelText={cancelText}
-        clickOk={clickOk}
-        clickCancel={clickCancel}
+        hideCancel={hideCancel}
+        hideSubmit={hideSubmit}
         disableCancel={disableCancel}
-        disableSubmit={disableSubmit}
-        isModalVisibleAgain={isModalVisibleAgain}
+        disableOk={disableOk}
+        showModal={showModal}
+        isModalVisible={isModalVisible}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
       >
         {ModalComponent.current}
       </ModalCustom>

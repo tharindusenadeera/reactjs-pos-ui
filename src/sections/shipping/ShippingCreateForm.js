@@ -47,7 +47,9 @@ export const ShippingCreateForm = (props) => {
     return errors;
   };
 
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    props.handleCancel();
+  };
 
   const handleSubmit = () => {
     if (isSame) {

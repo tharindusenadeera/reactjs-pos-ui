@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Modal } from "antd";
 import { ButtonCustom } from "../button";
@@ -92,28 +92,52 @@ export const ModalCustom = (props) => {
     title,
     className,
     children,
-    clickOk,
-    clickCancel,
     disableCancel,
-    disableSubmit,
-    isModalVisibleAgain,
     disableOk,
-    disableCancel,
+    hideCancel,
+    hideSubmit,
+    isModalVisible,
+    handleOk,
+    handleCancel,
+    showModal
   } = props;
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
+  const [disablePropertiesCancel, setDisablePropertiesCancel] = useState({});
+  const [disablePropertiesSubmit, setDisablePropertiesSubmit] = useState({});
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  useEffect(() => {
+      setProperties();
+  }, [disableCancel, disableOk, hideCancel, hideSubmit]);
+
+  const setProperties = () => {
+    handleCancelButtonProperties();
+    handleSubmitButtonProperties();
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-    clickOk();
+  const handleCancelButtonProperties = () => {
+    let obj = {};
+    if (disableCancel) {
+      obj.disabled = disableCancel;
+    }
+
+    if (hideCancel) {
+      obj.style = { display: "none" };
+    }
+
+    setDisablePropertiesCancel(obj);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    clickCancel();
+  const handleSubmitButtonProperties = () => {
+    let obj = {};
+    if (disableOk) {
+      obj.disabled = disableOk;
+    }
+
+    if (hideSubmit) {
+      obj.style = { display: "none" };
+    }
+
+    setDisablePropertiesSubmit(obj);
   };
 
   /* Prop Handle */
@@ -136,8 +160,7 @@ export const ModalCustom = (props) => {
   } else {
     SecondaryButtonText.current = cancelText;
   }
-console.log("isModalVisible", isModalVisible);
-console.log("isModalVisibleAgain", isModalVisibleAgain);
+
   return (
     <Fragment>
       <ButtonWrap>
@@ -152,20 +175,16 @@ console.log("isModalVisibleAgain", isModalVisibleAgain);
 
       <ModalAnt
         title={title}
-        visible={isModalVisible || isModalVisibleAgain}
+        visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         width={800}
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
         className={className}
-<<<<<<< HEAD
-        cancelButtonProps={disableCancel ? { style: { display: "none" } } : ""}
-        okButtonProps={disableSubmit ? { style: { display: "none" } } : ""}
-=======
-        cancelButtonProps={{disabled: disableCancel}}
-        okButtonProps={{disabled: disableOk}}
->>>>>>> origin/master
+        cancelButtonProps={disablePropertiesCancel}
+        okButtonProps={disablePropertiesSubmit}
+        closable={false}
       >
         {children}
       </ModalAnt>

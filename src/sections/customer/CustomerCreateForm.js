@@ -45,7 +45,7 @@ export const CustomerCreateForm = (props) => {
   };
 
   const handleCancel = () => {
-    props.handleClose();
+    props.handleCancel();
   };
 
   const handleSubmit = () => {
@@ -71,7 +71,7 @@ export const CustomerCreateForm = (props) => {
         dispatch(addCustomerTriggered(false));
         dispatch(addCutomer(obj));
         console.log("CUSTOMER", obj);
-        props.handleClose();
+        props.handleCancel();
       }
     }
   };
