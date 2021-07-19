@@ -14,6 +14,8 @@ export const CustomerSection = () => {
           placeholder="Select customer"
           options={customerArr}
           okText="Add Customer"
+          disableCancel={true}
+          disableSubmit={true}
         />
       </div>
       <div className="col-12 col-sm-6">

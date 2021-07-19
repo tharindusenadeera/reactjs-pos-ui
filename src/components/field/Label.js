@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { ModalCustom } from "../modal";
@@ -43,13 +43,19 @@ export const Label = (props) => {
     label,
     clickOk,
     clickCancel,
+    disableCancel,
+    disableSubmit
   } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
   const ModalTitle = useRef("");
+  const [isModalVisibleAgain, setIsModalVisible] = useState(false);
+  const handleClose = () => {
+    setIsModalVisible(false);
+  }
   if (plusComp === "customer-create") {
     ModalComponent.current = (
-      <CustomerCreateForm />
+      <CustomerCreateForm handleClose={handleClose}/>
     );
     ModalTitle.current = "Add a customer";
   } else if (plusComp === "shipping-create") {
@@ -73,6 +79,9 @@ export const Label = (props) => {
         cancelText={cancelText}
         clickOk={clickOk}
         clickCancel={clickCancel}
+        disableCancel={disableCancel}
+        disableSubmit={disableSubmit}
+        isModalVisibleAgain={isModalVisibleAgain}
       >
         {ModalComponent.current}
       </ModalCustom>

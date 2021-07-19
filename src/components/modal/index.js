@@ -82,7 +82,6 @@ const Count = styled.span`
 `;
 
 export const ModalCustom = (props) => {
-  const dispatch = useDispatch();
   const {
     count,
     type,
@@ -95,6 +94,9 @@ export const ModalCustom = (props) => {
     children,
     clickOk,
     clickCancel,
+    disableCancel,
+    disableSubmit,
+    isModalVisibleAgain,
   } = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -105,19 +107,18 @@ export const ModalCustom = (props) => {
   const handleOk = () => {
     setIsModalVisible(false);
     clickOk();
-    dispatch(addCustomerTriggered(true));
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
     clickCancel();
-    dispatch(addCustomerTriggered(false));
   };
 
   /* Prop Handle */
   const CountComp = useRef("");
   const PrimaryButtonText = useRef("");
   const SecondaryButtonText = useRef("");
+
   if (!!count) {
     CountComp.current = <Count>{count}</Count>;
   }
@@ -133,7 +134,8 @@ export const ModalCustom = (props) => {
   } else {
     SecondaryButtonText.current = cancelText;
   }
-
+console.log("isModalVisible", isModalVisible);
+console.log("isModalVisibleAgain", isModalVisibleAgain);
   return (
     <Fragment>
       <ButtonWrap>
@@ -148,13 +150,15 @@ export const ModalCustom = (props) => {
 
       <ModalAnt
         title={title}
-        visible={isModalVisible}
+        visible={isModalVisible || isModalVisibleAgain}
         onOk={handleOk}
         onCancel={handleCancel}
         width={800}
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
         className={className}
+        cancelButtonProps={disableCancel ? { style: { display: "none" } } : ""}
+        okButtonProps={disableSubmit ? { style: { display: "none" } } : ""}
       >
         {children}
       </ModalAnt>
