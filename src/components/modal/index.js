@@ -97,6 +97,8 @@ export const ModalCustom = (props) => {
     disableCancel,
     disableSubmit,
     isModalVisibleAgain,
+    disableOk,
+    disableCancel,
   } = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -157,8 +159,13 @@ console.log("isModalVisibleAgain", isModalVisibleAgain);
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
         className={className}
+<<<<<<< HEAD
         cancelButtonProps={disableCancel ? { style: { display: "none" } } : ""}
         okButtonProps={disableSubmit ? { style: { display: "none" } } : ""}
+=======
+        cancelButtonProps={{disabled: disableCancel}}
+        okButtonProps={{disabled: disableOk}}
+>>>>>>> origin/master
       >
         {children}
       </ModalAnt>

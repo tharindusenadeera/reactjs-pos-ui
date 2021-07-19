@@ -143,7 +143,7 @@ export const ItemSection = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedProperties?.taste && selectedProperties?.size && selectedProperties.quantity) {
+    if (selectedProperties?.taste && selectedProperties?.size && selectedProperties?.quantity && selectedProperties?.quantity !== 0) {
       setDisableOk(false);
     }
   }, [selectedProperties]);
@@ -229,6 +229,7 @@ export const ItemSection = () => {
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
+    setDisableOk(true);
   }
 
   const handleCategories = (data) => {
