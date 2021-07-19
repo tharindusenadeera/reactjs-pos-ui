@@ -4,6 +4,18 @@ import styled from "styled-components";
 import Theme from "../../utils/Theme";
 
 const ButtonAnt = styled(Button)`
+  &.ant-btn {
+    &.green {
+      background: #63b10e;
+      border-color: #58a208;
+      &:hover,
+      :focus {
+        background: #559c07;
+        border-color: #4f9204;
+      }
+    }
+  }
+
   &.ant-btn-primary {
     background: ${Theme.colors.$primary};
     border-color: ${Theme.colors.$primaryBorder};
@@ -31,11 +43,7 @@ const ButtonAnt = styled(Button)`
 export const ButtonCustom = (props) => {
   const { type, className, btnTitle, onClick } = props;
   return (
-    <ButtonAnt
-      type={type}
-      onClick={onClick}
-      className={className}
-    >
+    <ButtonAnt type={type} onClick={onClick} className={className}>
       {btnTitle}
     </ButtonAnt>
   );

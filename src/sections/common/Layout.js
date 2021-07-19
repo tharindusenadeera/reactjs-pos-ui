@@ -26,7 +26,7 @@ const Section = styled.section`
     padding-top: 139px;
   }
   @media ${Theme.device.sm} {
-    padding-top: 98px;
+    padding-top: 85px;
   }
 `;
 

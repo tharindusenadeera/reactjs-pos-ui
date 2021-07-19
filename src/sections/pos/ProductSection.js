@@ -1,15 +1,14 @@
 import React, { useRef, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { SelectNInputField } from "../../components/field/SelectNInputField";
 import { TableCustom } from "../../components/table";
 import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
-import { useWindowDimensions } from "../../utils/useWindowDimension";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import { updateItem, deleteItem } from '../../actions/selectedItems';
+import { updateItem, deleteItem } from "../../actions/selectedItems";
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -37,7 +36,7 @@ const TableWarp = styled.div`
       max-height: calc(100vh - 698px) !important;
     }
     @media ${Theme.device.lg} {
-      max-height: calc(100vh - 496px) !important;
+      max-height: calc(100vh - 428px) !important;
     }
   }
 `;
@@ -70,17 +69,17 @@ export const ProductSection = () => {
 
   const clickUpdate = () => {
     dispatch(updateItem(selectedProperties));
-  }
+  };
 
   const clickDelete = () => {
     dispatch(deleteItem(selectedProperties));
-  }
+  };
 
-  const clickCancel = () => {}
+  const clickCancel = () => {};
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
-  }
+  };
 
   const columns = [
     {
@@ -103,55 +102,44 @@ export const ProductSection = () => {
     {
       title: "Qty",
       dataIndex: "quantity",
-      width: 40,
+      width: 50,
     },
     {
       title: "Discount",
       dataIndex: "discount",
-      width: 60,
+      width: 70,
     },
     {
       title: "Subtotal",
       dataIndex: "subtotal",
-      width: 60,
+      width: 70,
     },
     {
-      title: "",
+      title: "Actions",
       dataIndex: "",
       key: "x",
-      width: 40,
+      width: 110,
+      fixed: "right",
       render: (text, record) => (
-        <ModalCustom
-          btnTitle={Theme.icons.$edit}
-          type="secondary"
-          title="Edit item in order"
-          okText="Update item"
-          className="body-nonpadding"
-          clickOk={clickUpdate}
-          clickCancel={clickCancel}
-        >
-          <ItemView item={record} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
-        </ModalCustom>
-      ),
-    },
-
-    {
-      title: "",
-      dataIndex: "",
-      key: "y",
-      width: 40,
-      render: (text, record) => (
-        <ModalCustom
-          btnTitle={Theme.icons.$delete}
-          type="secondary"
-          title="Delete item in order"
-          okText="Delete item"
-          className="body-nonpadding"
-          clickOk={clickDelete}
-          clickCancel={clickCancel}
-        >
-          <ItemView item={record} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
-        </ModalCustom>
+        <div className="d-flex">
+          <ModalCustom
+            btnTitle={Theme.icons.$edit}
+            btnClass="mr-2"
+            type="primary"
+            title="Edit item in order"
+            okText="Update item"
+            className="body-nonpadding"
+            clickOk={clickUpdate}
+            clickCancel={clickCancel}
+          >
+            <ItemView
+              item={record}
+              selectedProperties={selectedProperties}
+              updateSelectedproperties={updateSelectedproperties}
+            />
+          </ModalCustom>
+          <DeleteButton btnTitle={Theme.icons.$delete} />
+        </div>
       ),
     },
   ];
@@ -164,7 +152,11 @@ export const ProductSection = () => {
         Selectplaceholder="Choose Type"
       />
       <TableWarp>
-        <TableCustom columns={columns} dataSource={selectedItems} scroll={{ y: 100 }} />
+        <TableCustom
+          columns={columns}
+          dataSource={selectedItems}
+          scroll={{ x: 730, y: 200 }}
+        />
       </TableWarp>
       <ButtonWarp>
         <DeleteButton btnTitle="Cancel Order" />

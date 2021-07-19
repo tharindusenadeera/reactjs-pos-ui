@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { BillingSection } from "./pos/BillingSection";
-import { CustomerSection } from "./pos/CustomerSection";
+import { CatagorySection } from "./pos/CatagorySection";
 import { ItemSection } from "./pos/ItemSection";
 import { ProductSection } from "./pos/ProductSection";
 
@@ -30,7 +30,7 @@ export const Pos = () => {
         </div>
         <div className="col-md-8 col-lg-8 col-xl-5 mb-4">
           <Wrap className="padding gutter-b">
-            <CustomerSection />
+            <CatagorySection />
           </Wrap>
           <Wrap className="padding">
             <ProductSection />
