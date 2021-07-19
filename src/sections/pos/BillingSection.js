@@ -56,7 +56,7 @@ const calculateOrderSummary = (selectedItems, discountPer) => {
   })
 
   const taxPer = 0.03; // tax harcoded as 3%
-  const shipping = subTot === 0 ? 0 : 5; // tax harcoded as 10
+  const shipping = subTot === 0 ? 0 : 0; // shipping harcoded as 0
 
   return {
     totItems : selectedItems.length,
