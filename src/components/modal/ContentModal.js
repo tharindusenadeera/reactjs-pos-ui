@@ -74,7 +74,7 @@ const Count = styled.span`
 `;
 
 export const ContentModal = (props) => {
-  const {clickOk, clickCancel} = props;
+  const {clickOk, clickCancel, disableOk, disableCancel} = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -128,6 +128,8 @@ export const ContentModal = (props) => {
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
         className={props.className}
+        cancelButtonProps={{disabled: disableCancel}}
+        okButtonProps={{disabled: disableOk}}
       >
         {props.children}
       </ModalAnt>
