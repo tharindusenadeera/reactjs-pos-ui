@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { SelectNInputField } from "../../components/field/SelectNInputField";
@@ -9,7 +9,7 @@ import { DeleteButton } from "../../components/button/DeleteButton";
 import { useWindowDimensions } from "../../utils/useWindowDimension";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import { updateItem, deleteItem } from '../../actions/selectedItems';
+import { updateItem, deleteItem } from "../../actions/selectedItems";
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -64,7 +64,7 @@ const ButtonWarp = styled.div`
 
 export const ProductSection = () => {
   const selectedItems = useSelector((state) => state.selectedItems);
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState({});
   const [disableOk, setDisableOk] = useState(true);
   const dispatch = useDispatch();
@@ -89,14 +89,19 @@ export const ProductSection = () => {
 
   const clickDelete = () => {
     dispatch(deleteItem(selectedProperties));
-  }
+  };
 
   const clickCancel = () => {
-  }
+    setIsModalVisible(false);
+  };
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
-  }
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
   const columns = [
     {
@@ -138,11 +143,17 @@ export const ProductSection = () => {
           title="Edit item in order"
           okText="Update item"
           className="body-nonpadding"
-          clickOk={clickUpdate}
-          clickCancel={clickCancel}
+          handleOk={clickUpdate}
+          handleCancel={clickCancel}
           disableOk={disableOk}
+          showModal={showModal}
+          isModalVisible={isModalVisible}
         >
-          <ItemView item={record} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
+          <ItemView
+            item={record}
+            selectedProperties={selectedProperties}
+            updateSelectedproperties={updateSelectedproperties}
+          />
         </ModalCustom>
       ),
     },
@@ -159,11 +170,17 @@ export const ProductSection = () => {
           title="Delete item in order"
           okText="Delete item"
           className="body-nonpadding"
-          clickOk={clickDelete}
-          clickCancel={clickCancel}
+          handleOk={clickDelete}
+          handleCancel={clickCancel}
           disableOk={disableOk}
+          showModal={showModal}
+          isModalVisible={isModalVisible}
         >
-          <ItemView item={record} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
+          <ItemView
+            item={record}
+            selectedProperties={selectedProperties}
+            updateSelectedproperties={updateSelectedproperties}
+          />
         </ModalCustom>
       ),
     },
@@ -177,7 +194,11 @@ export const ProductSection = () => {
         Selectplaceholder="Choose Type"
       />
       <TableWarp>
-        <TableCustom columns={columns} dataSource={selectedItems} scroll={{ y: 100 }} />
+        <TableCustom
+          columns={columns}
+          dataSource={selectedItems}
+          scroll={{ y: 100 }}
+        />
       </TableWarp>
       <ButtonWarp>
         <DeleteButton btnTitle="Cancel Order" />

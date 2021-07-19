@@ -1,8 +1,10 @@
-import React, { Fragment, useState, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Modal } from "antd";
 import { ButtonCustom } from "../button";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
+import { addCustomerTriggered } from "../../actions/customer";
 
 /* Props
 
@@ -90,31 +92,59 @@ export const ModalCustom = (props) => {
     title,
     className,
     children,
-    clickOk,
-    clickCancel,
-    disableOk,
     disableCancel,
+    disableOk,
+    hideCancel,
+    hideSubmit,
+    isModalVisible,
+    handleOk,
+    handleCancel,
+    showModal
   } = props;
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
+  const [disablePropertiesCancel, setDisablePropertiesCancel] = useState({});
+  const [disablePropertiesSubmit, setDisablePropertiesSubmit] = useState({});
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  useEffect(() => {
+      setProperties();
+  }, [disableCancel, disableOk, hideCancel, hideSubmit]);
+
+  const setProperties = () => {
+    handleCancelButtonProperties();
+    handleSubmitButtonProperties();
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
-    clickOk();
+  const handleCancelButtonProperties = () => {
+    let obj = {};
+    if (disableCancel) {
+      obj.disabled = disableCancel;
+    }
+
+    if (hideCancel) {
+      obj.style = { display: "none" };
+    }
+
+    setDisablePropertiesCancel(obj);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    clickCancel();
+  const handleSubmitButtonProperties = () => {
+    let obj = {};
+    if (disableOk) {
+      obj.disabled = disableOk;
+    }
+
+    if (hideSubmit) {
+      obj.style = { display: "none" };
+    }
+
+    setDisablePropertiesSubmit(obj);
   };
 
   /* Prop Handle */
   const CountComp = useRef("");
   const PrimaryButtonText = useRef("");
   const SecondaryButtonText = useRef("");
+
   if (!!count) {
     CountComp.current = <Count>{count}</Count>;
   }
@@ -152,8 +182,9 @@ export const ModalCustom = (props) => {
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
         className={className}
-        cancelButtonProps={{disabled: disableCancel}}
-        okButtonProps={{disabled: disableOk}}
+        cancelButtonProps={disablePropertiesCancel}
+        okButtonProps={disablePropertiesSubmit}
+        closable={false}
       >
         {children}
       </ModalAnt>
