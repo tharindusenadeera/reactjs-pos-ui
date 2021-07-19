@@ -25,6 +25,8 @@ export const CustomerSection = () => {
           plusComp="shipping-create"
           placeholder="Select Address"
           okText="Add Address"
+          disableCancel={true}
+          disableSubmit={true}
         />
       </div>
     </div>

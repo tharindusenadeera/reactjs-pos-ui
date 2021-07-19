@@ -25,12 +25,6 @@ export const CustomerCreateForm = (props) => {
   );
   const mobileNoRegex = RegExp("^([0-9]+)$");
 
-  // useEffect(() => {
-  //   if (clickedSubmit.isAdd) {
-  //     handleSubmit();
-  //   }
-  // }, [clickedSubmit]);
-
   const validate = (data) => {
     let errors = {};
     if (!data.firstName) {
