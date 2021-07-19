@@ -72,26 +72,24 @@ export const ProductSection = () => {
   useEffect(() => {
     if (selectedProperties.quantity && selectedProperties.quantity !== 0) {
       setDisableOk(false);
+    } else {
+      setDisableOk(true);
     }
   }, [selectedProperties]);
 
   const clickUpdate = () => {
     dispatch(updateItem(selectedProperties));
-    setDisableOk(true);
   }
 
   const clickDelete = () => {
     dispatch(deleteItem(selectedProperties));
-    setDisableOk(true);
   }
 
   const clickCancel = () => {
-    setDisableOk(true);
   }
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
-    setDisableOk(true);
   }
 
   const columns = [
