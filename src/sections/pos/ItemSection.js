@@ -129,6 +129,8 @@ export const ItemSection = () => {
   const [categories, setCategories] = useState([]);
 
   const [selectedProperties, setSelectedProperties] = useState({});
+  const [disableOk, setDisableOk] = useState(true);
+
   const alreadyAddedItems = useSelector((state) => state.selectedItems);
   const dispatch = useDispatch();
 
@@ -139,6 +141,12 @@ export const ItemSection = () => {
     });
     // handleProducts(productsArr, selectedItems);
   }, []);
+
+  useEffect(() => {
+    if (selectedProperties?.taste && selectedProperties?.size && selectedProperties.quantity) {
+      setDisableOk(false);
+    }
+  }, [selectedProperties]);
 
   const handleProducts = (data) => {
     let itemArr = [];
@@ -211,10 +219,12 @@ export const ItemSection = () => {
       dispatch(addItem(newItem));
     }
     setSelectedProperties({});
+    setDisableOk(true);
   }
 
   const clickCancel = () => {
     setSelectedProperties({});
+    setDisableOk(true);
   }
 
   const updateSelectedproperties = (updatedItem) => {
@@ -290,6 +300,7 @@ export const ItemSection = () => {
                   }
                   okText="Add to order"
                   className="body-nonpadding"
+                  disableOk={disableOk}
                   clickOk={clickOk}
                   clickCancel={clickCancel}
                 >
