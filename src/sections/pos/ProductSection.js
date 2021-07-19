@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
@@ -66,7 +66,16 @@ export const ProductSection = () => {
   const selectedItems = useSelector((state) => state.selectedItems);
 
   const [selectedProperties, setSelectedProperties] = useState({});
+  const [disableOk, setDisableOk] = useState(true);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (selectedProperties.quantity && selectedProperties.quantity !== 0) {
+      setDisableOk(false);
+    } else {
+      setDisableOk(true);
+    }
+  }, [selectedProperties]);
 
   const clickUpdate = () => {
     dispatch(updateItem(selectedProperties));
@@ -76,7 +85,8 @@ export const ProductSection = () => {
     dispatch(deleteItem(selectedProperties));
   }
 
-  const clickCancel = () => {}
+  const clickCancel = () => {
+  }
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
@@ -129,6 +139,7 @@ export const ProductSection = () => {
           className="body-nonpadding"
           clickOk={clickUpdate}
           clickCancel={clickCancel}
+          disableOk={disableOk}
         >
           <ItemView item={record} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
         </ModalCustom>
@@ -149,6 +160,7 @@ export const ProductSection = () => {
           className="body-nonpadding"
           clickOk={clickDelete}
           clickCancel={clickCancel}
+          disableOk={disableOk}
         >
           <ItemView item={record} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
         </ModalCustom>
