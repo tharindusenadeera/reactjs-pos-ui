@@ -92,6 +92,8 @@ export const ModalCustom = (props) => {
     children,
     clickOk,
     clickCancel,
+    disableOk,
+    disableCancel,
   } = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -150,6 +152,8 @@ export const ModalCustom = (props) => {
         okText={PrimaryButtonText.current}
         cancelText={SecondaryButtonText.current}
         className={className}
+        cancelButtonProps={{disabled: disableCancel}}
+        okButtonProps={{disabled: disableOk}}
       >
         {children}
       </ModalAnt>
