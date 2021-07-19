@@ -49,7 +49,7 @@ export const Label = (props) => {
   const ModalTitle = useRef("");
   if (plusComp === "customer-create") {
     ModalComponent.current = (
-      <CustomerCreateForm onOk={clickOk} onCancel={clickCancel} okText={cancelText} />
+      <CustomerCreateForm />
     );
     ModalTitle.current = "Add a customer";
   } else if (plusComp === "shipping-create") {

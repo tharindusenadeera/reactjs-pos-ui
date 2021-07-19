@@ -1,8 +1,10 @@
 import React, { Fragment, useState, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { Modal } from "antd";
 import { ButtonCustom } from "../button";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
+import { addCustomerTriggered } from "../../actions/customer";
 
 /* Props
 
@@ -80,6 +82,7 @@ const Count = styled.span`
 `;
 
 export const ModalCustom = (props) => {
+  const dispatch = useDispatch();
   const {
     count,
     type,
@@ -102,11 +105,13 @@ export const ModalCustom = (props) => {
   const handleOk = () => {
     setIsModalVisible(false);
     clickOk();
+    dispatch(addCustomerTriggered(true));
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
     clickCancel();
+    dispatch(addCustomerTriggered(false));
   };
 
   /* Prop Handle */
