@@ -76,11 +76,16 @@ const calculateOrderSummary = (selectedItems, discountPer) => {
   };
 };
 
-export const BillingSection = () => {
+export const BillingSection = (props) => {
   const [perc, setPerc] = useState(0);
   const [savedPerc, setSavedPerc] = useState(0);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const selectedItems = useSelector((state) => state.selectedItems);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
   const clickOk = () => {
     setSavedPerc(perc);
@@ -94,6 +99,14 @@ export const BillingSection = () => {
     if (!isNaN(per)) {
       setPerc(parseInt(per));
     }
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   const { totItems, subTot, discount, tax, shipping, tot } =
@@ -170,6 +183,10 @@ export const BillingSection = () => {
           btnClass="mb-3 w-100 green"
           title="Payment"
           okText="Pay Now"
+          showModal={showModal}
+          isModalVisible={isModalVisible}
+          handleOk={handleOk}
+          handleCancel={handleCancel}
         >
           <Payment />
         </ModalCustom>
