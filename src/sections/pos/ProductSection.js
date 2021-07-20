@@ -153,7 +153,7 @@ export const ProductSection = () => {
               type="primary"
               title="Edit item in order"
               okText="Update item"
-              okType="primary green"
+              okType="primary yellow"
               className="body-nonpadding"
               handleOk={clickUpdate}
               handleCancel={clickCancel}
@@ -192,32 +192,6 @@ export const ProductSection = () => {
         </div>
       ),
     },
-    // {
-    //   title: "",
-    //   dataIndex: "",
-    //   key: "y",
-    //   width: 35,
-    //   render: (text, record) => (
-    //     <ModalCustom
-    //       btnTitle={Theme.icons.$delete}
-    //       type="secondary"
-    //       title="Delete item in order"
-    //       okText="Delete item"
-    //       className="body-nonpadding"
-    //       handleOk={clickDelete}
-    //       handleCancel={clickCancel}
-    //       disableOk={disableOk}
-    //       showModal={showModal}
-    //       isModalVisible={isModalVisible}
-    //     >
-    //       <ItemView
-    //         item={record}
-    //         selectedProperties={selectedProperties}
-    //         updateSelectedproperties={updateSelectedproperties}
-    //       />
-    //     </ModalCustom>
-    //   ),
-    // },
   ];
 
   return (
