@@ -57,6 +57,26 @@ const GlobalStyle = createGlobalStyle`
     height: unset;
     padding: 6px 20px;
     border-radius: ${Theme.space.BorderRadius};
+
+    &.green {
+      background: ${Theme.colors.$green} !important;
+      border-color: ${Theme.colors.$greenBorder} !important;
+      &:hover,
+      :focus {
+        background: ${Theme.colors.$greenHover} !important;
+        border-color: ${Theme.colors.$greenHoverBorder} !important;
+      }
+    }
+
+    &.yellow {
+      background: ${Theme.colors.$yellow} !important;
+      border-color: ${Theme.colors.$yellowBorder} !important;
+      &:hover,
+      :focus {
+        background: ${Theme.colors.$yellowHover} !important;
+        border-color: ${Theme.colors.$yellowHover} !important;
+      }
+    }
   }
 
   /* Ant Popconfirm */
@@ -111,29 +131,27 @@ const GlobalStyle = createGlobalStyle`
 
   /* Ant Modal */
   .ant-modal{
-    .ant-modal-footer{
-      .ant-btn{
-          &{
-            background: ${Theme.colors.$white};
-            border-color: ${Theme.colors.$secondary};
-            color: ${Theme.colors.$secondary};
-            &:hover {
-              background: ${Theme.colors.$white};
-              border-color: ${Theme.colors.$secondaryHover};
-              color: ${Theme.colors.$secondaryHover};
-            }
-          }
-          &.ant-btn-primary{
-            background: ${Theme.colors.$primary};
-            border-color: ${Theme.colors.$primary};
-            color: ${Theme.colors.$white};
-            &:hover {
-              background: ${Theme.colors.$primaryHover};
-              border-color: ${Theme.colors.$primaryHover};
-              color: ${Theme.colors.$white};
-            }
-          }
+    .ant-btn{
+      &{
+        background: ${Theme.colors.$white};
+        border-color: ${Theme.colors.$secondary};
+        color: ${Theme.colors.$secondary};
+        &:hover {
+          background: ${Theme.colors.$white};
+          border-color: ${Theme.colors.$secondaryHover};
+          color: ${Theme.colors.$secondaryHover};
         }
+      }
+      &.ant-btn-primary{
+        background: ${Theme.colors.$primary};
+        border-color: ${Theme.colors.$primary};
+        color: ${Theme.colors.$white};
+        &:hover {
+          background: ${Theme.colors.$primaryHover};
+          border-color: ${Theme.colors.$primaryHover};
+          color: ${Theme.colors.$white};
+        }
+      }
     }
   }
 

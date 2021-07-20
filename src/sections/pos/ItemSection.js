@@ -77,7 +77,7 @@ const Body = styled.div`
     max-height: calc(100vh - 630px) !important;
   }
   @media ${Theme.device.lg} {
-    max-height: calc(100vh - 190px) !important;
+    max-height: calc(100vh - 180px) !important;
   }
 
   &::-webkit-scrollbar {
@@ -143,7 +143,12 @@ export const ItemSection = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedProperties?.taste && selectedProperties?.size && selectedProperties?.quantity && selectedProperties?.quantity !== 0) {
+    if (
+      selectedProperties?.taste &&
+      selectedProperties?.size &&
+      selectedProperties?.quantity &&
+      selectedProperties?.quantity !== 0
+    ) {
       setDisableOk(false);
     }
   }, [selectedProperties]);
@@ -204,33 +209,38 @@ export const ItemSection = () => {
 
   const handlePriceCalculation = (item, itemKey) => {
     // disounted value and total value should update with services
-    return {...item, subtotal: (item?.price * item?.quantity), key: itemKey};
-  }
+    return { ...item, subtotal: item?.price * item?.quantity, key: itemKey };
+  };
 
   const clickOk = () => {
     const itemKey = generateUniqueId(selectedProperties);
     const newItem = handlePriceCalculation(selectedProperties, itemKey);
-    const addedItem = alreadyAddedItems.find((addedItem) => addedItem.key === itemKey);
+    const addedItem = alreadyAddedItems.find(
+      (addedItem) => addedItem.key === itemKey
+    );
 
     if (addedItem) {
-      const updatedItem = handlePriceCalculation({...addedItem, quantity : newItem.quantity + addedItem.quantity}, itemKey);
+      const updatedItem = handlePriceCalculation(
+        { ...addedItem, quantity: newItem.quantity + addedItem.quantity },
+        itemKey
+      );
       dispatch(updateItem(updatedItem));
     } else {
       dispatch(addItem(newItem));
     }
     setSelectedProperties({});
     setDisableOk(true);
-  }
+  };
 
   const clickCancel = () => {
     setSelectedProperties({});
     setDisableOk(true);
-  }
+  };
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
     setDisableOk(true);
-  }
+  };
 
   const handleCategories = (data) => {
     let newArr = [];
@@ -255,7 +265,7 @@ export const ItemSection = () => {
     setCategories(newArr);
   };
 
-  const handleSearch = value => {
+  const handleSearch = (value) => {
     let strLength = value.length;
 
     if (strLength % 3 == 0) {
@@ -263,7 +273,7 @@ export const ItemSection = () => {
     } else {
       return;
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -278,7 +288,11 @@ export const ItemSection = () => {
             />
           </div>
           <div className="col-6">
-            <SelectCustom showSearch={true} placeholder="Type item to search" onSearch={handleSearch}/>
+            <SelectCustom
+              showSearch={true}
+              placeholder="Type item to search"
+              onSearch={handleSearch}
+            />
           </div>
         </div>
       </Head>
@@ -299,13 +313,18 @@ export const ItemSection = () => {
                       <span className="prod-title">{item.name}</span>
                     </ProductCard>
                   }
+                  btnClass="green"
                   okText="Add to order"
                   className="body-nonpadding"
                   disableOk={disableOk}
                   clickOk={clickOk}
                   clickCancel={clickCancel}
                 >
-                  <ItemView item={item} selectedProperties={selectedProperties} updateSelectedproperties={updateSelectedproperties}/>
+                  <ItemView
+                    item={item}
+                    selectedProperties={selectedProperties}
+                    updateSelectedproperties={updateSelectedproperties}
+                  />
                 </ContentModal>
               </div>
             );

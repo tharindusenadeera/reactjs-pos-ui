@@ -4,6 +4,10 @@ import styled from "styled-components";
 import Theme from "../../utils/Theme";
 
 const Wrapper = styled.div`
+  .ant-radio-wrapper {
+    margin-right: 14px;
+  }
+
   .ant-radio-checked::after {
     border: 1px solid ${Theme.colors.$primary};
     top: 4px;

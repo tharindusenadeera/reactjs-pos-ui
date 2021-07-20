@@ -6,6 +6,7 @@ import Theme from "../../utils/Theme";
 import { ModalCustom } from "../../components/modal";
 import { Label } from "../../components/field/Label";
 import { Payment } from "../billing/Payment";
+import { SelectField } from "../../components/field/SelectField";
 
 const ShopDetail = styled.div`
   display: flex;
@@ -47,6 +48,13 @@ const FieldRow = styled.div`
     margin-bottom: unset;
   }
 `;
+
+const Hr = styled.hr`
+  margin-top: 3px;
+  margin-bottom: 10px;
+`;
+
+const customerArr = [{ key: 1, value: "Walk in Customer" }];
 
 const calculateOrderSummary = (selectedItems, discountPer) => {
   let subTot = 0;
@@ -168,13 +176,11 @@ export const BillingSection = (props) => {
         </FieldRow>
       </BillDetail>
 
-      <hr />
-
       <div className="d-flex flex-column mt-4">
         <ModalCustom
           btnTitle="Pay the bill"
           type="primary"
-          btnClass="mb-3 w-100"
+          btnClass="mb-3 w-100 green"
           title="Payment"
           okText="Pay Now"
           showModal={showModal}
@@ -184,6 +190,34 @@ export const BillingSection = (props) => {
         >
           <Payment />
         </ModalCustom>
+      </div>
+
+      <Hr />
+
+      <div className="row">
+        <div className="col-12">
+          <SelectField
+            showSearch={true}
+            label="Choose a Customer"
+            plusComp="customer-create"
+            placeholder="Select customer"
+            options={customerArr}
+            okText="Add Customer"
+            hideCancel={true}
+            hideSubmit={true}
+          />
+        </div>
+        <div className="col-12">
+          <SelectField
+            showSearch={true}
+            label="Shipping Address"
+            plusComp="shipping-create"
+            placeholder="Select Address"
+            okText="Add Address"
+            hideCancel={true}
+            hideSubmit={true}
+          />
+        </div>
       </div>
     </Fragment>
   );

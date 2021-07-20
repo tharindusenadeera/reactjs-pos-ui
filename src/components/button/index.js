@@ -23,7 +23,7 @@ const ButtonAnt = styled(Button)`
     :focus {
       background: ${Theme.colors.$primaryLight};
       border-color: ${Theme.colors.$primaryHover};
-      color: ${Theme.colors.$primaryHover};
+      color: ${Theme.colors.$white};
     }
   }
 `;
@@ -31,11 +31,7 @@ const ButtonAnt = styled(Button)`
 export const ButtonCustom = (props) => {
   const { type, className, btnTitle, onClick } = props;
   return (
-    <ButtonAnt
-      type={type}
-      onClick={onClick}
-      className={className}
-    >
+    <ButtonAnt type={type} onClick={onClick} className={className}>
       {btnTitle}
     </ButtonAnt>
   );

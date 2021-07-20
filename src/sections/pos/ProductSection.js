@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
@@ -6,7 +6,6 @@ import { SelectNInputField } from "../../components/field/SelectNInputField";
 import { TableCustom } from "../../components/table";
 import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
-import { useWindowDimensions } from "../../utils/useWindowDimension";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
 import { updateItem, deleteItem } from "../../actions/selectedItems";
@@ -37,7 +36,7 @@ const TableWarp = styled.div`
       max-height: calc(100vh - 698px) !important;
     }
     @media ${Theme.device.lg} {
-      max-height: calc(100vh - 496px) !important;
+      max-height: calc(100vh - 428px) !important;
     }
   }
 `;
@@ -65,6 +64,7 @@ const ButtonWarp = styled.div`
 export const ProductSection = () => {
   const selectedItems = useSelector((state) => state.selectedItems);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisibleDelete, setIsModalVisibleDelete] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState({});
   const [disableOk, setDisableOk] = useState(true);
   const dispatch = useDispatch();
@@ -79,13 +79,13 @@ export const ProductSection = () => {
 
   const handlePriceCalculation = (item) => {
     // disounted value and total value should update with services
-    return {...item, subtotal: (item?.price * item?.quantity)};
-  }
+    return { ...item, subtotal: item?.price * item?.quantity };
+  };
 
   const clickUpdate = () => {
-    const updatedItem = handlePriceCalculation(selectedProperties)
+    const updatedItem = handlePriceCalculation(selectedProperties);
     dispatch(updateItem(updatedItem));
-  }
+  };
 
   const clickDelete = () => {
     dispatch(deleteItem(selectedProperties));
@@ -95,12 +95,19 @@ export const ProductSection = () => {
     setIsModalVisible(false);
   };
 
+  const clickCancelDelete = () => {
+    setIsModalVisibleDelete(false);
+  };
+
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
   };
 
   const showModal = () => {
     setIsModalVisible(true);
+  };
+  const showModalDelete = () => {
+    setIsModalVisibleDelete(true);
   };
 
   const columns = [
@@ -132,56 +139,57 @@ export const ProductSection = () => {
       width: 70,
     },
     {
-      title: "",
+      title: "Actions",
       dataIndex: "",
       key: "x",
-      width: 35,
+      width: 110,
+      fixed: "right",
       render: (text, record) => (
-        <ModalCustom
-          btnTitle={Theme.icons.$edit}
-          type="secondary"
-          title="Edit item in order"
-          okText="Update item"
-          className="body-nonpadding"
-          handleOk={clickUpdate}
-          handleCancel={clickCancel}
-          disableOk={disableOk}
-          showModal={showModal}
-          isModalVisible={isModalVisible}
-        >
-          <ItemView
-            item={record}
-            selectedProperties={selectedProperties}
-            updateSelectedproperties={updateSelectedproperties}
-          />
-        </ModalCustom>
-      ),
-    },
-
-    {
-      title: "",
-      dataIndex: "",
-      key: "y",
-      width: 35,
-      render: (text, record) => (
-        <ModalCustom
-          btnTitle={Theme.icons.$delete}
-          type="secondary"
-          title="Delete item in order"
-          okText="Delete item"
-          className="body-nonpadding"
-          handleOk={clickDelete}
-          handleCancel={clickCancel}
-          disableOk={disableOk}
-          showModal={showModal}
-          isModalVisible={isModalVisible}
-        >
-          <ItemView
-            item={record}
-            selectedProperties={selectedProperties}
-            updateSelectedproperties={updateSelectedproperties}
-          />
-        </ModalCustom>
+        <div className="d-flex">
+          <Fragment>
+            <ModalCustom
+              btnTitle={Theme.icons.$edit}
+              btnClass="mr-2 yellow"
+              type="primary"
+              title="Edit item in order"
+              okText="Update item"
+              okType="primary yellow"
+              className="body-nonpadding"
+              handleOk={clickUpdate}
+              handleCancel={clickCancel}
+              disableOk={disableOk}
+              showModal={showModal}
+              isModalVisible={isModalVisible}
+            >
+              <ItemView
+                item={record}
+                selectedProperties={selectedProperties}
+                updateSelectedproperties={updateSelectedproperties}
+              />
+            </ModalCustom>
+          </Fragment>
+          {/* <DeleteButton btnTitle={Theme.icons.$delete} /> */}
+          <Fragment>
+            <ModalCustom
+              btnTitle={Theme.icons.$delete}
+              btnClass="btn-danger"
+              title="Delete item in order"
+              okText="Delete item"
+              className="body-nonpadding"
+              handleOk={clickDelete}
+              handleCancel={clickCancelDelete}
+              disableOk={disableOk}
+              showModal={showModalDelete}
+              isModalVisible={isModalVisibleDelete}
+            >
+              <ItemView
+                item={record}
+                selectedProperties={selectedProperties}
+                updateSelectedproperties={updateSelectedproperties}
+              />
+            </ModalCustom>
+          </Fragment>
+        </div>
       ),
     },
   ];
@@ -197,12 +205,12 @@ export const ProductSection = () => {
         <TableCustom
           columns={columns}
           dataSource={selectedItems}
-          scroll={{ y: 100 }}
+          scroll={{ x: 730, y: 200 }}
         />
       </TableWarp>
       <ButtonWarp>
         <DeleteButton btnTitle="Cancel Order" />
-        <ButtonCustom type="primary" btnTitle="Draft Order" />
+        <ButtonCustom type="primary" className="green" btnTitle="Draft Order" />
       </ButtonWarp>
     </div>
   );
