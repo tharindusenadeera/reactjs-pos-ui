@@ -1,9 +1,14 @@
-import { ADD_CUSTOMER_TRIGGERED, ADD_CUSTOMER } from "../constants/ActionTypes";
+import {
+  ADD_CUSTOMER_TRIGGERED,
+  ADD_CUSTOMER,
+  CUSTOMER_DETAILS,
+} from "../constants/ActionTypes";
 
 const initialState = {
   isAdd: false,
   isCancel: false,
   addCustomer: {},
+  customerDetails: {}
 };
 
 const customerReducer = (state = initialState, action) => {
@@ -11,6 +16,8 @@ const customerReducer = (state = initialState, action) => {
     case ADD_CUSTOMER_TRIGGERED:
       return { ...state, isAdd: action.payload };
     case ADD_CUSTOMER:
+      return { ...state, addCustomer: action.payload };
+    case CUSTOMER_DETAILS:
       return { ...state, addCustomer: action.payload };
     default:
       return state;

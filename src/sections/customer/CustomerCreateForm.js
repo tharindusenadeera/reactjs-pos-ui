@@ -2,9 +2,10 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectField } from "../../components/field/SelectField";
 import { InputField } from "../../components/field/InputField";
-import { addCustomerTriggered, addCutomer } from "../../actions/customer";
+import { addCustomerTriggered, addCutomer, customerDetails } from "../../actions/customer";
 import styled from "styled-components";
 import { ButtonCustom } from "../../components/button";
+import { addCustomer } from "../../api/customer";
 
 const ButtonWrap = styled.div`
   margin-top: 5px;
@@ -20,6 +21,8 @@ export const CustomerCreateForm = (props) => {
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
+  const [firstAddressLine, setFirstAddressLine] = useState("");
+  const [secondAddressLine, setSecondAddressLine] = useState("");
   const [errorObj, setErrorObj] = useState({});
   const emailRegex = RegExp(
     '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
@@ -32,8 +35,6 @@ export const CustomerCreateForm = (props) => {
       errors.firstName = "First Name Required !";
     } else if (!data.lastName) {
       errors.lastName = "Last Name Required !";
-    } else if (!data.email) {
-      errors.email = "Email Required !";
     } else if (!emailRegex.test(data.email)) {
       errors.email = "Invalid Email !";
     } else if (!data.phoneNumber) {
@@ -57,7 +58,6 @@ export const CustomerCreateForm = (props) => {
       email,
     };
     if (!firstName || !lastName || !phoneNumber) {
-      console.log("=== ERROR - NOTHING ===");
       setErrorObj({
         all: "all",
         firstName: "Required !",
@@ -67,12 +67,22 @@ export const CustomerCreateForm = (props) => {
       return;
     } else {
       const errors = validate(obj);
-      console.log("=== ERROR ===", errors);
+      let newCustomer = {
+        first_name: firstName,
+        last_name: lastName,
+        contact_number: phoneNumber,
+        email: email,
+        address_line_1: firstAddressLine,
+        address_line_2: secondAddressLine
+      };
       if (!Object.keys(errors).length) {
-        dispatch(addCustomerTriggered(false));
-        dispatch(addCutomer(obj));
-        console.log("CUSTOMER", obj);
-        props.handleCancel();
+        addCustomer(newCustomer).then(res => {
+          console.log("=== Customer response ===", res.data);
+          if (res.data.status == 'success') {
+            dispatch(customerDetails(res.data.data));
+            props.handleCancel();
+          }
+        })
       }
     }
   };
@@ -129,6 +139,34 @@ export const CustomerCreateForm = (props) => {
             }
             onChange={(e) => {
               setLastName(e.target.value);
+              setErrorObj({});
+            }}
+          />
+        </div>
+
+        <div className="col-12 col-sm-6">
+          <InputField
+            label="Address Line 1"
+            placeholder="Type first address line"
+            // errorMsg={
+            //   errorObj.lastName || errorObj.all ? errorObj.lastName : ""
+            // }
+            onChange={(e) => {
+              setFirstAddressLine(e.target.value);
+              setErrorObj({});
+            }}
+          />
+        </div>
+
+        <div className="col-12 col-sm-6">
+          <InputField
+            label="Address Line 2"
+            placeholder="Type second address line"
+            // errorMsg={
+            //   errorObj.lastName || errorObj.all ? errorObj.lastName : ""
+            // }
+            onChange={(e) => {
+              setSecondAddressLine(e.target.value);
               setErrorObj({});
             }}
           />

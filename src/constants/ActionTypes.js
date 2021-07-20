@@ -6,6 +6,7 @@ export const DELETE_ITEM = 'DELETE_ITEM';
 //---------- Customer ------------------//
 export const ADD_CUSTOMER_TRIGGERED = 'ADD_CUSTOMER_TRIGGERED';
 export const ADD_CUSTOMER = 'ADD_CUSTOMER';
+export const CUSTOMER_DETAILS = 'CUSTOMER_DETAILS';
 
 //----------- Common -------------------//
 export const ERROR = 'ERROR';
