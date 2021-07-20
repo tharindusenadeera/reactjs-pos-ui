@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { ModalCustom } from "../modal";
@@ -35,18 +35,42 @@ const LabelWrap = styled.div`
 `;
 
 export const Label = (props) => {
-  const { plusComp, okText, cancelText, className, label } = props;
+  const {
+    plusComp,
+    okText,
+    cancelText,
+    className,
+    label,
+    hideCancel,
+    hideSubmit,
+    disableCancel,
+    disableOk,
+    onChange
+  } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
   const ModalTitle = useRef("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
   if (plusComp === "customer-create") {
-    ModalComponent.current = <CustomerCreateForm />;
+    ModalComponent.current = <CustomerCreateForm handleCancel={handleCancel}/>;
     ModalTitle.current = "Add a customer";
   } else if (plusComp === "shipping-create") {
-    ModalComponent.current = <ShippingCreateForm />;
+    ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel}/>;
     ModalTitle.current = "Add a shipping address";
   } else if (plusComp === "discount") {
-    ModalComponent.current = <DiscountForm />;
+    ModalComponent.current = <DiscountForm onChange={onChange}/>;
     ModalTitle.current = "Add Discount";
   } else if (plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;
@@ -61,6 +85,14 @@ export const Label = (props) => {
         type="primary"
         okText={okText}
         cancelText={cancelText}
+        hideCancel={hideCancel}
+        hideSubmit={hideSubmit}
+        disableCancel={disableCancel}
+        disableOk={disableOk}
+        showModal={showModal}
+        isModalVisible={isModalVisible}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
       >
         {ModalComponent.current}
       </ModalCustom>

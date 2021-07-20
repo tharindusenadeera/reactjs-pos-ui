@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
@@ -63,22 +63,43 @@ const ButtonWarp = styled.div`
 
 export const ProductSection = () => {
   const selectedItems = useSelector((state) => state.selectedItems);
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState({});
+  const [disableOk, setDisableOk] = useState(true);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (selectedProperties.quantity && selectedProperties.quantity !== 0) {
+      setDisableOk(false);
+    } else {
+      setDisableOk(true);
+    }
+  }, [selectedProperties]);
+
+  const handlePriceCalculation = (item) => {
+    // disounted value and total value should update with services
+    return { ...item, subtotal: item?.price * item?.quantity };
+  };
+
   const clickUpdate = () => {
-    dispatch(updateItem(selectedProperties));
+    const updatedItem = handlePriceCalculation(selectedProperties);
+    dispatch(updateItem(updatedItem));
   };
 
   const clickDelete = () => {
     dispatch(deleteItem(selectedProperties));
   };
 
-  const clickCancel = () => {};
+  const clickCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
   };
 
   const columns = [
@@ -87,27 +108,22 @@ export const ProductSection = () => {
       dataIndex: "name",
       key: "name",
       //fixed: "left",
-      width: 110,
+      width: 120,
     },
     {
       title: "Taste",
       dataIndex: "taste",
-      width: 60,
+      width: 70,
     },
     {
       title: "Size",
       dataIndex: "size",
-      width: 60,
+      width: 70,
     },
     {
       title: "Qty",
       dataIndex: "quantity",
       width: 50,
-    },
-    {
-      title: "Discount",
-      dataIndex: "discount",
-      width: 70,
     },
     {
       title: "Subtotal",

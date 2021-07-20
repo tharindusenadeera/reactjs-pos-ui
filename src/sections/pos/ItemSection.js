@@ -146,7 +146,8 @@ export const ItemSection = () => {
     if (
       selectedProperties?.taste &&
       selectedProperties?.size &&
-      selectedProperties.quantity
+      selectedProperties?.quantity &&
+      selectedProperties?.quantity !== 0
     ) {
       setDisableOk(false);
     }
@@ -208,7 +209,7 @@ export const ItemSection = () => {
 
   const handlePriceCalculation = (item, itemKey) => {
     // disounted value and total value should update with services
-    return { ...item, discount: 100, subtotal: 1000, key: itemKey };
+    return { ...item, subtotal: item?.price * item?.quantity, key: itemKey };
   };
 
   const clickOk = () => {
@@ -238,6 +239,7 @@ export const ItemSection = () => {
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
+    setDisableOk(true);
   };
 
   const handleCategories = (data) => {

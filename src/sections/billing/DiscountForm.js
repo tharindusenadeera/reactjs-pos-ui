@@ -1,15 +1,15 @@
 import React, { Fragment } from "react";
 import { InputField } from "../../components/field/InputField";
 
-export const DiscountForm = () => {
+export const DiscountForm = ({onChange}) => {
   return (
     <Fragment>
       <div className="row">
         <div className="col-12">
           <InputField
-            label="Discount"
+            label="Discount(%)"
             placeholder="Enter discount"
-            errorMsg="This is an error"
+            onChange={onChange}
           />
         </div>
       </div>
