@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
@@ -64,6 +64,7 @@ const ButtonWarp = styled.div`
 export const ProductSection = () => {
   const selectedItems = useSelector((state) => state.selectedItems);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisibleDelete, setIsModalVisibleDelete] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState({});
   const [disableOk, setDisableOk] = useState(true);
   const dispatch = useDispatch();
@@ -94,12 +95,19 @@ export const ProductSection = () => {
     setIsModalVisible(false);
   };
 
+  const clickCancelDelete = () => {
+    setIsModalVisibleDelete(false);
+  };
+
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
   };
 
   const showModal = () => {
     setIsModalVisible(true);
+  };
+  const showModalDelete = () => {
+    setIsModalVisibleDelete(true);
   };
 
   const columns = [
@@ -138,26 +146,77 @@ export const ProductSection = () => {
       fixed: "right",
       render: (text, record) => (
         <div className="d-flex">
-          <ModalCustom
-            btnTitle={Theme.icons.$edit}
-            btnClass="mr-2 yellow"
-            type="primary"
-            title="Edit item in order"
-            okText="Update item"
-            className="body-nonpadding"
-            clickOk={clickUpdate}
-            clickCancel={clickCancel}
-          >
-            <ItemView
-              item={record}
-              selectedProperties={selectedProperties}
-              updateSelectedproperties={updateSelectedproperties}
-            />
-          </ModalCustom>
-          <DeleteButton btnTitle={Theme.icons.$delete} />
+          <Fragment>
+            <ModalCustom
+              btnTitle={Theme.icons.$edit}
+              btnClass="mr-2 yellow"
+              type="primary"
+              title="Edit item in order"
+              okText="Update item"
+              className="body-nonpadding"
+              handleOk={clickUpdate}
+              handleCancel={clickCancel}
+              disableOk={disableOk}
+              showModal={showModal}
+              isModalVisible={isModalVisible}
+            >
+              <ItemView
+                item={record}
+                selectedProperties={selectedProperties}
+                updateSelectedproperties={updateSelectedproperties}
+              />
+            </ModalCustom>
+          </Fragment>
+          {/* <DeleteButton btnTitle={Theme.icons.$delete} /> */}
+          <Fragment>
+            <ModalCustom
+              btnTitle={Theme.icons.$delete}
+              type="secondary"
+              title="Delete item in order"
+              okText="Delete item"
+              className="body-nonpadding"
+              handleOk={clickDelete}
+              handleCancel={clickCancelDelete}
+              disableOk={disableOk}
+              showModal={showModalDelete}
+              isModalVisible={isModalVisibleDelete}
+            >
+              <ItemView
+                item={record}
+                selectedProperties={selectedProperties}
+                updateSelectedproperties={updateSelectedproperties}
+              />
+            </ModalCustom>
+          </Fragment>
         </div>
       ),
     },
+    // {
+    //   title: "",
+    //   dataIndex: "",
+    //   key: "y",
+    //   width: 35,
+    //   render: (text, record) => (
+    //     <ModalCustom
+    //       btnTitle={Theme.icons.$delete}
+    //       type="secondary"
+    //       title="Delete item in order"
+    //       okText="Delete item"
+    //       className="body-nonpadding"
+    //       handleOk={clickDelete}
+    //       handleCancel={clickCancel}
+    //       disableOk={disableOk}
+    //       showModal={showModal}
+    //       isModalVisible={isModalVisible}
+    //     >
+    //       <ItemView
+    //         item={record}
+    //         selectedProperties={selectedProperties}
+    //         updateSelectedproperties={updateSelectedproperties}
+    //       />
+    //     </ModalCustom>
+    //   ),
+    // },
   ];
 
   return (

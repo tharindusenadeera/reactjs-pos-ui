@@ -203,6 +203,8 @@ export const BillingSection = (props) => {
             placeholder="Select customer"
             options={customerArr}
             okText="Add Customer"
+            hideCancel={true}
+            hideSubmit={true}
           />
         </div>
         <div className="col-12">
@@ -212,6 +214,8 @@ export const BillingSection = (props) => {
             plusComp="shipping-create"
             placeholder="Select Address"
             okText="Add Address"
+            hideCancel={true}
+            hideSubmit={true}
           />
         </div>
       </div>
