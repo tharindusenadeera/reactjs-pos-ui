@@ -153,6 +153,7 @@ export const ProductSection = () => {
               type="primary"
               title="Edit item in order"
               okText="Update item"
+              okType="primary green"
               className="body-nonpadding"
               handleOk={clickUpdate}
               handleCancel={clickCancel}
