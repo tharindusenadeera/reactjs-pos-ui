@@ -6,12 +6,22 @@ import Theme from "../../utils/Theme";
 const ButtonAnt = styled(Button)`
   &.ant-btn {
     &.green {
-      background: #63b10e;
-      border-color: #58a208;
+      background: ${Theme.colors.$green};
+      border-color: ${Theme.colors.$greenBorder};
       &:hover,
       :focus {
-        background: #559c07;
-        border-color: #4f9204;
+        background: ${Theme.colors.$greenHover};
+        border-color: ${Theme.colors.$greenHoverBorder};
+      }
+    }
+
+    &.yellow {
+      background: ${Theme.colors.$yellow};
+      border-color: ${Theme.colors.$yellowBorder};
+      &:hover,
+      :focus {
+        background: ${Theme.colors.$yellowHover};
+        border-color: ${Theme.colors.$yellowHover};
       }
     }
   }

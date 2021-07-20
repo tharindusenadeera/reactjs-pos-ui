@@ -124,7 +124,7 @@ export const ProductSection = () => {
         <div className="d-flex">
           <ModalCustom
             btnTitle={Theme.icons.$edit}
-            btnClass="mr-2"
+            btnClass="mr-2 yellow"
             type="primary"
             title="Edit item in order"
             okText="Update item"

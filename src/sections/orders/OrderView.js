@@ -176,7 +176,7 @@ export const OrderView = () => {
                   <ModalCustom
                     btnTitle={Theme.icons.$edit}
                     type="primary"
-                    btnClass="mr-2"
+                    btnClass="mr-2 yellow"
                     okText="Draft/Save current order"
                     cancelText="Discard current order"
                   >
