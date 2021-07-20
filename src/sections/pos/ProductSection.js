@@ -171,7 +171,7 @@ export const ProductSection = () => {
           <Fragment>
             <ModalCustom
               btnTitle={Theme.icons.$delete}
-              type="secondary"
+              btnClass="btn-danger"
               title="Delete item in order"
               okText="Delete item"
               className="body-nonpadding"
@@ -235,7 +235,7 @@ export const ProductSection = () => {
       </TableWarp>
       <ButtonWarp>
         <DeleteButton btnTitle="Cancel Order" />
-        <ButtonCustom type="primary" btnTitle="Draft Order" />
+        <ButtonCustom type="primary" className="green" btnTitle="Draft Order" />
       </ButtonWarp>
     </div>
   );

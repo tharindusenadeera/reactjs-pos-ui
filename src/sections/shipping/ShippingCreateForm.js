@@ -7,9 +7,10 @@ import { ButtonCustom } from "../../components/button";
 import { Checkbox } from "antd";
 
 const ButtonWrap = styled.div`
-  position: relative;
   margin-top: 5px;
-  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `;
 
 export const ShippingCreateForm = (props) => {
@@ -166,14 +167,14 @@ export const ShippingCreateForm = (props) => {
         <div className="col-6"></div>
 
         <ButtonWrap>
+          <ButtonCustom btnTitle={"Cancel"} onClick={handleCancel} />
+
           <ButtonCustom
             type="primary"
             btnTitle={"Add Details"}
+            className="ml-2 green"
             onClick={handleSubmit}
           />
-        </ButtonWrap>
-        <ButtonWrap>
-          <ButtonCustom btnTitle={"Cancel"} onClick={handleCancel} />
         </ButtonWrap>
       </div>
     </Fragment>

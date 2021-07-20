@@ -45,7 +45,7 @@ export const Label = (props) => {
     hideSubmit,
     disableCancel,
     disableOk,
-    onChange
+    onChange,
   } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
@@ -64,13 +64,13 @@ export const Label = (props) => {
   };
 
   if (plusComp === "customer-create") {
-    ModalComponent.current = <CustomerCreateForm handleCancel={handleCancel}/>;
+    ModalComponent.current = <CustomerCreateForm handleCancel={handleCancel} />;
     ModalTitle.current = "Add a customer";
   } else if (plusComp === "shipping-create") {
-    ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel}/>;
+    ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel} />;
     ModalTitle.current = "Add a shipping address";
   } else if (plusComp === "discount") {
-    ModalComponent.current = <DiscountForm onChange={onChange}/>;
+    ModalComponent.current = <DiscountForm onChange={onChange} />;
     ModalTitle.current = "Add Discount";
   } else if (plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;
@@ -84,6 +84,7 @@ export const Label = (props) => {
         title={ModalTitle.current}
         type="primary"
         okText={okText}
+        okType="primary green"
         cancelText={cancelText}
         hideCancel={hideCancel}
         hideSubmit={hideSubmit}

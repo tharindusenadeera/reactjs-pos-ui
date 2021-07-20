@@ -7,9 +7,10 @@ import styled from "styled-components";
 import { ButtonCustom } from "../../components/button";
 
 const ButtonWrap = styled.div`
-  position: relative;
   margin-top: 5px;
-  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `;
 
 export const CustomerCreateForm = (props) => {
@@ -132,15 +133,16 @@ export const CustomerCreateForm = (props) => {
             }}
           />
         </div>
+
         <ButtonWrap>
+          <ButtonCustom btnTitle={"Cancel"} onClick={handleCancel} />
+
           <ButtonCustom
             type="primary"
             btnTitle={"Add Customer"}
+            className="ml-2 green"
             onClick={handleSubmit}
           />
-        </ButtonWrap>
-        <ButtonWrap>
-          <ButtonCustom btnTitle={"Cancel"} onClick={handleCancel} />
         </ButtonWrap>
       </div>
     </Fragment>

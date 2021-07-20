@@ -86,6 +86,7 @@ export const ModalCustom = (props) => {
     count,
     type,
     okText,
+    okType,
     cancelText,
     btnTitle,
     btnClass,
@@ -99,14 +100,14 @@ export const ModalCustom = (props) => {
     isModalVisible,
     handleOk,
     handleCancel,
-    showModal
+    showModal,
   } = props;
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const [disablePropertiesCancel, setDisablePropertiesCancel] = useState({});
   const [disablePropertiesSubmit, setDisablePropertiesSubmit] = useState({});
 
   useEffect(() => {
-      setProperties();
+    setProperties();
   }, [disableCancel, disableOk, hideCancel, hideSubmit]);
 
   const setProperties = () => {
@@ -180,6 +181,7 @@ export const ModalCustom = (props) => {
         onCancel={handleCancel}
         width={800}
         okText={PrimaryButtonText.current}
+        okType={okType}
         cancelText={SecondaryButtonText.current}
         className={className}
         cancelButtonProps={disablePropertiesCancel}

@@ -313,6 +313,7 @@ export const ItemSection = () => {
                       <span className="prod-title">{item.name}</span>
                     </ProductCard>
                   }
+                  btnClass="green"
                   okText="Add to order"
                   className="body-nonpadding"
                   disableOk={disableOk}

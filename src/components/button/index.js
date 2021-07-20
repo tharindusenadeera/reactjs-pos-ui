@@ -4,28 +4,6 @@ import styled from "styled-components";
 import Theme from "../../utils/Theme";
 
 const ButtonAnt = styled(Button)`
-  &.ant-btn {
-    &.green {
-      background: ${Theme.colors.$green};
-      border-color: ${Theme.colors.$greenBorder};
-      &:hover,
-      :focus {
-        background: ${Theme.colors.$greenHover};
-        border-color: ${Theme.colors.$greenHoverBorder};
-      }
-    }
-
-    &.yellow {
-      background: ${Theme.colors.$yellow};
-      border-color: ${Theme.colors.$yellowBorder};
-      &:hover,
-      :focus {
-        background: ${Theme.colors.$yellowHover};
-        border-color: ${Theme.colors.$yellowHover};
-      }
-    }
-  }
-
   &.ant-btn-primary {
     background: ${Theme.colors.$primary};
     border-color: ${Theme.colors.$primaryBorder};
@@ -45,7 +23,7 @@ const ButtonAnt = styled(Button)`
     :focus {
       background: ${Theme.colors.$primaryLight};
       border-color: ${Theme.colors.$primaryHover};
-      color: ${Theme.colors.$primaryHover};
+      color: ${Theme.colors.$white};
     }
   }
 `;
