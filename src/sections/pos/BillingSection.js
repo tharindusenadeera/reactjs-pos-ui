@@ -1,5 +1,5 @@
-import React, { Fragment, useState} from "react";
-import { useSelector } from 'react-redux';
+import React, { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ShopLogo from "../../assests/images/grill-logo.png";
 import Theme from "../../utils/Theme";
@@ -50,47 +50,60 @@ const FieldRow = styled.div`
 
 const calculateOrderSummary = (selectedItems, discountPer) => {
   let subTot = 0;
-  
+
   selectedItems.forEach((item) => {
     subTot += item?.subtotal;
-  })
+  });
 
   const taxPer = 0.03; // tax harcoded as 3%
   const shipping = subTot === 0 ? 0 : 0; // shipping harcoded as 0
 
   return {
-    totItems : selectedItems.length,
-    subTot : subTot,
-    discount : subTot * (discountPer/100),
-    tax : subTot * taxPer,
-    shipping : shipping,
-    tot : subTot - (subTot * discountPer/100) + (subTot * taxPer) + shipping,
-  }
-}
+    totItems: selectedItems.length,
+    subTot: subTot,
+    discount: subTot * (discountPer / 100),
+    tax: subTot * taxPer,
+    shipping: shipping,
+    tot: subTot - (subTot * discountPer) / 100 + subTot * taxPer + shipping,
+  };
+};
 
-export const BillingSection = () => {
+export const BillingSection = (props) => {
   const [perc, setPerc] = useState(0);
   const [savedPerc, setSavedPerc] = useState(0);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const selectedItems = useSelector((state) => state.selectedItems);
-  
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
   const clickOk = () => {
     setSavedPerc(perc);
-  }
-  
-  const clickCancel = () => {
-  }
-  
+  };
+
+  const clickCancel = () => {};
+
   const onChange = (e) => {
     const per = e.target.value;
-    
-    if(!isNaN(per)) {
+
+    if (!isNaN(per)) {
       setPerc(parseInt(per));
     }
-  }
+  };
 
-  const  {totItems, subTot, discount, tax, shipping, tot} = calculateOrderSummary(selectedItems, savedPerc);
-  const DiscountLabel =  `Discount  (${savedPerc}) %`;
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const { totItems, subTot, discount, tax, shipping, tot } =
+    calculateOrderSummary(selectedItems, savedPerc);
+  const DiscountLabel = `Discount  (${savedPerc}) %`;
 
   return (
     <Fragment>
@@ -164,6 +177,10 @@ export const BillingSection = () => {
           btnClass="mb-3 w-100"
           title="Payment"
           okText="Pay Now"
+          showModal={showModal}
+          isModalVisible={isModalVisible}
+          handleOk={handleOk}
+          handleCancel={handleCancel}
         >
           <Payment />
         </ModalCustom>
