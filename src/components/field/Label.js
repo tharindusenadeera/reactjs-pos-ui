@@ -68,7 +68,7 @@ export const Label = (props) => {
     ModalTitle.current = "Add a customer";
   } else if (plusComp === "shipping-create") {
     ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel} />;
-    ModalTitle.current = "Add a shipping address";
+    ModalTitle.current = "Add a Delivery address";
   } else if (plusComp === "discount") {
     ModalComponent.current = <DiscountForm onChange={onChange} />;
     ModalTitle.current = "Add Discount";
