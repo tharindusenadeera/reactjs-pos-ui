@@ -57,11 +57,18 @@ export const Label = (props) => {
   };
 
   const handleOk = () => {
+    if (plusComp === "discount") {
+      handleDiscount();
+    }
     setIsModalVisible(false);
   };
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  const handleDiscount = () => {
+    console.log("Just Called ---");
+  }
 
   if (plusComp === "customer-create") {
     ModalComponent.current = <CustomerCreateForm handleCancel={handleCancel} />;
@@ -70,7 +77,7 @@ export const Label = (props) => {
     ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel} />;
     ModalTitle.current = "Add a shipping address";
   } else if (plusComp === "discount") {
-    ModalComponent.current = <DiscountForm onChange={onChange} />;
+    ModalComponent.current = <DiscountForm handleCancel={handleCancel} />;
     ModalTitle.current = "Add Discount";
   } else if (plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;
