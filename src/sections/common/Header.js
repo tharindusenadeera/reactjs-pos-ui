@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Theme from "../../utils/Theme";
 import styled from "styled-components";
 import Clock from "react-live-clock";
@@ -48,6 +48,20 @@ const NavControls = styled.div`
 `;
 
 export const Header = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const clickCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const clickOK = () => {
+    setIsModalVisible(false);
+  };
+
   return (
     <Wrapper>
       <div className="container-fluid">
@@ -77,6 +91,10 @@ export const Header = () => {
                 count={5}
                 title="Draft Orders"
                 type="primary"
+                handleOk={clickOK}
+                handleCancel={clickCancel}
+                showModal={showModal}
+                isModalVisible={isModalVisible}
               >
                 <OrderView />
               </ModalCustom>
