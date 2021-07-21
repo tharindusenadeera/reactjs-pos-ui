@@ -16,11 +16,21 @@ errorMsg = String {Error message}
 */
 
 export const InputField = (props) => {
-  const { label, plusComp, placeholder, value, disabled, errorMsg, onChange } = props;
+  const {
+    label,
+    plusComp,
+    placeholder,
+    value,
+    disabled,
+    errorMsg,
+    type,
+    onChange,
+  } = props;
   return (
     <div className="field-row">
       <Label label={label} plusComp={plusComp} />
       <InputCustom
+        type={type}
         placeholder={placeholder}
         value={value}
         disabled={disabled}
