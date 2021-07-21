@@ -1,10 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Checkbox } from "antd";
 import { SelectField } from "../../components/field/SelectField";
 import { InputField } from "../../components/field/InputField";
 import { ButtonCustom } from "../../components/button";
+import { getCities } from "../../api/common";
+import { selectedCityDetails } from "../../actions/customer";
 
 const ButtonWrap = styled.div`
   margin-top: 5px;
@@ -14,6 +16,7 @@ const ButtonWrap = styled.div`
 `;
 
 export const ShippingCreateForm = (props) => {
+  const dispatch = useDispatch();
   const customer = useSelector((state) => state.customer);
   const [deliveryFirstName, setDeliveryFirstName] = useState("");
   const [deliveryLastName, setDeliveryLastName] = useState("");
@@ -29,6 +32,28 @@ export const ShippingCreateForm = (props) => {
     '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
   );
   const mobileNoRegex = RegExp("^([0-9]+)$");
+
+  useEffect(() => {
+    getCities().then((res) => {
+      if (res.data.status == "success") {
+        handleCities(res.data.data);
+      }
+    });
+  }, []);
+
+  const handleCities = (data) => {
+    let newArr = [];
+    data.forEach((element) => {
+      let obj = {
+        key: element.id,
+        value: element.name,
+        deliveryCharge: element.delivery_charge,
+        status: element.status,
+      };
+      newArr.push(obj);
+    });
+    setCity(newArr);
+  };
 
   const validate = (data) => {
     let errors = {};
@@ -83,9 +108,7 @@ export const ShippingCreateForm = (props) => {
       } else {
         const errors = validate(obj);
         if (!Object.keys(errors).length) {
-          let shippingDetail = {
-            
-          }
+          let shippingDetail = {};
           console.log("SHIPPING", obj);
         }
       }
@@ -94,6 +117,15 @@ export const ShippingCreateForm = (props) => {
 
   const handleChecked = (e) => {
     setIsSame(e.target.checked);
+  };
+
+  const handleSelectedCity = (value) => {
+    setSelectedCity(value);
+    let cityDetails = city.filter((item) => {
+      return item.id == value;
+    });
+    console.log("cityDetails", cityDetails);
+    dispatch(selectedCityDetails(cityDetails && cityDetails[0]));
   };
 
   return (
@@ -138,8 +170,9 @@ export const ShippingCreateForm = (props) => {
           <SelectField
             showSearch={false}
             label="Delivery City"
+            options={city && city}
             placeholder="Select a delivery city"
-            onChange={(e) => setSelectedCity(e.target.value)}
+            onChange={handleSelectedCity}
             errorMsg={
               errorObj.selectedCity || errorObj.all ? errorObj.selectedCity : ""
             }
