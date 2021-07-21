@@ -127,11 +127,11 @@ export const OrderView = () => {
   }, []);
 
   const handleConfirm = () => {
-    setIsModalVisible(true);
+    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(true);
+    setIsModalVisible(false);
   };
 
   const showModal = () => {
