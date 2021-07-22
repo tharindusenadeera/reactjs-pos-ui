@@ -107,6 +107,12 @@ const ProductCard = styled.div`
     transition: color ease-in-out 0.3s;
     white-space: break-spaces;
   }
+  .prod-price {
+    font-size: 0.813rem;
+    font-weight: 500;
+    color: ${Theme.colors.$green};
+  }
+
   &:hover,
   :focus {
     .prod-title {
@@ -311,6 +317,7 @@ export const ItemSection = () => {
                     <ProductCard>
                       <ProductImg src={item.image} alt="product image" />
                       <span className="prod-title">{item.name}</span>
+                      <span className="prod-price">Rs 3,000.00</span>
                     </ProductCard>
                   }
                   btnClass="green"

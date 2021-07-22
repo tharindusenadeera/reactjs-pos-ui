@@ -23,7 +23,7 @@ const ButtonAnt = styled(Button)`
     :focus {
       background: ${Theme.colors.$primaryLight};
       border-color: ${Theme.colors.$primaryHover};
-      color: ${Theme.colors.$white};
+      color: ${Theme.colors.$primary};
     }
   }
 `;

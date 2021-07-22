@@ -10,7 +10,7 @@ const colors = {
   $primaryBorder: "#0b3e69",
   $primaryHover: "#1267af",
   $primaryShadow: "0 0 0 2px rgb(18 94 156 / 40%)",
-  $primaryLight: "#34648c",
+  $primaryLight: "#d7e1ea",
   $secondary: "#b7b7b7fa",
   $secondaryHover: "#797979fa",
   $greye9ecef: "#e9ecef",
