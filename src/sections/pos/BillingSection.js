@@ -181,6 +181,7 @@ export const BillingSection = (props) => {
           btnTitle="Pay the bill"
           type="primary"
           btnClass="mb-3 w-100 green"
+          btnDisabled={true}
           title="Payment"
           okText="Pay Now"
           showModal={showModal}
