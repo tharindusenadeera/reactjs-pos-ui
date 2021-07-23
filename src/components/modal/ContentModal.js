@@ -75,10 +75,11 @@ const Count = styled.span`
 `;
 
 export const ContentModal = (props) => {
-  const { clickOk, clickCancel, disableOk, disableCancel } = props;
+  const { clickOk, clickCancel, disableOk, disableCancel, record, selectItem} = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
+    selectItem(record);
     setIsModalVisible(true);
   };
 

@@ -6,57 +6,10 @@ import Theme from "../../utils/Theme";
 import { ContentModal } from "../../components/modal/ContentModal";
 import { ItemView } from "../orders/ItemView";
 import { addItem, updateItem } from "../../actions/selectedItems";
-import generateUniqueId from "../../utils/generateUniqueId";
+import { GenerateUniqueId, CheckforMatch, GetItemFromId} from "../../utils/generateUniqueId";
 import { categoryList } from "../../api/category";
 
-import ProductImg1 from "../../assests/images/products/Chicken-Burger.jpg";
-import ProductImg2 from "../../assests/images/products/Chicken-sandwich.jpg";
-import ProductImg3 from "../../assests/images/products/Checken-Nugets.jpg";
-import ProductImg4 from "../../assests/images/products/Chicken-Submarine.jpg";
-import ProductImg5 from "../../assests/images/products/French-Fries.jpg";
-import ProductImg6 from "../../assests/images/products/Cheesy-Gordita-Crunch.jpg";
-import ProductImg7 from "../../assests/images/products/Cherry-Limeade.jpg";
 import { productsList } from "../../api/products";
-
-const itemArr = [
-  { key: 0, value: "All" },
-  { key: 1, value: "Meat" },
-  { key: 2, value: "Vegan" },
-  { key: 3, value: "Gluten Free" },
-  { key: 4, value: "Soft Drinks" },
-];
-
-const productsArr = [
-  { productKey: 1, category: 1, name: "Chicken Burger", image: ProductImg1 },
-  { productKey: 2, category: 1, name: "Chicken Sandwich", image: ProductImg2 },
-  { productKey: 3, category: 1, name: "Chicken Nuggets", image: ProductImg3 },
-  { productKey: 4, category: 1, name: "Chicken Submarine", image: ProductImg4 },
-  { productKey: 5, category: 2, name: "French Fries", image: ProductImg5 },
-  {
-    productKey: 6,
-    category: 3,
-    name: "Cheesy Gordita Crunch",
-    image: ProductImg6,
-  },
-  { productKey: 7, category: 4, name: "Cherry Limeade", image: ProductImg7 },
-  { productKey: 8, category: 1, name: "Chicken Burger", image: ProductImg1 },
-  { productKey: 9, category: 1, name: "Chicken Sandwich", image: ProductImg2 },
-  { productKey: 10, category: 1, name: "Chicken Nuggets", image: ProductImg3 },
-  {
-    productKey: 11,
-    category: 1,
-    name: "Chicken Submarine",
-    image: ProductImg4,
-  },
-  { productKey: 12, category: 2, name: "French Fries", image: ProductImg5 },
-  {
-    productKey: 13,
-    category: 3,
-    name: "Cheesy Gordita Crunch",
-    image: ProductImg6,
-  },
-  { productKey: 14, category: 4, name: "Cherry Limeade", image: ProductImg7 },
-];
 
 const Head = styled.div`
   padding: 1.25rem;
@@ -145,13 +98,18 @@ export const ItemSection = () => {
     categoryList().then((res) => {
       handleCategories(res.data.data);
     });
-    // handleProducts(productsArr, selectedItems);
   }, []);
 
+  const isRealValue = (obj) => {
+    return obj && obj !== 'null' && obj !== 'undefined' && obj !== '';
+  }
+
   useEffect(() => {
+    let isItemSelected = selectedProperties?.categories?.filter((category) => isRealValue(category.item));
+
     if (
-      selectedProperties?.taste &&
-      selectedProperties?.size &&
+      isItemSelected &&
+      isItemSelected?.length &&
       selectedProperties?.quantity &&
       selectedProperties?.quantity !== 0
     ) {
@@ -161,6 +119,7 @@ export const ItemSection = () => {
 
   const handleProducts = (data) => {
     let itemArr = [];
+
     data.forEach((element) => {
       let obj = {
         productKey: element.id,
@@ -180,7 +139,7 @@ export const ItemSection = () => {
   };
 
   const handleItemsSelect = (value) => {
-    if (value == 0) {
+    if (value === 0) {
       getAllProducts();
     } else {
       getFilteredProducts("id", value);
@@ -196,7 +155,7 @@ export const ItemSection = () => {
 
   const getFilteredProducts = (type, value) => {
     let obj = {};
-    if (type == "id") {
+    if (type === "id") {
       obj.id = value;
     } else {
       obj.item = value;
@@ -206,40 +165,67 @@ export const ItemSection = () => {
     });
   };
 
+    /**
+   * * This function will do the price calculation update with the quantity
+   * todo: maybe this function need to handle separately after services
+   * @param { Selected or new Item} item
+   * @param { key} itemKey
+   * @returns
+   */
+
   const handlePriceCalculation = (item, itemKey) => {
     // disounted value and total value should update with services
     return { ...item, subtotal: item?.price * item?.quantity, key: itemKey };
   };
 
-  const clickOk = () => {
-    const itemKey = generateUniqueId(selectedProperties);
-    const newItem = handlePriceCalculation(selectedProperties, itemKey);
-    const addedItem = alreadyAddedItems.find(
-      (addedItem) => addedItem.key === itemKey
-    );
+  /**
+   * * Simply Tring add a food item to table
+   * * If the new food item and other properties same with existing item then that item will udpate
+   */
 
-    if (addedItem) {
+  const clickOk = () => {
+    const itemKey = GenerateUniqueId(selectedProperties);
+    const newItem = handlePriceCalculation(selectedProperties, itemKey);
+    const existingItem = CheckforMatch(itemKey, alreadyAddedItems);
+
+    if (existingItem) {
+      const item = GetItemFromId(itemKey, alreadyAddedItems);
+
       const updatedItem = handlePriceCalculation(
-        { ...addedItem, quantity: newItem.quantity + addedItem.quantity },
+        { ...item, quantity: newItem.quantity + item.quantity },
         itemKey
       );
       dispatch(updateItem(updatedItem));
     } else {
       dispatch(addItem(newItem));
     }
+
     setSelectedProperties({});
     setDisableOk(true);
   };
+
+    /**
+   * * Modal click cancel event handling
+   */
 
   const clickCancel = () => {
     setSelectedProperties({});
     setDisableOk(true);
   };
 
+    /**
+   * * Update function which triggered from the ItemSection and save the state in here
+   * @param { Item with user update } updatedItem
+   */
+
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
     setDisableOk(true);
   };
+
+  const selectItem = (item) => {
+    setSelectedProperties(item);
+  }
 
   const handleCategories = (data) => {
     let newArr = [];
@@ -267,7 +253,7 @@ export const ItemSection = () => {
   const handleSearch = (value) => {
     let strLength = value.length;
 
-    if (strLength % 3 == 0) {
+    if (strLength % 3 === 0) {
       getFilteredProducts("item", value);
     } else {
       return;
@@ -305,7 +291,6 @@ export const ItemSection = () => {
                 className="col-xl-4 col-lg-2 col-md-3 col-sm-4 col-6"
               >
                 <ContentModal
-                  //title={item.name}
                   btnContent={
                     <ProductCard>
                       <ProductImg src={item.image} alt="product image" />
@@ -319,9 +304,10 @@ export const ItemSection = () => {
                   disableOk={disableOk}
                   clickOk={clickOk}
                   clickCancel={clickCancel}
+                  record={item}
+                  selectItem={selectItem}
                 >
                   <ItemView
-                    item={item}
                     selectedProperties={selectedProperties}
                     updateSelectedproperties={updateSelectedproperties}
                   />
