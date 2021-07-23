@@ -9,12 +9,12 @@ import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
 import { updateItem, deleteItem, addItem } from "../../actions/selectedItems";
+import AddOrder from "../orders/AddOrder";
 import {
   GenerateUniqueId,
   CheckforMatch,
   GetItemFromId,
 } from "../../utils/generateUniqueId";
-import swal from "sweetalert";
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -183,22 +183,6 @@ export const ProductSection = () => {
     setItemBeforeEdit(item);
   };
 
-  const handleOrder = () => {
-    swal({
-      title: "Confirm to Add",
-      text: "",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        // Use order placing API here
-      } else {
-        swal("Process Terminated!");
-      }
-    });
-  }
-
   const columns = [
     {
       title: "Name",
@@ -289,7 +273,8 @@ export const ProductSection = () => {
           btnTitle="Draft Order"
           disabled={true}
         />
-        <ButtonCustom type="primary" className="green" btnTitle="Add Order" onClick={handleOrder}/>
+
+        <AddOrder />
       </ButtonWarp>
     </div>
   );
