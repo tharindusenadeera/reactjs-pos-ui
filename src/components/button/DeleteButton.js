@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import { Popconfirm, message } from "antd";
+import { Popconfirm } from "antd";
 import { ButtonCustom } from "../button";
 import Theme from "../../utils/Theme";
 
 export const DeleteButton = (props) => {
-  const { confirm, cancel, btnTitle, disabled } = props;
+  const { confirm, cancel, btnTitle, confirmTitle, disabled } = props;
 
   const Title = useRef("");
   if (!!btnTitle) {
@@ -13,9 +13,13 @@ export const DeleteButton = (props) => {
     Title.current = Theme.icons.$delete;
   }
 
+  const GetConfirmTitle = () => {
+    return confirmTitle ? confirmTitle : "Are you sure to delete this record?"
+  }
+
   return (
     <Popconfirm
-      title="Are you sure to delete this record?"
+      title={GetConfirmTitle}
       onConfirm={confirm}
       onCancel={cancel}
       okText="Yes"
