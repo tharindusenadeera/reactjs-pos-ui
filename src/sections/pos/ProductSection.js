@@ -8,8 +8,13 @@ import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import { updateItem, deleteItem, addItem} from "../../actions/selectedItems";
-import { GenerateUniqueId, CheckforMatch, GetItemFromId} from "../../utils/generateUniqueId";
+import { updateItem, deleteItem, addItem } from "../../actions/selectedItems";
+import {
+  GenerateUniqueId,
+  CheckforMatch,
+  GetItemFromId,
+} from "../../utils/generateUniqueId";
+import swal from "sweetalert";
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -47,7 +52,6 @@ const ButtonWarp = styled.div`
   margin-top: 15px;
 
   .ant-btn {
-    &:last-child {
       margin-left: 10px;
     }
 
@@ -123,7 +127,6 @@ export const ProductSection = () => {
         dispatch(deleteItem(itemBeforeEdit));
         dispatch(updateItem(updatedItem));
       }
-
     } else {
       // new Key after edit and not found in existing -> SHOULD ADD THE NEW  and DELETE PREV
       dispatch(deleteItem(itemBeforeEdit));
@@ -131,7 +134,7 @@ export const ProductSection = () => {
     }
 
     setIsModalVisible(false);
-    setSelectedProperties({})
+    setSelectedProperties({});
     setItemBeforeEdit({});
   };
 
@@ -150,7 +153,7 @@ export const ProductSection = () => {
 
   const clickCancel = () => {
     setIsModalVisible(false);
-    setSelectedProperties({})
+    setSelectedProperties({});
     setItemBeforeEdit({});
   };
 
@@ -175,9 +178,25 @@ export const ProductSection = () => {
    */
 
   const editRow = (item) => {
-    const selectedItem = {...item, visibleModal: true};
+    const selectedItem = { ...item, visibleModal: true };
     setSelectedProperties(selectedItem);
     setItemBeforeEdit(item);
+  };
+
+  const handleOrder = () => {
+    swal({
+      title: "Confirm to Add",
+      text: "",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        // Use order placing API here
+      } else {
+        swal("Process Terminated!");
+      }
+    });
   }
 
   const columns = [
@@ -240,8 +259,11 @@ export const ProductSection = () => {
       width: 30,
       fixed: "right",
       render: (text, record) => (
-        <DeleteButton confirmTitle="Delete item ?" confirm={() => handleDelete(record)}/>
-      )
+        <DeleteButton
+          confirmTitle="Delete item ?"
+          confirm={() => handleDelete(record)}
+        />
+      ),
     },
   ];
 
@@ -267,7 +289,7 @@ export const ProductSection = () => {
           btnTitle="Draft Order"
           disabled={true}
         />
-        <ButtonCustom type="primary" className="green" btnTitle="Add Order" />
+        <ButtonCustom type="primary" className="green" btnTitle="Add Order" onClick={handleOrder}/>
       </ButtonWarp>
     </div>
   );
