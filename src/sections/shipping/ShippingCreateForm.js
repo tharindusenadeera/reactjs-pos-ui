@@ -1,10 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { Checkbox } from "antd";
 import { SelectField } from "../../components/field/SelectField";
 import { InputField } from "../../components/field/InputField";
 import { ButtonCustom } from "../../components/button";
-import { Checkbox } from "antd";
+import { getCities } from "../../api/common";
+import { selectedCityDetails } from "../../actions/customer";
 
 const ButtonWrap = styled.div`
   margin-top: 5px;
@@ -14,18 +16,44 @@ const ButtonWrap = styled.div`
 `;
 
 export const ShippingCreateForm = (props) => {
+  const dispatch = useDispatch();
   const customer = useSelector((state) => state.customer);
   const [deliveryFirstName, setDeliveryFirstName] = useState("");
   const [deliveryLastName, setDeliveryLastName] = useState("");
-  const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [firstDeliveryAddress, setFirstDeliveryAddress] = useState("");
+  const [secondDeliveryAddress, setSecondDeliveryAddress] = useState("");
   const [deliveryPhoneNo, setDeliveryPhoneNo] = useState("");
   const [deliveryEmail, setDeliveryEmail] = useState("");
+  const [city, setCity] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
   const [errorObj, setErrorObj] = useState({});
   const [isSame, setIsSame] = useState(false);
   const emailRegex = RegExp(
     '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
   );
   const mobileNoRegex = RegExp("^([0-9]+)$");
+
+  useEffect(() => {
+    getCities().then((res) => {
+      if (res.data.status == "success") {
+        handleCities(res.data.data);
+      }
+    });
+  }, []);
+
+  const handleCities = (data) => {
+    let newArr = [];
+    data.forEach((element) => {
+      let obj = {
+        key: element.id,
+        value: element.name,
+        deliveryCharge: element.delivery_charge,
+        status: element.status,
+      };
+      newArr.push(obj);
+    });
+    setCity(newArr);
+  };
 
   const validate = (data) => {
     let errors = {};
@@ -41,7 +69,7 @@ export const ShippingCreateForm = (props) => {
       errors.deliveryPhoneNo = "Phone number Required !";
     } else if (!mobileNoRegex.test(data.deliveryPhoneNo)) {
       errors.deliveryPhoneNo = "Invalid Phone number !";
-    } else if (!data.deliveryAddress) {
+    } else if (!data.firstDeliveryAddress) {
       errors.deliveryAddress = "Address is Required !";
     }
     setErrorObj(errors);
@@ -60,10 +88,16 @@ export const ShippingCreateForm = (props) => {
         deliveryLastName,
         deliveryPhoneNo,
         deliveryEmail,
-        deliveryAddress,
+        firstDeliveryAddress,
+        selectedCity,
       };
 
-      if (!deliveryFirstName || !deliveryLastName || !deliveryPhoneNo) {
+      if (
+        !deliveryFirstName ||
+        !deliveryLastName ||
+        !deliveryPhoneNo ||
+        !selectedCity
+      ) {
         setErrorObj({
           all: "all",
           deliveryFirstName: "Required !",
@@ -74,6 +108,7 @@ export const ShippingCreateForm = (props) => {
       } else {
         const errors = validate(obj);
         if (!Object.keys(errors).length) {
+          let shippingDetail = {};
           console.log("SHIPPING", obj);
         }
       }
@@ -82,6 +117,15 @@ export const ShippingCreateForm = (props) => {
 
   const handleChecked = (e) => {
     setIsSame(e.target.checked);
+  };
+
+  const handleSelectedCity = (value) => {
+    setSelectedCity(value);
+    let cityDetails = city.filter((item) => {
+      return item.id == value;
+    });
+    console.log("cityDetails", cityDetails);
+    dispatch(selectedCityDetails(cityDetails && cityDetails[0]));
   };
 
   return (
@@ -102,6 +146,7 @@ export const ShippingCreateForm = (props) => {
             onChange={(e) => {
               setDeliveryFirstName(e.target.value);
             }}
+            disabled={isSame ? true : false}
           />
         </div>
 
@@ -117,21 +162,49 @@ export const ShippingCreateForm = (props) => {
             onChange={(e) => {
               setDeliveryLastName(e.target.value);
             }}
+            disabled={isSame ? true : false}
+          />
+        </div>
+
+        <div className="col-6">
+          <SelectField
+            showSearch={false}
+            label="Delivery City"
+            options={city && city}
+            placeholder="Select a delivery city"
+            onChange={handleSelectedCity}
+            errorMsg={
+              errorObj.selectedCity || errorObj.all ? errorObj.selectedCity : ""
+            }
+          />
+        </div>
+
+        <div className="col-6"></div>
+
+        <div className="col-6">
+          <InputField
+            label="Delivery Address Line 1"
+            placeholder="Enter first delivery Address line"
+            errorMsg={
+              errorObj.firstDeliveryAddress || errorObj.all
+                ? errorObj.firstDeliveryAddress
+                : ""
+            }
+            onChange={(e) => {
+              setFirstDeliveryAddress(e.target.value);
+            }}
+            disabled={isSame ? true : false}
           />
         </div>
 
         <div className="col-6">
           <InputField
-            label="Delivery Address"
-            placeholder="Enter Delivery Address"
-            errorMsg={
-              errorObj.deliveryAddress || errorObj.all
-                ? errorObj.deliveryAddress
-                : ""
-            }
+            label="Delivery Address Line 2"
+            placeholder="Enter second delivery Address"
             onChange={(e) => {
-              setDeliveryAddress(e.target.value);
+              setSecondDeliveryAddress(e.target.value);
             }}
+            disabled={isSame ? true : false}
           />
         </div>
 
@@ -147,6 +220,7 @@ export const ShippingCreateForm = (props) => {
             onChange={(e) => {
               setDeliveryPhoneNo(e.target.value);
             }}
+            disabled={isSame ? true : false}
           />
         </div>
 
@@ -162,6 +236,7 @@ export const ShippingCreateForm = (props) => {
             onChange={(e) => {
               setDeliveryEmail(e.target.value);
             }}
+            disabled={isSame ? true : false}
           />
         </div>
         <div className="col-6"></div>

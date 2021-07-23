@@ -24,7 +24,7 @@ const InputAnt = styled(Input)`
 `;
 
 export const InputCustom = (props) => {
-  const { placeholder, value, disabled, onChange } = props;
+  const { placeholder, value, disabled, type, onChange } = props;
 
   const DisableState = useRef("");
   if (disabled === true) {
@@ -35,6 +35,7 @@ export const InputCustom = (props) => {
 
   return (
     <InputAnt
+      type={type}
       placeholder={placeholder}
       value={value}
       allowClear

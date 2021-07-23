@@ -23,15 +23,31 @@ const ButtonAnt = styled(Button)`
     :focus {
       background: ${Theme.colors.$primaryLight};
       border-color: ${Theme.colors.$primaryHover};
-      color: ${Theme.colors.$white};
+      color: ${Theme.colors.$primary};
     }
+  }
+
+  &.ant-btn[disabled],
+  &.ant-btn[disabled]:hover,
+  &.ant-btn[disabled]:focus,
+  &.ant-btn[disabled]:active {
+    color: rgba(0, 0, 0, 0.25);
+    background: ${Theme.colors.$greye9ecef} !important;
+    border-color: ${Theme.colors.$greyd3d7dc} !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
   }
 `;
 
 export const ButtonCustom = (props) => {
-  const { type, className, btnTitle, onClick } = props;
+  const { type, className, btnTitle, onClick, disabled } = props;
   return (
-    <ButtonAnt type={type} onClick={onClick} className={className}>
+    <ButtonAnt
+      type={type}
+      onClick={onClick}
+      className={className}
+      disabled={disabled}
+    >
       {btnTitle}
     </ButtonAnt>
   );

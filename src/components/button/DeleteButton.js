@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import { Popconfirm, message } from "antd";
+import { Popconfirm } from "antd";
 import { ButtonCustom } from "../button";
 import Theme from "../../utils/Theme";
 
 export const DeleteButton = (props) => {
-  const { confirm, cancel, btnTitle, confirmTitle} = props;
+  const { confirm, cancel, btnTitle, confirmTitle, disabled } = props;
 
   const Title = useRef("");
   if (!!btnTitle) {
@@ -29,6 +29,7 @@ export const DeleteButton = (props) => {
         //type="primary"
         btnTitle={Title.current}
         className="btn-danger"
+        disabled={disabled}
       />
     </Popconfirm>
   );

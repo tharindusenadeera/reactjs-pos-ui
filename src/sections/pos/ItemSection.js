@@ -60,6 +60,12 @@ const ProductCard = styled.div`
     transition: color ease-in-out 0.3s;
     white-space: break-spaces;
   }
+  .prod-price {
+    font-size: 0.813rem;
+    font-weight: 500;
+    color: ${Theme.colors.$green};
+  }
+
   &:hover,
   :focus {
     .prod-title {
@@ -100,7 +106,7 @@ export const ItemSection = () => {
 
   useEffect(() => {
     let isItemSelected = selectedProperties?.categories?.filter((category) => isRealValue(category.item));
-    
+
     if (
       isItemSelected &&
       isItemSelected?.length &&
@@ -162,9 +168,9 @@ export const ItemSection = () => {
     /**
    * * This function will do the price calculation update with the quantity
    * todo: maybe this function need to handle separately after services
-   * @param { Selected or new Item} item 
-   * @param { key} itemKey 
-   * @returns 
+   * @param { Selected or new Item} item
+   * @param { key} itemKey
+   * @returns
    */
 
   const handlePriceCalculation = (item, itemKey) => {
@@ -209,7 +215,7 @@ export const ItemSection = () => {
 
     /**
    * * Update function which triggered from the ItemSection and save the state in here
-   * @param { Item with user update } updatedItem 
+   * @param { Item with user update } updatedItem
    */
 
   const updateSelectedproperties = (updatedItem) => {
@@ -289,6 +295,7 @@ export const ItemSection = () => {
                     <ProductCard>
                       <ProductImg src={item.image} alt="product image" />
                       <span className="prod-title">{item.name}</span>
+                      <span className="prod-price">$ {item.price}</span>
                     </ProductCard>
                   }
                   btnClass="green"

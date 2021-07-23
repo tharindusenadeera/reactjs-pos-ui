@@ -7,6 +7,7 @@ import Theme from "../../utils/Theme";
 /*Props
 
 className = "body-nonpadding" (Remove modal body padding)
+btnDisabled={true} For button disable
 */
 
 const ContentWrap = styled.div`
@@ -115,7 +116,11 @@ export const ContentModal = (props) => {
   return (
     <Fragment>
       <ContentWrap>
-        <ButtonAnt type="ghost" onClick={showModal}>
+        <ButtonAnt
+          type="ghost"
+          onClick={showModal}
+          disabled={props.btnDisabled}
+        >
           {props.btnContent}
         </ButtonAnt>
       </ContentWrap>

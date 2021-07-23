@@ -1,5 +1,5 @@
 import React from "react";
-import { InputCustom } from "../input";
+import { AutoCompleteCustom } from "../input/AutoCompleteCustom";
 import { Label } from "./Label";
 import { Error } from "./Error";
 
@@ -15,26 +15,18 @@ errorMsg = String {Error message}
 
 */
 
-export const InputField = (props) => {
-  const {
-    label,
-    plusComp,
-    placeholder,
-    value,
-    disabled,
-    errorMsg,
-    type,
-    onChange,
-  } = props;
+export const AutoCompleteField = (props) => {
+  const { label, plusComp, placeholder, value, disabled, errorMsg, options, onSearch, onSelect } = props;
   return (
     <div className="field-row">
       <Label label={label} plusComp={plusComp} />
-      <InputCustom
-        type={type}
+      <AutoCompleteCustom
         placeholder={placeholder}
         value={value}
         disabled={disabled}
-        onChange={onChange}
+        onSearch={onSearch}
+        onSelect={onSelect}
+        options={options}
       />
       <Error errorMsg={errorMsg} />
     </div>

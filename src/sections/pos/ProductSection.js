@@ -83,9 +83,9 @@ export const ProductSection = () => {
   /**
    * * This function will do the price calculation update with the quantity
    * todo: maybe this function need to handle separately after services
-   * @param { Selected or new Item} item 
-   * @param { key} itemKey 
-   * @returns 
+   * @param { Selected or new Item} item
+   * @param { key} itemKey
+   * @returns
    */
 
   const handlePriceCalculation = (item, itemKey) => {
@@ -109,7 +109,7 @@ export const ProductSection = () => {
     // Either key not changed OR new key already exists
     if (isItemExists) {
       const item = GetItemFromId(itemKey, alreadyAddedItems);
-      
+
       if (item.key === itemBeforeEdit.key) {
         // Last saved key didn't changed with edit -> SHOULD UPDATE PREV
         dispatch(updateItem(newItem));
@@ -156,7 +156,7 @@ export const ProductSection = () => {
 
   /**
    * * Update function which triggered from the ItemSection and save the state in here
-   * @param { Item with user update } updatedItem 
+   * @param { Item with user update } updatedItem
    */
 
   const updateSelectedproperties = (updatedItem) => {
@@ -171,7 +171,7 @@ export const ProductSection = () => {
    * * This function will trigger just after edit button click in the table
    * * Setting the selectedProperties
    * * Set the Initial state before user edit the items
-   * @param {* selected item } item 
+   * @param {* selected item } item
    */
 
   const editRow = (item) => {
@@ -204,7 +204,7 @@ export const ProductSection = () => {
       key: "x",
       width: 30,
       fixed: "right",
-      
+
       render: (text, record) => (
         <div className="d-flex">
           <Fragment>
@@ -260,8 +260,13 @@ export const ProductSection = () => {
         />
       </TableWarp>
       <ButtonWarp>
-        <DeleteButton btnTitle="Cancel Order" />
-        <ButtonCustom type="primary" className="green" btnTitle="Draft Order" />
+        <DeleteButton btnTitle="Cancel Order" disabled={true} />
+        <ButtonCustom
+          type="primary"
+          className="green"
+          btnTitle="Draft Order"
+          disabled={true}
+        />
         <ButtonCustom type="primary" className="green" btnTitle="Add Order" />
       </ButtonWarp>
     </div>

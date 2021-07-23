@@ -120,14 +120,23 @@ const ActionButtons = styled.div`
 
 export const OrderView = () => {
   const [orders, setOrders] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     setOrders(orderArr);
   }, []);
 
-  const handleConfirm = () => {};
+  const handleConfirm = () => {
+    setIsModalVisible(false);
+  };
 
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
 
   return (
     <Wrapper>
@@ -179,6 +188,10 @@ export const OrderView = () => {
                     btnClass="mr-2 yellow"
                     okText="Draft/Save current order"
                     cancelText="Discard current order"
+                    handleOk={handleConfirm}
+                    handleCancel={handleCancel}
+                    showModal={showModal}
+                    isModalVisible={isModalVisible}
                   >
                     <Warning
                       title="Save current order"

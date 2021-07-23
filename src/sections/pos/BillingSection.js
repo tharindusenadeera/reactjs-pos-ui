@@ -157,9 +157,9 @@ export const BillingSection = (props) => {
 
         <FieldRow>
           <Label
-            label="Shipping Cost"
+            label="Delivery Cost"
             className="label"
-            plusComp="shipping-cost"
+            // plusComp="shipping-cost"
             okText="Apply Shipping Cost"
           />
           <p>${shipping}</p>
@@ -181,6 +181,7 @@ export const BillingSection = (props) => {
           btnTitle="Pay the bill"
           type="primary"
           btnClass="mb-3 w-100 green"
+          btnDisabled={true}
           title="Payment"
           okText="Pay Now"
           showModal={showModal}
@@ -210,7 +211,7 @@ export const BillingSection = (props) => {
         <div className="col-12">
           <SelectField
             showSearch={true}
-            label="Shipping Address"
+            label="Delivery Address"
             plusComp="shipping-create"
             placeholder="Select Address"
             okText="Add Address"

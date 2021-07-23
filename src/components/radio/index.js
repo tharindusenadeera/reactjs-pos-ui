@@ -42,19 +42,11 @@ const Wrapper = styled.div`
 `;
 
 export const RadioCustom = (props) => {
-  const [value, setValue] = React.useState(1);
-
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
-
-    props.onChecked(e.target.value);
-  };
-
+  const { onChange, value, children } = props;
   return (
     <Wrapper>
       <Radio.Group onChange={onChange} value={value}>
-        {props.children}
+        {children}
       </Radio.Group>
     </Wrapper>
   );
