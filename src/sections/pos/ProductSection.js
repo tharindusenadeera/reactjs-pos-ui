@@ -262,6 +262,7 @@ export const ProductSection = () => {
       <ButtonWarp>
         <DeleteButton btnTitle="Cancel Order" />
         <ButtonCustom type="primary" className="green" btnTitle="Draft Order" />
+        <ButtonCustom type="primary" className="green" btnTitle="Add Order" />
       </ButtonWarp>
     </div>
   );
