@@ -157,7 +157,6 @@ export const CustomerCreateForm = (props) => {
           if (willDelete) {
             addCustomer(newCustomer)
               .then((res) => {
-                console.log("=== Customer response ===", res.data);
                 if (res.data.status == "success") {
                   dispatch(customerDetails(res.data.data));
                   props.handleCancel();
