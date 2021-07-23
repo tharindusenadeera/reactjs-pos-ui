@@ -4,7 +4,7 @@ import { ButtonCustom } from "../button";
 import Theme from "../../utils/Theme";
 
 export const DeleteButton = (props) => {
-  const { confirm, cancel, btnTitle } = props;
+  const { confirm, cancel, btnTitle, disabled } = props;
 
   const Title = useRef("");
   if (!!btnTitle) {
@@ -25,6 +25,7 @@ export const DeleteButton = (props) => {
         //type="primary"
         btnTitle={Title.current}
         className="btn-danger"
+        disabled={disabled}
       />
     </Popconfirm>
   );

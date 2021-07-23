@@ -9,6 +9,7 @@ import { addCustomerTriggered } from "../../actions/customer";
 /* Props
 
 count = Intiger (Show count as label top of the button)
+btnDisabled={true} For button disable
 
 title = Model Title
 okText = String (Modal Submit button text)
@@ -90,6 +91,7 @@ export const ModalCustom = (props) => {
     cancelText,
     btnTitle,
     btnClass,
+    btnDisabled,
     title,
     className,
     children,
@@ -170,6 +172,7 @@ export const ModalCustom = (props) => {
           btnTitle={btnTitle}
           onClick={showModal}
           className={btnClass}
+          disabled={btnDisabled}
         />
         {CountComp.current}
       </ButtonWrap>

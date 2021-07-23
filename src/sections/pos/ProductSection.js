@@ -209,8 +209,13 @@ export const ProductSection = () => {
         />
       </TableWarp>
       <ButtonWarp>
-        <DeleteButton btnTitle="Cancel Order" />
-        <ButtonCustom type="primary" className="green" btnTitle="Draft Order" />
+        <DeleteButton btnTitle="Cancel Order" disabled={true} />
+        <ButtonCustom
+          type="primary"
+          className="green"
+          btnTitle="Draft Order"
+          disabled={true}
+        />
       </ButtonWarp>
     </div>
   );
