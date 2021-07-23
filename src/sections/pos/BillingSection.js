@@ -56,29 +56,34 @@ const Hr = styled.hr`
 
 const customerArr = [{ key: 1, value: "Walk in Customer" }];
 
-const calculateOrderSummary = (selectedItems, discountPer) => {
+const calculateOrderSummary = (selectedItems, disc) => {
   let subTot = 0;
 
   selectedItems.forEach((item) => {
     subTot += item?.subtotal;
   });
-
+  
+  const discount = disc.key === "1" ? subTot * (disc.value / 100) : disc.value;
   const taxPer = 0.03; // tax harcoded as 3%
   const shipping = subTot === 0 ? 0 : 0; // shipping harcoded as 0
 
   return {
     totItems: selectedItems.length,
     subTot: subTot,
-    discount: subTot * (discountPer / 100),
+    discount: discount,
     tax: subTot * taxPer,
     shipping: shipping,
-    tot: subTot - (subTot * discountPer) / 100 + subTot * taxPer + shipping,
+    tot: subTot - discount + subTot * taxPer + shipping,
   };
 };
 
 export const BillingSection = (props) => {
-  const [perc, setPerc] = useState(0);
-  const [savedPerc, setSavedPerc] = useState(0);
+
+  // key 1 -> percentage  2 -> fixed value
+  const initialDiscount = { key: "1", value: 0 }
+  const [dis, setDis] = useState(initialDiscount);
+  const [savedDis, setSavedDis] = useState(initialDiscount);
+  
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const selectedItems = useSelector((state) => state.selectedItems);
@@ -88,16 +93,22 @@ export const BillingSection = (props) => {
   };
 
   const clickOk = () => {
-    setSavedPerc(perc);
+    setSavedDis(dis);
   };
 
   const clickCancel = () => {};
 
-  const onChange = (e) => {
-    const per = e.target.value;
+  const onChange = (type, event) => {
+    
+    if (type === 'name') {
+      const {key} = event;
+      setDis({...dis, key : key});
+    } else {
+      const figure = event?.target?.value || 0;
 
-    if (!isNaN(per)) {
-      setPerc(parseInt(per));
+      if (!isNaN(figure)) {
+        setDis({...dis, value : parseInt(figure)});
+      }
     }
   };
 
@@ -109,9 +120,14 @@ export const BillingSection = (props) => {
     setIsModalVisible(false);
   };
 
+  const onModalClicked = () => {
+    setDis(savedDis);
+  }
+
   const { totItems, subTot, discount, tax, shipping, tot } =
-    calculateOrderSummary(selectedItems, savedPerc);
-  const DiscountLabel = `Discount  (${savedPerc}) %`;
+    calculateOrderSummary(selectedItems, savedDis);
+
+  const DiscountLabel = `Discount  (${savedDis.value} ${savedDis.key === "1" ? '%)' : '$)'}`;
 
   return (
     <Fragment>
@@ -146,6 +162,7 @@ export const BillingSection = (props) => {
             onChange={onChange}
             clickOk={clickOk}
             clickCancel={clickCancel}
+            onModalClicked= {onModalClicked}
           />
           <p>${discount}</p>
         </FieldRow>
