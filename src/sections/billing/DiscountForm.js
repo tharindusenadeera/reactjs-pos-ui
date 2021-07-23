@@ -1,27 +1,18 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState} from "react";
 import { InputField } from "../../components/field/InputField";
 import { SelectField } from "../../components/field/SelectField";
 
 const list = [
-  { key: "1", value: "Fixed Rate" },
-  { key: "2", value: "Percentage" },
+  { key: "1", value: "Percentage" },
+  { key: "2", value: "Fixed Rate" },
 ];
 
-export const DiscountForm = (props) => {
-  const [selectedType, setSelectedType] = useState("");
-  const [discount, setDiscount] = useState();
-  const mobileNoRegex = RegExp("^([0-9]+)$");
+export const DiscountForm = ({onChange}) => {
+  const [type, setType] = useState("1");
 
-  const onChangeType = value => {
-    setSelectedType(value);
-  }
-
-  const onChangeDiscount = e => {
-    if (!mobileNoRegex.test(e.target.value)) {
-      return ;
-    } else {
-      setDiscount(e.target.value)
-    }
+  const changeType = (e) => {
+    setType(e)
+    onChange('name', list?.find((item) => item?.key === e))
   }
 
   return (
@@ -32,15 +23,15 @@ export const DiscountForm = (props) => {
             label="Discount Type"
             placeholder="Choose a discount type"
             options={list}
-            onChange={onChangeType}
+            onChange={(e) => changeType(e)}
           />
         </div>
         <div className="col-12">
           <InputField
             type="number"
-            label="Discount(%)"
+            label={type === "1" ? 'Discount (%)' : 'Discount ($)'}
             placeholder="Enter discount"
-            onChange={onChangeDiscount}
+            onChange={(e) => onChange('figure', e)}
           />
         </div>
       </div>
