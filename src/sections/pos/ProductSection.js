@@ -8,7 +8,8 @@ import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import { updateItem, deleteItem } from "../../actions/selectedItems";
+import { updateItem, deleteItem, addItem} from "../../actions/selectedItems";
+import { GenerateUniqueId, CheckforMatch, GetItemFromId} from "../../utils/generateUniqueId";
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -62,42 +63,101 @@ const ButtonWarp = styled.div`
 `;
 
 export const ProductSection = () => {
-  const selectedItems = useSelector((state) => state.selectedItems);
+  const alreadyAddedItems = useSelector((state) => state.selectedItems);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isModalVisibleDelete, setIsModalVisibleDelete] = useState(false);
+
   const [selectedProperties, setSelectedProperties] = useState({});
-  const [disableOk, setDisableOk] = useState(true);
+  const [itemBeforeEdit, setItemBeforeEdit] = useState({});
+
+  const [disableOk, setDisableOk] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (selectedProperties.quantity && selectedProperties.quantity !== 0) {
+    if (selectedProperties?.quantity && selectedProperties?.quantity !== 0) {
       setDisableOk(false);
     } else {
       setDisableOk(true);
     }
   }, [selectedProperties]);
 
-  const handlePriceCalculation = (item) => {
+  /**
+   * * This function will do the price calculation update with the quantity
+   * todo: maybe this function need to handle separately after services
+   * @param { Selected or new Item} item 
+   * @param { key} itemKey 
+   * @returns 
+   */
+
+  const handlePriceCalculation = (item, itemKey) => {
     // disounted value and total value should update with services
-    return { ...item, subtotal: item?.price * item?.quantity };
+    return { ...item, subtotal: item?.price * item?.quantity, key: itemKey };
   };
+
+  /**
+   * * ClickUpdate fucntion will triggered when user click update button
+   * * Handling 3 different Senarios
+   * * If the key is not changed with the update
+   * * If the key is changed with the update and new key already exists
+   * * If the key is changed with the update and new key is not exists
+   */
 
   const clickUpdate = () => {
-    const updatedItem = handlePriceCalculation(selectedProperties);
-    dispatch(updateItem(updatedItem));
+    const itemKey = GenerateUniqueId(selectedProperties);
+    const newItem = handlePriceCalculation(selectedProperties, itemKey);
+    const isItemExists = CheckforMatch(itemKey, alreadyAddedItems);
+
+    // Either key not changed OR new key already exists
+    if (isItemExists) {
+      const item = GetItemFromId(itemKey, alreadyAddedItems);
+      
+      if (item.key === itemBeforeEdit.key) {
+        // Last saved key didn't changed with edit -> SHOULD UPDATE PREV
+        dispatch(updateItem(newItem));
+      } else {
+        // Last saved key changed with edit -> SHOULD DELETE PREV (selected one) and UPDATE EXISTING ONE(exists in table)
+        const updatedItem = handlePriceCalculation(
+          { ...item, quantity: newItem.quantity + item.quantity },
+          item.key
+        );
+
+        dispatch(deleteItem(itemBeforeEdit));
+        dispatch(updateItem(updatedItem));
+      }
+
+    } else {
+      // new Key after edit and not found in existing -> SHOULD ADD THE NEW  and DELETE PREV
+      dispatch(deleteItem(itemBeforeEdit));
+      dispatch(addItem(newItem));
+    }
+
+    setIsModalVisible(false);
+    setSelectedProperties({})
+    setItemBeforeEdit({});
   };
 
-  const clickDelete = () => {
-    dispatch(deleteItem(selectedProperties));
+  /**
+   * * Item delete event handle when user delete the item
+   * @param { Delete record} record
+   */
+
+  const handleDelete = (record) => {
+    dispatch(deleteItem(record));
   };
+
+  /**
+   * * Modal click cancel event handling
+   */
 
   const clickCancel = () => {
     setIsModalVisible(false);
+    setSelectedProperties({})
+    setItemBeforeEdit({});
   };
 
-  const clickCancelDelete = () => {
-    setIsModalVisibleDelete(false);
-  };
+  /**
+   * * Update function which triggered from the ItemSection and save the state in here
+   * @param { Item with user update } updatedItem 
+   */
 
   const updateSelectedproperties = (updatedItem) => {
     setSelectedProperties(updatedItem);
@@ -106,9 +166,19 @@ export const ProductSection = () => {
   const showModal = () => {
     setIsModalVisible(true);
   };
-  const showModalDelete = () => {
-    setIsModalVisibleDelete(true);
-  };
+
+  /**
+   * * This function will trigger just after edit button click in the table
+   * * Setting the selectedProperties
+   * * Set the Initial state before user edit the items
+   * @param {* selected item } item 
+   */
+
+  const editRow = (item) => {
+    const selectedItem = {...item, visibleModal: true};
+    setSelectedProperties(selectedItem);
+    setItemBeforeEdit(item);
+  }
 
   const columns = [
     {
@@ -116,17 +186,7 @@ export const ProductSection = () => {
       dataIndex: "name",
       key: "name",
       //fixed: "left",
-      width: 120,
-    },
-    {
-      title: "Taste",
-      dataIndex: "taste",
-      width: 70,
-    },
-    {
-      title: "Size",
-      dataIndex: "size",
-      width: 70,
+      width: 100,
     },
     {
       title: "Qty",
@@ -142,8 +202,9 @@ export const ProductSection = () => {
       title: "Actions",
       dataIndex: "",
       key: "x",
-      width: 110,
+      width: 30,
       fixed: "right",
+      
       render: (text, record) => (
         <div className="d-flex">
           <Fragment>
@@ -159,31 +220,11 @@ export const ProductSection = () => {
               handleCancel={clickCancel}
               disableOk={disableOk}
               showModal={showModal}
-              isModalVisible={isModalVisible}
+              isModalVisible={record?.key === itemBeforeEdit?.key}
+              record={record}
+              editRow={editRow}
             >
               <ItemView
-                item={record}
-                selectedProperties={selectedProperties}
-                updateSelectedproperties={updateSelectedproperties}
-              />
-            </ModalCustom>
-          </Fragment>
-          {/* <DeleteButton btnTitle={Theme.icons.$delete} /> */}
-          <Fragment>
-            <ModalCustom
-              btnTitle={Theme.icons.$delete}
-              btnClass="btn-danger"
-              title="Delete item in order"
-              okText="Delete item"
-              className="body-nonpadding"
-              handleOk={clickDelete}
-              handleCancel={clickCancelDelete}
-              disableOk={disableOk}
-              showModal={showModalDelete}
-              isModalVisible={isModalVisibleDelete}
-            >
-              <ItemView
-                item={record}
                 selectedProperties={selectedProperties}
                 updateSelectedproperties={updateSelectedproperties}
               />
@@ -191,6 +232,16 @@ export const ProductSection = () => {
           </Fragment>
         </div>
       ),
+    },
+    {
+      title: "",
+      dataIndex: "",
+      key: "x",
+      width: 30,
+      fixed: "right",
+      render: (text, record) => (
+        <DeleteButton confirmTitle="Delete item ?" confirm={() => handleDelete(record)}/>
+      )
     },
   ];
 
@@ -204,7 +255,7 @@ export const ProductSection = () => {
       <TableWarp>
         <TableCustom
           columns={columns}
-          dataSource={selectedItems}
+          dataSource={alreadyAddedItems}
           scroll={{ x: 730, y: 200 }}
         />
       </TableWarp>

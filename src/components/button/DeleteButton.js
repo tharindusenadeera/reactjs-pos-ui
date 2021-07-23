@@ -4,7 +4,7 @@ import { ButtonCustom } from "../button";
 import Theme from "../../utils/Theme";
 
 export const DeleteButton = (props) => {
-  const { confirm, cancel, btnTitle } = props;
+  const { confirm, cancel, btnTitle, confirmTitle} = props;
 
   const Title = useRef("");
   if (!!btnTitle) {
@@ -13,9 +13,13 @@ export const DeleteButton = (props) => {
     Title.current = Theme.icons.$delete;
   }
 
+  const GetConfirmTitle = () => {
+    return confirmTitle ? confirmTitle : "Are you sure to delete this record?"
+  }
+
   return (
     <Popconfirm
-      title="Are you sure to delete this record?"
+      title={GetConfirmTitle}
       onConfirm={confirm}
       onCancel={cancel}
       okText="Yes"

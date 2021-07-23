@@ -101,6 +101,8 @@ export const ModalCustom = (props) => {
     handleOk,
     handleCancel,
     showModal,
+    record,
+    editRow,
   } = props;
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const [disablePropertiesCancel, setDisablePropertiesCancel] = useState({});
@@ -162,13 +164,21 @@ export const ModalCustom = (props) => {
     SecondaryButtonText.current = cancelText;
   }
 
+  const onClick = (record) => {
+    showModal();
+
+    if (editRow ) {
+      editRow(record);
+    }
+  }
+
   return (
     <Fragment>
       <ButtonWrap>
         <ButtonCustom
           type={type}
           btnTitle={btnTitle}
-          onClick={showModal}
+          onClick={() => onClick(record)}
           className={btnClass}
         />
         {CountComp.current}
