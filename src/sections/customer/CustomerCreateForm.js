@@ -11,6 +11,7 @@ import styled from "styled-components";
 import { ButtonCustom } from "../../components/button";
 import { addCustomer, getAllCustomers } from "../../api/customer";
 import { AutoCompleteField } from "../../components/field/AutoCompleteField";
+import swal from "sweetalert";
 
 const ButtonWrap = styled.div`
   margin-top: 5px;
@@ -73,10 +74,9 @@ export const CustomerCreateForm = (props) => {
   const mobileNoRegex = RegExp("^([0-9]+)$");
 
   useEffect(() => {
-    handlePhoneNumbers(customerArr);
     getAllCustomers().then((res) => {
       if (res.data.data) {
-        // handlePhoneNumbers(res.data.data);
+        handlePhoneNumbers(res.data.data);
       }
     });
   }, []);
@@ -111,6 +111,12 @@ export const CustomerCreateForm = (props) => {
   };
 
   const handleCancel = () => {
+    setFirstName("");
+    setLastName("");
+    setPhoneNumber("");
+    setEmail("");
+    setFirstAddressLine("");
+    setSecondAddressLine("")
     props.handleCancel();
   };
 
@@ -139,12 +145,29 @@ export const CustomerCreateForm = (props) => {
         address_line_1: firstAddressLine,
         address_line_2: secondAddressLine,
       };
+
       if (!Object.keys(errors).length) {
-        addCustomer(newCustomer).then((res) => {
-          console.log("=== Customer response ===", res.data);
-          if (res.data.status == "success") {
-            dispatch(customerDetails(res.data.data));
-            props.handleCancel();
+        swal({
+          title: "Confirm to Add",
+          text: "",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willDelete) => {
+          if (willDelete) {
+            addCustomer(newCustomer)
+              .then((res) => {
+                console.log("=== Customer response ===", res.data);
+                if (res.data.status == "success") {
+                  dispatch(customerDetails(res.data.data));
+                  props.handleCancel();
+                }
+              })
+              .catch((error) => {
+                swal("Something Went Wrong !", "Please Try Again!", "error");
+              });
+          } else {
+            swal("Process Terminated!");
           }
         });
       }
@@ -152,15 +175,13 @@ export const CustomerCreateForm = (props) => {
   };
 
   const handlePhoneNumberSelect = (value) => {
-    // setErrorObj({});
-    // setPhoneNumber(value);
-    console.log("Selected", value);
+    setErrorObj({});
+    setPhoneNumber(value);
   };
 
   const handlePhoneNumberSearch = (value) => {
-    // setErrorObj({});
-    // setPhoneNumber(value);
-    console.log("searched", value);
+    setErrorObj({});
+    setPhoneNumber(value);
   };
 
   return (
