@@ -90,7 +90,7 @@ export const ItemView = ({ item, selectedProperties, updateSelectedproperties })
     <ItemDetail>
       <Image
         style={{
-          backgroundImage: `url(${item && item.image})`,
+          backgroundImage: `url(${item && item.image && process.env.REACT_APP_IMAGE_URL + item.image})`,
         }}
       />
       {/* <img src={item && item.image} alt="Item" /> */}

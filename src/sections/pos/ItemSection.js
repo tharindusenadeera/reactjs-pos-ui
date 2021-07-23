@@ -161,21 +161,22 @@ export const ItemSection = () => {
 
   const handleProducts = (data) => {
     let itemArr = [];
-    data.forEach((element) => {
-      let obj = {
-        productKey: element.id,
-        category: element.menu_category,
-        name: element.name,
-        image: element.image,
-        price: element.price,
-        qty: element.qty,
-        branch_id: element.branch_id,
-        status: element.status,
-        created_at: element.created_at,
-        updated_at: element.updated_at,
-      };
-      itemArr.push(obj);
-    });
+    data &&
+      data.forEach((element) => {
+        let obj = {
+          productKey: element.id,
+          category: element.menu_category,
+          name: element.name,
+          image: element.main_image,
+          price: element.price,
+          qty: element.qty,
+          branch_id: element.branch_id,
+          status: element.status,
+          created_at: element.created_at,
+          updated_at: element.updated_at,
+        };
+        itemArr.push(obj);
+      });
     setProducts(itemArr);
   };
 
@@ -308,7 +309,10 @@ export const ItemSection = () => {
                   //title={item.name}
                   btnContent={
                     <ProductCard>
-                      <ProductImg src={item.image} alt="product image" />
+                      <ProductImg
+                        src={process.env.REACT_APP_IMAGE_URL + item.image}
+                        alt="product image"
+                      />
                       <span className="prod-title">{item.name}</span>
                       <span className="prod-price">$ {item.price}</span>
                     </ProductCard>
