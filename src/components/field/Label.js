@@ -45,7 +45,11 @@ export const Label = (props) => {
     hideSubmit,
     disableCancel,
     disableOk,
+    clickOk,
     onChange,
+    clickCancel,
+    onModalClicked,
+
   } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
@@ -54,21 +58,23 @@ export const Label = (props) => {
 
   const showModal = () => {
     setIsModalVisible(true);
+
+    if (onModalClicked) {
+      onModalClicked()
+    }
   };
 
   const handleOk = () => {
     if (plusComp === "discount") {
-      handleDiscount();
+      clickOk();
     }
     setIsModalVisible(false);
   };
+  
   const handleCancel = () => {
+    clickCancel();
     setIsModalVisible(false);
   };
-
-  const handleDiscount = () => {
-    console.log("Just Called ---");
-  }
 
   if (plusComp === "customer-create") {
     ModalComponent.current = <CustomerCreateForm handleCancel={handleCancel} />;
@@ -77,7 +83,7 @@ export const Label = (props) => {
     ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel} />;
     ModalTitle.current = "Add a Delivery address";
   } else if (plusComp === "discount") {
-    ModalComponent.current = <DiscountForm handleCancel={handleCancel} />;
+    ModalComponent.current = <DiscountForm handleCancel={handleCancel} onChange={onChange}/>;
     ModalTitle.current = "Add Discount";
   } else if (plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;
