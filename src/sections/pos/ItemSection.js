@@ -105,11 +105,12 @@ export const ItemSection = () => {
   }
 
   useEffect(() => {
-    let isItemSelected = selectedProperties?.categories?.filter((category) => isRealValue(category.item));
+    let isCategoryAvailable = selectedProperties?.menu_option_categories?.length > 0;
+    let items = selectedProperties?.categories?.filter((category) => isRealValue(category.item));
+    let isItemSelected = (items && items?.length) || !isCategoryAvailable;
 
     if (
       isItemSelected &&
-      isItemSelected?.length &&
       selectedProperties?.quantity &&
       selectedProperties?.quantity !== 0
     ) {
@@ -132,6 +133,19 @@ export const ItemSection = () => {
           status: element.status,
           created_at: element.created_at,
           updated_at: element.updated_at,
+          menu_option_categories: element.menu_option_categories.map((category) => {
+            return {
+              ...category,
+              value : category.name,
+              key : category.id,
+              menu_item_options: category.menu_item_options.map((item) => {
+                return {
+                  ...item,
+                  value : item.name,
+                  key : item.id
+                }
+              })};
+          })
         };
         itemArr.push(obj);
       });
@@ -223,6 +237,10 @@ export const ItemSection = () => {
     setDisableOk(true);
   };
 
+  /**
+   * * adding value property for dropdown
+   * @param { use clicked item from Production section} item 
+   */
   const selectItem = (item) => {
     setSelectedProperties(item);
   }
@@ -239,7 +257,7 @@ export const ItemSection = () => {
     data.forEach((element) => {
       let obj = {
         key: element.id,
-        value: element.category_name,
+        value: element.name,
         status: element.status,
         created_at: element.created_at,
         updated_at: element.updated_at,

@@ -10,7 +10,7 @@ export const GenerateUniqueId = (item) => {
     let id_array = [];
     const product_key = ''+item.productKey+'|';
 
-    item.categories.forEach(category => {
+    item?.categories?.forEach(category => {
         const category_key = category?.key;
         const item_key = category?.item?.key;
         
@@ -35,8 +35,8 @@ const Search = (newId, existingItems) => {
     let isMatch = false;
     let matchedItem = {};
 
-    existingItems.forEach((item) => {
-        let idArray = item.key?.split('|');
+    existingItems?.forEach((item) => {
+        let idArray = item?.key?.split('|');
         let itemMatch = false;
 
         // Id's Dont match if the product keys are not matching
@@ -47,12 +47,12 @@ const Search = (newId, existingItems) => {
         
         let categoriesId = idArray?.slice(1);
         
-        categoriesId.forEach((categoryId) => {
+        categoriesId?.forEach((categoryId) => {
             let categoryOld = categoryId?.split('-')[0];
             let itemOld = categoryId?.split('-')[1];
             let status = false;
 
-            newItemCategoriesId.forEach((newItemCategoryId) => {
+            newItemCategoriesId?.forEach((newItemCategoryId) => {
                 let categoryNew = newItemCategoryId?.split('-')[0];
                 let itemNew = newItemCategoryId?.split('-')[1];
 
