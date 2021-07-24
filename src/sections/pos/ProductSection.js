@@ -76,8 +76,16 @@ export const ProductSection = () => {
   const [disableOk, setDisableOk] = useState(false);
   const dispatch = useDispatch();
 
+  const isRealValue = (obj) => {
+    return obj && obj !== 'null' && obj !== 'undefined' && obj !== '';
+  }
+
   useEffect(() => {
-    if (selectedProperties?.quantity && selectedProperties?.quantity !== 0) {
+    let isCategoryAvailable = selectedProperties?.menu_option_categories?.length > 0;
+    let items = selectedProperties?.categories?.filter((category) => isRealValue(category.item));
+    let isItemSelected = (items && items?.length) || !isCategoryAvailable;
+
+    if (selectedProperties?.quantity && selectedProperties?.quantity !== 0 && isItemSelected) {
       setDisableOk(false);
     } else {
       setDisableOk(true);
