@@ -12,3 +12,6 @@ export const SELECTED_CITY = 'SELECTED_CITY';
 //----------- Common -------------------//
 export const ERROR = 'ERROR';
 export const MEAL_TYPE = 'MEAL_TYPE';
+
+//---------- Order ------------------//
+export const ADD_ORDER = 'ADD_ORDER';

@@ -72,7 +72,9 @@ export const Label = (props) => {
   };
   
   const handleCancel = () => {
-    clickCancel();
+    if (clickCancel) {
+      clickCancel();
+    }
     setIsModalVisible(false);
   };
 
