@@ -37,39 +37,11 @@ const ItemForm = styled.div`
 
 const TagRow = styled.div`
   margin-left: 5px;
+  margin-bottom: 5px;
 `;
 
-const TasteList = [
-  { key: 1, value: "Sweet" },
-  { key: 2, value: "Salty" },
-  { key: 3, value: "Bitter" },
-  { key: 4, value: "Savory" },
-];
-
-const SizeList = [
-  { key: 1, value: "Small" },
-  { key: 2, value: "Medium" },
-  { key: 3, value: "Large" },
-];
-
-const Suger = [
-  { key: 1, value: "No Suger" },
-  { key: 2, value: "Low Suger" },
-  { key: 3, value: "Normal" },
-];
-
-const categoryToPropertiesMap = {
-  1: TasteList,
-  2: SizeList,
-  3: Suger,
-};
-const CategoryList = [
-  { key: 1, value: "Taste" },
-  { key: 2, value: "Size" },
-  { key: 3, value: "Suger" },
-];
-
 export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
+  
   const onClickPlus = () => {
     const newQty = selectedProperties?.quantity
       ? selectedProperties?.quantity + 1
@@ -104,29 +76,30 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
   const onChangeCategory = (id) => {
     // categories which are not selected
     if (
-      !selectedProperties.categories?.find((category) => category.key === id)
+      !selectedProperties.categories?.find((category) => category.id === id)
     ) {
       const array = selectedProperties?.categories
         ? selectedProperties?.categories
         : [];
-      const selectedCategory = CategoryList.find(
-        (category) => category.key === id
+      const selectedCategory = selectedProperties?.menu_option_categories?.find(
+        (category) => category.id === id
       );
-
       // other categories hide
       array?.map((category) => (category.isShow = false));
       // new category show and push to the array
       array.push({
+        id: id,
         key: id,
-        categoryName: selectedCategory.value,
+        categoryName: selectedCategory?.name,
+        value: selectedCategory?.name,
         item: "",
         isShow: true,
       });
 
       updateSelectedproperties({ ...selectedProperties, categories: array });
     } else {
-      // category which is just selected showing and hiding others
-      const categories = selectedProperties.categories.map((category) => ({
+      // selected category showing and hiding others
+      const categories = selectedProperties?.categories?.map((category) => ({
         ...category,
         isShow: category.key === id,
       }));
@@ -142,17 +115,18 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
    * @param {* Id of the Category Items Dropdown} id
    */
 
-  const onChangeCategoryItem = (id) => {
+  const onChangeCategoryItem = (key) => {
     // Get the displaying category Item
     const categoryItemObject = selectedProperties.categories.find(
       (category) => category?.isShow
     );
     // Get the displaying category Item's details
-    const selectedCategoryItemList =
-      categoryToPropertiesMap[categoryItemObject.key];
+    const selectedCategoryItemList = selectedProperties?.menu_option_categories.find(
+      (category) => category.key === categoryItemObject.key
+    );;
     // From that find the selecting item detail
-    const selectedCategoryItem = selectedCategoryItemList.find(
-      (item) => item.key === id
+    const selectedCategoryItem = selectedCategoryItemList?.menu_item_options.find(
+      (item) => item.key === key
     );
 
     const categories = selectedProperties?.categories?.map((category) => {
@@ -185,17 +159,18 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
   };
 
   const getCategoryItemLabel = (key) => {
-    const category = CategoryList.find((category) => category.key === key);
+    const category = selectedProperties?.menu_option_categories?.find((category) => category.key === key);
     return category.value;
   };
 
   const getCategoryItemPlcaeHolder = (key) => {
-    const category = CategoryList.find((category) => category.key === key);
+    const category = selectedProperties?.menu_option_categories?.find((category) => category.key === key);
     return `Choose a ${category.value}`;
   };
 
   const getCategoryItemOptions = (key) => {
-    return categoryToPropertiesMap[key] || {};
+    const category = selectedProperties?.menu_option_categories?.find((category) => category.key === key);
+    return category?.menu_item_options || {};
   };
 
   return (
@@ -217,7 +192,7 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
             <SelectField
               label="Category"
               value="Choose a Category"
-              options={CategoryList}
+              options={selectedProperties.menu_option_categories}
               onChange={onChangeCategory}
             />
           </div>
