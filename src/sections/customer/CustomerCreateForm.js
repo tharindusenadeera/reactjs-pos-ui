@@ -20,46 +20,8 @@ const ButtonWrap = styled.div`
   width: 100%;
 `;
 
-const customerArr = [
-  {
-    id: 1,
-    first_name: "nadeera",
-    last_name: "lakshan",
-    contact_number: "0718989600",
-    address_line_1: "Lorem Ipsum",
-    address_line_2: "Lorem Ipsu,",
-    email: "nadeera036@gmail.com",
-    password: null,
-    emai_verified: null,
-    phone_verified: null,
-    status: null,
-    city_id: null,
-    created_by: null,
-    created_at: "2021-07-20T11:49:57.000000Z",
-    updated_at: "2021-07-20T11:49:57.000000Z",
-  },
-  {
-    id: 2,
-    first_name: "Tharindu",
-    last_name: "lakshan",
-    contact_number: "0715475220",
-    address_line_1: "Lorem Ipsum",
-    address_line_2: "Lorem Ipsu,",
-    email: "tharindusenadeera081@gmail.com",
-    password: null,
-    emai_verified: null,
-    phone_verified: null,
-    status: null,
-    city_id: null,
-    created_by: null,
-    created_at: "2021-07-20T11:49:57.000000Z",
-    updated_at: "2021-07-20T11:49:57.000000Z",
-  },
-];
-
 export const CustomerCreateForm = (props) => {
   const dispatch = useDispatch();
-  const clickedSubmit = useSelector((state) => state.customer);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -74,12 +36,16 @@ export const CustomerCreateForm = (props) => {
   const mobileNoRegex = RegExp("^([0-9]+)$");
 
   useEffect(() => {
+    handleAllCustomers();
+  }, []);
+
+  const handleAllCustomers = () => {
     getAllCustomers().then((res) => {
       if (res.data.data) {
         handlePhoneNumbers(res.data.data);
       }
     });
-  }, []);
+  };
 
   const handlePhoneNumbers = (data) => {
     let newArr = [];
@@ -116,7 +82,7 @@ export const CustomerCreateForm = (props) => {
     setPhoneNumber("");
     setEmail("");
     setFirstAddressLine("");
-    setSecondAddressLine("")
+    setSecondAddressLine("");
     props.handleCancel();
   };
 
@@ -159,6 +125,14 @@ export const CustomerCreateForm = (props) => {
               .then((res) => {
                 if (res.data.status == "success") {
                   dispatch(customerDetails(res.data.data));
+                  setFirstName("");
+                  setLastName("");
+                  setPhoneNumber("");
+                  setEmail("");
+                  setFirstAddressLine("");
+                  setSecondAddressLine("");
+                  handleAllCustomers();
+                  swal("Successfully Submitted !", "", "success");
                   props.handleCancel();
                 }
               })

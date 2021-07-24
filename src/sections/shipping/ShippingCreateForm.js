@@ -43,7 +43,7 @@ export const ShippingCreateForm = (props) => {
 
   const handleCities = (data) => {
     let newArr = [];
-    data.forEach((element) => {
+    data?.forEach((element) => {
       let obj = {
         key: element.id,
         value: element.name,

@@ -4,6 +4,7 @@ import Theme from "../../utils/Theme";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { Warning } from "../../sections/common/Warning";
+import { getAllOrders } from "../../api/order";
 
 const orderArr = [
   {
@@ -124,7 +125,16 @@ export const OrderView = () => {
 
   useEffect(() => {
     setOrders(orderArr);
+    getAllOrders().then((res) => {
+      if (res.data.data) {
+        handleAllOrders(res.data.data);
+      }
+    });
   }, []);
+
+  const handleAllOrders = (data) => {
+    console.log("====data====", data);
+  };
 
   const handleConfirm = () => {
     setIsModalVisible(false);

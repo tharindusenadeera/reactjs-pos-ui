@@ -239,7 +239,7 @@ export const ItemSection = () => {
     data.forEach((element) => {
       let obj = {
         key: element.id,
-        value: element.category_name,
+        value: element.name,
         status: element.status,
         created_at: element.created_at,
         updated_at: element.updated_at,

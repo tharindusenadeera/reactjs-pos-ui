@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Theme from "../../utils/Theme";
 import styled from "styled-components";
 import Clock from "react-live-clock";
