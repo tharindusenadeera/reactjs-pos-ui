@@ -6,10 +6,16 @@ import Theme from "../../utils/Theme";
 import { ContentModal } from "../../components/modal/ContentModal";
 import { ItemView } from "../orders/ItemView";
 import { addItem, updateItem } from "../../actions/selectedItems";
-import { GenerateUniqueId, CheckforMatch, GetItemFromId} from "../../utils/generateUniqueId";
+import {
+  GenerateUniqueId,
+  CheckforMatch,
+  GetItemFromId,
+} from "../../utils/generateUniqueId";
 import { categoryList } from "../../api/category";
 
 import { productsList } from "../../api/products";
+import { SelectNInputField } from "../../components/field/SelectNInputField";
+import { InputField } from "../../components/field/InputField";
 
 const Head = styled.div`
   padding: 1.25rem;
@@ -101,12 +107,15 @@ export const ItemSection = () => {
   }, []);
 
   const isRealValue = (obj) => {
-    return obj && obj !== 'null' && obj !== 'undefined' && obj !== '';
-  }
+    return obj && obj !== "null" && obj !== "undefined" && obj !== "";
+  };
 
   useEffect(() => {
-    let isCategoryAvailable = selectedProperties?.menu_option_categories?.length > 0;
-    let items = selectedProperties?.categories?.filter((category) => isRealValue(category.item));
+    let isCategoryAvailable =
+      selectedProperties?.menu_option_categories?.length > 0;
+    let items = selectedProperties?.categories?.filter((category) =>
+      isRealValue(category.item)
+    );
     let isItemSelected = (items && items?.length) || !isCategoryAvailable;
 
     if (
@@ -133,19 +142,22 @@ export const ItemSection = () => {
           status: element.status,
           created_at: element.created_at,
           updated_at: element.updated_at,
-          menu_option_categories: element?.menu_option_categories?.map((category) => {
-            return {
-              ...category,
-              value : category.name,
-              key : category.id,
-              menu_item_options: category?.menu_item_options?.map((item) => {
-                return {
-                  ...item,
-                  value : item.name,
-                  key : item.id
-                }
-              })};
-          })
+          menu_option_categories: element?.menu_option_categories?.map(
+            (category) => {
+              return {
+                ...category,
+                value: category.name,
+                key: category.id,
+                menu_item_options: category?.menu_item_options?.map((item) => {
+                  return {
+                    ...item,
+                    value: item.name,
+                    key: item.id,
+                  };
+                }),
+              };
+            }
+          ),
         };
         itemArr.push(obj);
       });
@@ -179,7 +191,7 @@ export const ItemSection = () => {
     });
   };
 
-    /**
+  /**
    * * This function will do the price calculation update with the quantity
    * todo: maybe this function need to handle separately after services
    * @param { Selected or new Item} item
@@ -218,7 +230,7 @@ export const ItemSection = () => {
     setDisableOk(true);
   };
 
-    /**
+  /**
    * * Modal click cancel event handling
    */
 
@@ -227,7 +239,7 @@ export const ItemSection = () => {
     setDisableOk(true);
   };
 
-    /**
+  /**
    * * Update function which triggered from the ItemSection and save the state in here
    * @param { Item with user update } updatedItem
    */
@@ -239,11 +251,11 @@ export const ItemSection = () => {
 
   /**
    * * adding value property for dropdown
-   * @param { use clicked item from Production section} item 
+   * @param { use clicked item from Production section} item
    */
   const selectItem = (item) => {
     setSelectedProperties(item);
-  }
+  };
 
   const handleCategories = (data) => {
     let newArr = [];
@@ -268,7 +280,8 @@ export const ItemSection = () => {
     setCategories(newArr);
   };
 
-  const handleSearch = (value) => {
+  const handleSearch = (e) => {
+    let value = e.target.value;
     let strLength = value.length;
 
     if (strLength % 3 === 0) {
@@ -291,10 +304,9 @@ export const ItemSection = () => {
             />
           </div>
           <div className="col-6">
-            <SelectCustom
-              showSearch={true}
+            <InputField
               placeholder="Type item to search"
-              onSearch={handleSearch}
+              onChange={handleSearch}
             />
           </div>
         </div>
