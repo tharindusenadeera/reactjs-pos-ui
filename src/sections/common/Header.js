@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import Theme from "../../utils/Theme";
 import styled from "styled-components";
 import Clock from "react-live-clock";
@@ -49,6 +50,8 @@ const NavControls = styled.div`
 
 export const Header = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const currentDate = moment().format("dddd DD MMMM YYYY");
+  const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -73,9 +76,9 @@ export const Header = () => {
               <Clock
                 format={"hh:mm:ssa"}
                 ticking={true}
-                timezone={"US/Pacific"}
+                timezone={currentTimeZone}
               />
-              <div className="date">Monday 5 July 2021</div>
+              <div className="date">{currentDate}</div>
             </TimeWrap>
 
             <NavControls className="mt-3 mt-md-0">
