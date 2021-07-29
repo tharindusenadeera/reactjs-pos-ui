@@ -62,7 +62,7 @@ const calculateOrderSummary = (selectedItems, disc) => {
   selectedItems.forEach((item) => {
     subTot += item?.subtotal;
   });
-  
+
   const discount = disc.key === "1" ? subTot * (disc.value / 100) : disc.value;
   const taxPer = 0.03; // tax harcoded as 3%
   const shipping = subTot === 0 ? 0 : 0; // shipping harcoded as 0
@@ -78,12 +78,11 @@ const calculateOrderSummary = (selectedItems, disc) => {
 };
 
 export const BillingSection = (props) => {
-
   // key 1 -> percentage  2 -> fixed value
-  const initialDiscount = { key: "1", value: 0 }
+  const initialDiscount = { key: "1", value: 0 };
   const [dis, setDis] = useState(initialDiscount);
   const [savedDis, setSavedDis] = useState(initialDiscount);
-  
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const selectedItems = useSelector((state) => state.selectedItems);
@@ -99,15 +98,14 @@ export const BillingSection = (props) => {
   const clickCancel = () => {};
 
   const onChange = (type, event) => {
-    
-    if (type === 'name') {
-      const {key} = event;
-      setDis({...dis, key : key});
+    if (type === "name") {
+      const { key } = event;
+      setDis({ ...dis, key: key });
     } else {
       const figure = event?.target?.value || 0;
 
       if (!isNaN(figure)) {
-        setDis({...dis, value : parseInt(figure)});
+        setDis({ ...dis, value: parseInt(figure) });
       }
     }
   };
@@ -122,12 +120,14 @@ export const BillingSection = (props) => {
 
   const onModalClicked = () => {
     setDis(savedDis);
-  }
+  };
 
   const { totItems, subTot, discount, tax, shipping, tot } =
     calculateOrderSummary(selectedItems, savedDis);
 
-  const DiscountLabel = `Discount  (${savedDis.value} ${savedDis.key === "1" ? '%)' : '$)'}`;
+  const DiscountLabel = `Discount  (${savedDis.value} ${
+    savedDis.key === "1" ? "%)" : "$)"
+  }`;
 
   return (
     <Fragment>
@@ -139,8 +139,33 @@ export const BillingSection = (props) => {
           <p>Russel st 50,Bostron,MA USA</p>
         </div>
       </ShopDetail> */}
+      <div className="row">
+        <div className="col-12">
+          <SelectField
+            showSearch={true}
+            label="Choose a Customer"
+            plusComp="customer-create"
+            placeholder="Select customer"
+            options={customerArr}
+            okText="Add Customer"
+            hideCancel={true}
+            hideSubmit={true}
+          />
+        </div>
+        <div className="col-12">
+          <SelectField
+            showSearch={true}
+            label="Delivery Address"
+            plusComp="shipping-create"
+            placeholder="Select Address"
+            okText="Add Address"
+            hideCancel={true}
+            hideSubmit={true}
+          />
+        </div>
+      </div>
 
-      {/* <hr /> */}
+      <hr />
 
       <BillDetail>
         <FieldRow>
@@ -162,7 +187,7 @@ export const BillingSection = (props) => {
             onChange={onChange}
             clickOk={clickOk}
             clickCancel={clickCancel}
-            onModalClicked= {onModalClicked}
+            onModalClicked={onModalClicked}
           />
           <p>${discount}</p>
         </FieldRow>
@@ -198,7 +223,7 @@ export const BillingSection = (props) => {
           btnTitle="Pay the bill"
           type="primary"
           btnClass="mb-3 w-100 green"
-          btnDisabled={true}
+          btnDisabled={false}
           title="Payment"
           okText="Pay Now"
           showModal={showModal}
@@ -211,32 +236,6 @@ export const BillingSection = (props) => {
       </div>
 
       <Hr />
-
-      <div className="row">
-        <div className="col-12">
-          <SelectField
-            showSearch={true}
-            label="Choose a Customer"
-            plusComp="customer-create"
-            placeholder="Select customer"
-            options={customerArr}
-            okText="Add Customer"
-            hideCancel={true}
-            hideSubmit={true}
-          />
-        </div>
-        <div className="col-12">
-          <SelectField
-            showSearch={true}
-            label="Delivery Address"
-            plusComp="shipping-create"
-            placeholder="Select Address"
-            okText="Add Address"
-            hideCancel={true}
-            hideSubmit={true}
-          />
-        </div>
-      </div>
     </Fragment>
   );
 };

@@ -7,5 +7,5 @@ export const getAllOrders = (params = {}) => {
 };
 
 export const addOrder = (newOrder) => {
-  return API.post(`${process.env.REACT_APP_API_URL}/v1/order`, newOrder);
+  return axios.post(`${process.env.REACT_APP_API_URL}/v1/order`, newOrder);
 };
