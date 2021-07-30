@@ -7,6 +7,7 @@ import { ModalCustom } from "../../components/modal";
 import { Label } from "../../components/field/Label";
 import { Payment } from "../billing/Payment";
 import { SelectField } from "../../components/field/SelectField";
+import { convertToDecimal } from "../../utils/formats"
 
 const ShopDetail = styled.div`
   display: flex;
@@ -67,13 +68,20 @@ const calculateOrderSummary = (selectedItems, disc) => {
   const taxPer = 0.03; // tax harcoded as 3%
   const shipping = subTot === 0 ? 0 : 0; // shipping harcoded as 0
 
+  /*  Decimal Translations  */
+  const subT = convertToDecimal(subTot, 2);
+  const dis = convertToDecimal(discount, 2);
+  const tax = convertToDecimal(subTot * taxPer, 2);
+  const ship = convertToDecimal(shipping, 2);
+  const tot = convertToDecimal(subTot - discount + subTot * taxPer + shipping, 2);
+  
   return {
     totItems: selectedItems.length,
-    subTot: subTot,
-    discount: discount,
-    tax: subTot * taxPer,
-    shipping: shipping,
-    tot: subTot - discount + subTot * taxPer + shipping,
+    subTot: subT,
+    discount: dis,
+    tax: tax,
+    shipping: ship,
+    tot: tot,
   };
 };
 
