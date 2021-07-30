@@ -9,7 +9,11 @@ import {
 } from "../../actions/customer";
 import styled from "styled-components";
 import { ButtonCustom } from "../../components/button";
-import { addCustomer, getAllCustomers } from "../../api/customer";
+import {
+  addCustomer,
+  getAllCustomers,
+  getCustomerById,
+} from "../../api/customer";
 import { AutoCompleteField } from "../../components/field/AutoCompleteField";
 import swal from "sweetalert";
 
@@ -30,6 +34,7 @@ export const CustomerCreateForm = (props) => {
   const [secondAddressLine, setSecondAddressLine] = useState("");
   const [errorObj, setErrorObj] = useState({});
   const [phoneNumberArr, setPhoneNumberArr] = useState([]);
+  const [customer, setCustomer] = useState({});
   const emailRegex = RegExp(
     '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
   );
@@ -38,6 +43,14 @@ export const CustomerCreateForm = (props) => {
   useEffect(() => {
     handleAllCustomers();
   }, []);
+
+  useEffect(() => {
+    setFirstName(customer.first_name);
+    setLastName(customer.last_name);
+    setEmail(customer.email);
+    setFirstAddressLine(customer.address_line_1);
+    setSecondAddressLine(customer.address_line_2);
+  }, [customer]);
 
   const handleAllCustomers = () => {
     getAllCustomers().then((res) => {
@@ -147,7 +160,23 @@ export const CustomerCreateForm = (props) => {
     }
   };
 
+  const getCustomer = (id) => [
+    getCustomerById(id).then((res) => {
+      if (res.data.status == "success") {
+        setCustomer(res.data.data);
+      }
+    }),
+  ];
+
+  const selectedPhoneNumberId = (phoneNumber) => {
+    let customerId = phoneNumberArr.filter((item) => {
+      return item.value == phoneNumber;
+    });
+    getCustomer(customerId[0].key);
+  };
+
   const handlePhoneNumberSelect = (value) => {
+    selectedPhoneNumberId(value);
     setErrorObj({});
     setPhoneNumber(value);
   };
@@ -177,6 +206,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Email"
             placeholder="Enter email address"
+            value={email ? email : undefined}
             errorMsg={errorObj.email ? errorObj.email : ""}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -189,6 +219,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="First Name"
             placeholder="Type a name"
+            value={firstName ? firstName : undefined}
             errorMsg={
               errorObj.firstName || errorObj.all ? errorObj.firstName : ""
             }
@@ -203,6 +234,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Last Name"
             placeholder="Type a name"
+            value={lastName ? lastName : undefined}
             errorMsg={
               errorObj.lastName || errorObj.all ? errorObj.lastName : ""
             }
@@ -217,6 +249,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Address Line 1"
             placeholder="Type first address line"
+            value={firstAddressLine ? firstAddressLine : undefined}
             // errorMsg={
             //   errorObj.lastName || errorObj.all ? errorObj.lastName : ""
             // }
@@ -231,6 +264,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Address Line 2"
             placeholder="Type second address line"
+            value={secondAddressLine ? secondAddressLine : undefined}
             // errorMsg={
             //   errorObj.lastName || errorObj.all ? errorObj.lastName : ""
             // }

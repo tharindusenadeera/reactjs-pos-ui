@@ -7,3 +7,7 @@ export const getAllCustomers = () => {
 export const addCustomer = (data) => {
   return Axios.post(`${process.env.REACT_APP_API_URL}/v1/new-customer`, data);
 };
+
+export const getCustomerById = id => {
+  return Axios.get(`${process.env.REACT_APP_API_URL}/v1/customer/${id}`);
+}
