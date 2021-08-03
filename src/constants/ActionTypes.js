@@ -2,12 +2,14 @@
 export const ADD_ITEM = 'ADD_ITEM';
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
+export const ALL_ITEMS = 'ALL_ITEMS';
 
 //---------- Customer ------------------//
 export const ADD_CUSTOMER_TRIGGERED = 'ADD_CUSTOMER_TRIGGERED';
 export const ADD_CUSTOMER = 'ADD_CUSTOMER';
 export const CUSTOMER_DETAILS = 'CUSTOMER_DETAILS';
 export const SELECTED_CITY = 'SELECTED_CITY';
+export const DELIVERY_INFORMATIONS = 'DELIVERY_INFORMATIONS';
 
 //----------- Common -------------------//
 export const ERROR = 'ERROR';

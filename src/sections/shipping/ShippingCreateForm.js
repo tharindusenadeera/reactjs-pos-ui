@@ -6,7 +6,11 @@ import { SelectField } from "../../components/field/SelectField";
 import { InputField } from "../../components/field/InputField";
 import { ButtonCustom } from "../../components/button";
 import { getCities } from "../../api/common";
-import { selectedCityDetails } from "../../actions/customer";
+import {
+  addDeliveryInformations,
+  selectedCityDetails,
+} from "../../actions/customer";
+import swal from "sweetalert";
 
 const ButtonWrap = styled.div`
   margin-top: 5px;
@@ -89,6 +93,8 @@ export const ShippingCreateForm = (props) => {
       errors.deliveryPhoneNo = "Invalid Phone number !";
     } else if (!data.firstDeliveryAddress) {
       errors.deliveryAddress = "Address is Required !";
+    } else if (!data.selectedCity) {
+      errors.selectedCity = "City is Required !";
     }
     setErrorObj(errors);
     return errors;
@@ -101,15 +107,6 @@ export const ShippingCreateForm = (props) => {
   const handleSubmit = () => {
     if (isSame) {
     } else {
-      let obj = {
-        deliveryFirstName,
-        deliveryLastName,
-        deliveryPhoneNo,
-        deliveryEmail,
-        firstDeliveryAddress,
-        selectedCity,
-      };
-
       if (
         !deliveryFirstName ||
         !deliveryLastName ||
@@ -121,13 +118,34 @@ export const ShippingCreateForm = (props) => {
           deliveryFirstName: "Required !",
           deliveryLastName: "Required !",
           deliveryPhoneNo: "Required !",
+          selectedCity: "Required !",
         });
         return;
       } else {
-        const errors = validate(obj);
+        let shippingDetail = {
+          customer_id: customer.addCustomer.id,
+          delivery_first_name: deliveryFirstName,
+          delivery_last_name: deliveryLastName,
+          delivery_city_id: selectedCity,
+          delivery_address_line_1: firstDeliveryAddress,
+          delivery_address_line_2: secondDeliveryAddress,
+          delivery_phone_number: deliveryPhoneNo,
+        };
+        const errors = validate(shippingDetail);
         if (!Object.keys(errors).length) {
-          let shippingDetail = {};
-          console.log("SHIPPING", obj);
+          swal({
+            title: "Confirm to Add",
+            text: "",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          }).then((willDelete) => {
+            if (willDelete) {
+              dispatch(addDeliveryInformations(shippingDetail));
+            } else {
+              swal("Process Terminated!");
+            }
+          });
         }
       }
     }
@@ -138,6 +156,7 @@ export const ShippingCreateForm = (props) => {
   };
 
   const handleSelectedCity = (value) => {
+    setErrorObj({});
     setSelectedCity(value);
     let cityDetails = city.filter((item) => {
       return item.id == value;
@@ -163,6 +182,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setDeliveryFirstName(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -180,6 +200,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setDeliveryLastName(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -212,6 +233,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setFirstDeliveryAddress(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -224,6 +246,7 @@ export const ShippingCreateForm = (props) => {
             value={secondDeliveryAddress ? secondDeliveryAddress : undefined}
             onChange={(e) => {
               setSecondDeliveryAddress(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -241,6 +264,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setDeliveryPhoneNo(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -258,6 +282,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setDeliveryEmail(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />

@@ -3,6 +3,7 @@ import {
   ADD_CUSTOMER,
   CUSTOMER_DETAILS,
   SELECTED_CITY,
+  DELIVERY_INFORMATIONS,
 } from "../constants/ActionTypes";
 
 export const addCustomerTriggered = (data) => {
@@ -30,6 +31,13 @@ export const customerDetails = (data) => {
 export const selectedCityDetails = (data) => {
   return {
     type: SELECTED_CITY,
+    payload: data,
+  };
+};
+
+export const addDeliveryInformations = (data) => {
+  return {
+    type: DELIVERY_INFORMATIONS,
     payload: data,
   };
 };
