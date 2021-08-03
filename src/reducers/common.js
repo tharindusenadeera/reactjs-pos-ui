@@ -2,7 +2,7 @@ import { ERROR, MEAL_TYPE } from "../constants/ActionTypes";
 
 const initialState = {
   isError: false,
-  mealType: 1,
+  mealType: "dine_in",
 };
 
 const commonReducer = (state = initialState, action) => {
