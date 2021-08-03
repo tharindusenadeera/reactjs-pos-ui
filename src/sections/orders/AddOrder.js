@@ -46,7 +46,7 @@ const AddOrder = () => {
       // console.log(order)
       const data = await dispatch(addItem(order));
 
-      if (data.status === "false") {
+      if (data?.status === "false") {
         return 'Adding Unsucessful !'
       } else {
         return 'Adding Sucessful !'

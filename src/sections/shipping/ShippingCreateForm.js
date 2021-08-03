@@ -6,7 +6,11 @@ import { SelectField } from "../../components/field/SelectField";
 import { InputField } from "../../components/field/InputField";
 import { ButtonCustom } from "../../components/button";
 import { getCities } from "../../api/common";
-import { selectedCityDetails } from "../../actions/customer";
+import {
+  addDeliveryInformations,
+  selectedCityDetails,
+} from "../../actions/customer";
+import swal from "sweetalert";
 
 const ButtonWrap = styled.div`
   margin-top: 5px;
@@ -41,9 +45,27 @@ export const ShippingCreateForm = (props) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (isSame) {
+      setDeliveryFirstName(customer.addCustomer.first_name);
+      setDeliveryLastName(customer.addCustomer.last_name);
+      setDeliveryPhoneNo(customer.addCustomer.contact_number);
+      setFirstDeliveryAddress(customer.addCustomer.address_line_1);
+      setSecondDeliveryAddress(customer.addCustomer.address_line_2);
+      setDeliveryEmail(customer.addCustomer.email);
+    } else {
+      setDeliveryFirstName("");
+      setDeliveryLastName("");
+      setDeliveryPhoneNo("");
+      setFirstDeliveryAddress("");
+      setSecondDeliveryAddress("");
+      setDeliveryEmail("");
+    }
+  }, [isSame]);
+
   const handleCities = (data) => {
     let newArr = [];
-    data.forEach((element) => {
+    data?.forEach((element) => {
       let obj = {
         key: element.id,
         value: element.name,
@@ -71,6 +93,8 @@ export const ShippingCreateForm = (props) => {
       errors.deliveryPhoneNo = "Invalid Phone number !";
     } else if (!data.firstDeliveryAddress) {
       errors.deliveryAddress = "Address is Required !";
+    } else if (!data.selectedCity) {
+      errors.selectedCity = "City is Required !";
     }
     setErrorObj(errors);
     return errors;
@@ -83,15 +107,6 @@ export const ShippingCreateForm = (props) => {
   const handleSubmit = () => {
     if (isSame) {
     } else {
-      let obj = {
-        deliveryFirstName,
-        deliveryLastName,
-        deliveryPhoneNo,
-        deliveryEmail,
-        firstDeliveryAddress,
-        selectedCity,
-      };
-
       if (
         !deliveryFirstName ||
         !deliveryLastName ||
@@ -103,13 +118,34 @@ export const ShippingCreateForm = (props) => {
           deliveryFirstName: "Required !",
           deliveryLastName: "Required !",
           deliveryPhoneNo: "Required !",
+          selectedCity: "Required !",
         });
         return;
       } else {
-        const errors = validate(obj);
+        let shippingDetail = {
+          customer_id: customer.addCustomer.id,
+          delivery_first_name: deliveryFirstName,
+          delivery_last_name: deliveryLastName,
+          delivery_city_id: selectedCity,
+          delivery_address_line_1: firstDeliveryAddress,
+          delivery_address_line_2: secondDeliveryAddress,
+          delivery_phone_number: deliveryPhoneNo,
+        };
+        const errors = validate(shippingDetail);
         if (!Object.keys(errors).length) {
-          let shippingDetail = {};
-          console.log("SHIPPING", obj);
+          swal({
+            title: "Confirm to Add",
+            text: "",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          }).then((willDelete) => {
+            if (willDelete) {
+              dispatch(addDeliveryInformations(shippingDetail));
+            } else {
+              swal("Process Terminated!");
+            }
+          });
         }
       }
     }
@@ -120,11 +156,11 @@ export const ShippingCreateForm = (props) => {
   };
 
   const handleSelectedCity = (value) => {
+    setErrorObj({});
     setSelectedCity(value);
     let cityDetails = city.filter((item) => {
       return item.id == value;
     });
-    console.log("cityDetails", cityDetails);
     dispatch(selectedCityDetails(cityDetails && cityDetails[0]));
   };
 
@@ -138,6 +174,7 @@ export const ShippingCreateForm = (props) => {
           <InputField
             label="Delivery First Name"
             placeholder="Enter Delivery First Name"
+            value={deliveryFirstName ? deliveryFirstName : undefined}
             errorMsg={
               errorObj.deliveryFirstName || errorObj.all
                 ? errorObj.deliveryFirstName
@@ -145,6 +182,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setDeliveryFirstName(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -154,6 +192,7 @@ export const ShippingCreateForm = (props) => {
           <InputField
             label="Delivery Last Name"
             placeholder="Enter Delivery Last Name"
+            value={deliveryLastName ? deliveryLastName : undefined}
             errorMsg={
               errorObj.deliveryLastName || errorObj.all
                 ? errorObj.deliveryLastName
@@ -161,6 +200,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setDeliveryLastName(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -185,6 +225,7 @@ export const ShippingCreateForm = (props) => {
           <InputField
             label="Delivery Address Line 1"
             placeholder="Enter first delivery Address line"
+            value={firstDeliveryAddress ? firstDeliveryAddress : undefined}
             errorMsg={
               errorObj.firstDeliveryAddress || errorObj.all
                 ? errorObj.firstDeliveryAddress
@@ -192,6 +233,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setFirstDeliveryAddress(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -201,8 +243,10 @@ export const ShippingCreateForm = (props) => {
           <InputField
             label="Delivery Address Line 2"
             placeholder="Enter second delivery Address"
+            value={secondDeliveryAddress ? secondDeliveryAddress : undefined}
             onChange={(e) => {
               setSecondDeliveryAddress(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -212,6 +256,7 @@ export const ShippingCreateForm = (props) => {
           <InputField
             label="Delivery Phone Number"
             placeholder="Enter Phone Number"
+            value={deliveryPhoneNo ? deliveryPhoneNo : undefined}
             errorMsg={
               errorObj.deliveryPhoneNo || errorObj.all
                 ? errorObj.deliveryPhoneNo
@@ -219,6 +264,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setDeliveryPhoneNo(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />
@@ -228,6 +274,7 @@ export const ShippingCreateForm = (props) => {
           <InputField
             label="Delivery Email"
             placeholder="Enter valid Delivery Email"
+            value={deliveryEmail ? deliveryEmail : undefined}
             errorMsg={
               errorObj.deliveryEmail || errorObj.all
                 ? errorObj.deliveryEmail
@@ -235,6 +282,7 @@ export const ShippingCreateForm = (props) => {
             }
             onChange={(e) => {
               setDeliveryEmail(e.target.value);
+              setErrorObj({});
             }}
             disabled={isSame ? true : false}
           />

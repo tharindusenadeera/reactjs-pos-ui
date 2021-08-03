@@ -1,7 +1,11 @@
 import axios from "axios";
 
-const API = axios.create({baseURL: process.env.REACT_APP_API_URL});
+export const getAllOrders = (params = {}) => {
+  return axios.get(`${process.env.REACT_APP_API_URL}/v1/orders`, {
+    params,
+  });
+};
 
 export const addOrder = (newOrder) => {
-  return API.post(`/v1/new-order`, newOrder);
+  return axios.post(`${process.env.REACT_APP_API_URL}/v1/order`, newOrder);
 };

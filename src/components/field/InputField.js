@@ -28,7 +28,7 @@ export const InputField = (props) => {
   } = props;
   return (
     <div className="field-row">
-      <Label label={label} plusComp={plusComp} />
+      {label ? <Label label={label} plusComp={plusComp} /> : ""}
       <InputCustom
         type={type}
         placeholder={placeholder}

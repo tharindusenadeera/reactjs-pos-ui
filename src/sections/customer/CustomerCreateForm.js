@@ -9,7 +9,11 @@ import {
 } from "../../actions/customer";
 import styled from "styled-components";
 import { ButtonCustom } from "../../components/button";
-import { addCustomer, getAllCustomers } from "../../api/customer";
+import {
+  addCustomer,
+  getAllCustomers,
+  getCustomerById,
+} from "../../api/customer";
 import { AutoCompleteField } from "../../components/field/AutoCompleteField";
 import swal from "sweetalert";
 
@@ -20,46 +24,8 @@ const ButtonWrap = styled.div`
   width: 100%;
 `;
 
-const customerArr = [
-  {
-    id: 1,
-    first_name: "nadeera",
-    last_name: "lakshan",
-    contact_number: "0718989600",
-    address_line_1: "Lorem Ipsum",
-    address_line_2: "Lorem Ipsu,",
-    email: "nadeera036@gmail.com",
-    password: null,
-    emai_verified: null,
-    phone_verified: null,
-    status: null,
-    city_id: null,
-    created_by: null,
-    created_at: "2021-07-20T11:49:57.000000Z",
-    updated_at: "2021-07-20T11:49:57.000000Z",
-  },
-  {
-    id: 2,
-    first_name: "Tharindu",
-    last_name: "lakshan",
-    contact_number: "0715475220",
-    address_line_1: "Lorem Ipsum",
-    address_line_2: "Lorem Ipsu,",
-    email: "tharindusenadeera081@gmail.com",
-    password: null,
-    emai_verified: null,
-    phone_verified: null,
-    status: null,
-    city_id: null,
-    created_by: null,
-    created_at: "2021-07-20T11:49:57.000000Z",
-    updated_at: "2021-07-20T11:49:57.000000Z",
-  },
-];
-
 export const CustomerCreateForm = (props) => {
   const dispatch = useDispatch();
-  const clickedSubmit = useSelector((state) => state.customer);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -68,18 +34,31 @@ export const CustomerCreateForm = (props) => {
   const [secondAddressLine, setSecondAddressLine] = useState("");
   const [errorObj, setErrorObj] = useState({});
   const [phoneNumberArr, setPhoneNumberArr] = useState([]);
+  const [customer, setCustomer] = useState({});
   const emailRegex = RegExp(
     '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
   );
   const mobileNoRegex = RegExp("^([0-9]+)$");
 
   useEffect(() => {
+    handleAllCustomers();
+  }, []);
+
+  useEffect(() => {
+    setFirstName(customer.first_name);
+    setLastName(customer.last_name);
+    setEmail(customer.email);
+    setFirstAddressLine(customer.address_line_1);
+    setSecondAddressLine(customer.address_line_2);
+  }, [customer]);
+
+  const handleAllCustomers = () => {
     getAllCustomers().then((res) => {
       if (res.data.data) {
         handlePhoneNumbers(res.data.data);
       }
     });
-  }, []);
+  };
 
   const handlePhoneNumbers = (data) => {
     let newArr = [];
@@ -116,7 +95,7 @@ export const CustomerCreateForm = (props) => {
     setPhoneNumber("");
     setEmail("");
     setFirstAddressLine("");
-    setSecondAddressLine("")
+    setSecondAddressLine("");
     props.handleCancel();
   };
 
@@ -159,6 +138,14 @@ export const CustomerCreateForm = (props) => {
               .then((res) => {
                 if (res.data.status == "success") {
                   dispatch(customerDetails(res.data.data));
+                  setFirstName("");
+                  setLastName("");
+                  setPhoneNumber("");
+                  setEmail("");
+                  setFirstAddressLine("");
+                  setSecondAddressLine("");
+                  handleAllCustomers();
+                  swal("Successfully Submitted !", "", "success");
                   props.handleCancel();
                 }
               })
@@ -173,7 +160,23 @@ export const CustomerCreateForm = (props) => {
     }
   };
 
+  const getCustomer = (id) => [
+    getCustomerById(id).then((res) => {
+      if (res.data.status == "success") {
+        setCustomer(res.data.data);
+      }
+    }),
+  ];
+
+  const selectedPhoneNumberId = (phoneNumber) => {
+    let customerId = phoneNumberArr.filter((item) => {
+      return item.value == phoneNumber;
+    });
+    getCustomer(customerId[0].key);
+  };
+
   const handlePhoneNumberSelect = (value) => {
+    selectedPhoneNumberId(value);
     setErrorObj({});
     setPhoneNumber(value);
   };
@@ -203,6 +206,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Email"
             placeholder="Enter email address"
+            value={email ? email : undefined}
             errorMsg={errorObj.email ? errorObj.email : ""}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -215,6 +219,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="First Name"
             placeholder="Type a name"
+            value={firstName ? firstName : undefined}
             errorMsg={
               errorObj.firstName || errorObj.all ? errorObj.firstName : ""
             }
@@ -229,6 +234,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Last Name"
             placeholder="Type a name"
+            value={lastName ? lastName : undefined}
             errorMsg={
               errorObj.lastName || errorObj.all ? errorObj.lastName : ""
             }
@@ -243,6 +249,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Address Line 1"
             placeholder="Type first address line"
+            value={firstAddressLine ? firstAddressLine : undefined}
             // errorMsg={
             //   errorObj.lastName || errorObj.all ? errorObj.lastName : ""
             // }
@@ -257,6 +264,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Address Line 2"
             placeholder="Type second address line"
+            value={secondAddressLine ? secondAddressLine : undefined}
             // errorMsg={
             //   errorObj.lastName || errorObj.all ? errorObj.lastName : ""
             // }

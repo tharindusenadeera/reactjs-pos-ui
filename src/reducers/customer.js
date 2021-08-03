@@ -2,7 +2,8 @@ import {
   ADD_CUSTOMER_TRIGGERED,
   ADD_CUSTOMER,
   CUSTOMER_DETAILS,
-  SELECTED_CITY
+  SELECTED_CITY,
+  DELIVERY_INFORMATIONS,
 } from "../constants/ActionTypes";
 
 const initialState = {
@@ -10,7 +11,8 @@ const initialState = {
   isCancel: false,
   addCustomer: {},
   customerDetails: {},
-  selectedCity: {}
+  selectedCity: {},
+  deliveryInformations: {},
 };
 
 const customerReducer = (state = initialState, action) => {
@@ -23,6 +25,8 @@ const customerReducer = (state = initialState, action) => {
       return { ...state, addCustomer: action.payload };
     case SELECTED_CITY:
       return { ...state, addCustomer: action.payload };
+    case DELIVERY_INFORMATIONS:
+      return { ...state, deliveryInformations: action.payload };
     default:
       return state;
   }

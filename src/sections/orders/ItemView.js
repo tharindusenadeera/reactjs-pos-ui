@@ -190,7 +190,7 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
         <div className="row">
           <div className="col-6">
             <SelectField
-              label="Category"
+              label="Category Options"
               value="Choose a Category"
               options={selectedProperties.menu_option_categories}
               onChange={onChangeCategory}

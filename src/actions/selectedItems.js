@@ -1,4 +1,4 @@
-import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM} from '../constants/ActionTypes';
+import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, ALL_ITEMS} from '../constants/ActionTypes';
 
 export const addItem = (item) => {
     return {
@@ -17,6 +17,13 @@ export const updateItem = (item) => {
 export const deleteItem = (item) => {
     return {
         type: DELETE_ITEM,
+        payload: item
+    }
+}
+
+export const allItems = (item) => {
+    return {
+        type: ALL_ITEMS,
         payload: item
     }
 }

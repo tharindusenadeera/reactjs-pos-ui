@@ -15,9 +15,9 @@ export const CatagorySection = (props) => {
   return (
     <Fragment>
       <RadioCustom onChange={handleMealType} value={value}>
-        <Radio value={1}>Dine In</Radio>
-        <Radio value={2}>Take Away</Radio>
-        <Radio value={3}>Deliver</Radio>
+        <Radio value={"dine_in"}>Dine In</Radio>
+        <Radio value={"take_away"}>Take Away</Radio>
+        <Radio value={"deliver"}>Deliver</Radio>
       </RadioCustom>
     </Fragment>
   );
