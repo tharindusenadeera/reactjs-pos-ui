@@ -15,6 +15,7 @@ import {
   CheckforMatch,
   GetItemFromId,
 } from "../../utils/generateUniqueId";
+import { InputField } from "../../components/field/InputField";
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -259,13 +260,19 @@ export const ProductSection = () => {
     },
   ];
 
+  const handleSearch = e => {
+    let letter = e.target.value;
+    
+  } 
+
   return (
     <div>
-      <SelectNInputField
+      {/* <SelectNInputField
         showSearch={false}
         label="Selected Product"
         Selectplaceholder="Choose Type"
-      />
+      /> */}
+      <InputField label="Selected Product" onChange={handleSearch}/>
       <TableWarp>
         <TableCustom
           columns={columns}
