@@ -7,25 +7,32 @@ import swal from "sweetalert";
 const AddOrder = () => {
     const dispatch = useDispatch();
     const selectedItems = useSelector((state) => state.selectedItems);
-    const customer = useSelector((state) => state.customer.addCustomer);
+    const customer = useSelector((state) => state.customer);
+    const orderType = useSelector((state) => state.common);
 
-    const orderItem = () => {
+    const getOrderMenuItems = () => {
       const order = [];
 
       selectedItems?.forEach((product) => {
+        const menu_option_category_menu_option_array = [];
+
         if (product?.categories?.length > 0) {
+
           product.categories.forEach((category) => {
-            order.push({
-              id: product.productKey,
-              qty: product.quantity,
-              menu_option_category_menu_option_id: category?.item?.id
-            })
+            menu_option_category_menu_option_array.push(category?.item?.id);
           })
+
+          order.push({
+            id: product.productKey,
+            qty: product.quantity,
+            menu_option_category_menu_option_id: menu_option_category_menu_option_array
+          })
+
         } else {
           order.push({
             id: product.productKey,
             qty: product.quantity,
-            menu_option_category_menu_option_id: ''
+            menu_option_category_menu_option_id: []
           })
         }
       })
@@ -33,23 +40,71 @@ const AddOrder = () => {
       return order;
     }
 
+    const getOrderDiliveryDetails = () => {
+      const diliveryDetails = customer?.deliveryInformations;
+
+      if (diliveryDetails) {
+        return {
+          customer_id: diliveryDetails.customer_id,
+          delivery_first_name: diliveryDetails.delivery_first_name,
+          delivery_last_name: diliveryDetails.delivery_last_name,
+          delivery_city_id: diliveryDetails.delivery_city_id,
+          delivery_address_line_1: diliveryDetails.delivery_address_line_1,
+          delivery_address_line_2: diliveryDetails.delivery_address_line_2,
+          delivery_phone_number: diliveryDetails.delivery_phone_number,
+        }
+      }
+    }
+
     const createOrder = () => {
-      const content = orderItem();
-      return {
-        customer_id : customer.id,
-        order_menu_items : content
-       };
+      const orderMenuItemsObj = getOrderMenuItems();
+      const diliveryDetailsObj = getOrderDiliveryDetails();
+
+      if (orderType?.mealType === 'deliver') {
+        let valueMisssig = false;
+
+        for (const detailKey in diliveryDetailsObj) {
+          if (!diliveryDetailsObj[detailKey]) {
+            valueMisssig = true;
+          }
+        }
+        
+        if (valueMisssig) {
+          return false;
+
+        } else {
+
+          return {
+            ...diliveryDetailsObj,
+            // customer_id: customer?.customerDetails?.id,
+            order_type: orderType?.mealType,
+            order_menu_items : orderMenuItemsObj,
+          };
+        }
+
+      } else {
+
+        return {
+          order_type: orderType?.mealType,
+          // customer_id: customer?.customerDetails?.id,
+          order_menu_items : orderMenuItemsObj,
+        };
+      }
     }
 
     const handleAddOrder = async () => {
       const order = createOrder();
-      // console.log(order)
-      const data = await dispatch(addItem(order));
 
-      if (data?.status === "false") {
-        return 'Adding Unsucessful !'
+      if (order) {
+        const data = await dispatch(addItem(order));
+
+        if (data?.status === "success") {
+          return 'Adding Sucessful !'
+        } else {
+          return 'Adding Unsucessful !'
+        }
       } else {
-        return 'Adding Sucessful !'
+        return 'Missing Dilivery Details in Order !'
       }
     }
 
