@@ -4,11 +4,20 @@ import { ButtonCustom } from "../../components/button";
 import { addItem } from "../../actions/order";
 import swal from "sweetalert";
 
-const AddOrder = () => {
+import {deleteAll} from "../../actions/selectedItems";
+
+const SaveOrder = ({type}) => {
     const dispatch = useDispatch();
     const selectedItems = useSelector((state) => state.selectedItems);
     const customer = useSelector((state) => state.customer);
     const orderType = useSelector((state) => state.common);
+
+    const addOrder = type === "add";
+
+    /**
+     * * mandatory order details will be extracted and formatted in this func
+     * @returns order details as a object
+     */
 
     const getOrderMenuItems = () => {
       const order = [];
@@ -40,6 +49,11 @@ const AddOrder = () => {
       return order;
     }
 
+    /**
+     * * delivery deatisl get from redux store
+     * @returns details of delivery
+     */
+
     const getOrderDiliveryDetails = () => {
       const diliveryDetails = customer?.deliveryInformations;
 
@@ -56,6 +70,11 @@ const AddOrder = () => {
       }
     }
 
+    /**
+     * * General func implimented for draft and add orders
+     * @returns order object
+     */
+
     const createOrder = () => {
       const orderMenuItemsObj = getOrderMenuItems();
       const diliveryDetailsObj = getOrderDiliveryDetails();
@@ -69,7 +88,7 @@ const AddOrder = () => {
           }
         }
         
-        if (valueMisssig) {
+        if (valueMisssig && addOrder) {
           return false;
 
         } else {
@@ -92,6 +111,11 @@ const AddOrder = () => {
       }
     }
 
+    /**
+     * * this func will add the order
+     * @returns status of the add order
+     */
+
     const handleAddOrder = async () => {
       const order = createOrder();
 
@@ -108,16 +132,41 @@ const AddOrder = () => {
       }
     }
 
+    /**
+     * * this func will save the order and reset the table if the saving sucess
+     * @returns status of the draft order
+     */
+
+    const handleDraftOrder = async () => {
+        const order = createOrder();
+        const data = await dispatch(addItem(order));
+
+        if (data?.status === "success") {
+            dispatch(deleteAll());
+
+            return 'Draft saved !'
+        } else {
+            return 'Draft not saved !'
+        }
+    }
+
+    /**
+     * *Common function used for handle add and draft order
+     */
+
     const handleOrder = () => {
+        const title = addOrder ? "Confirm Order ?" : "Draft Order ?";
+        const orderHandle = addOrder ? handleAddOrder : handleDraftOrder;
+
         swal({
-          title: "Confirm Order ?",
+          title: title,
           text: "",
           icon: "warning",
           buttons: true,
           dangerMode: true,
         }).then((value) => {
           if (value) {
-            handleAddOrder().then((status) => {
+            orderHandle().then((status) => {
               swal(status);
             })
           } else {
@@ -130,11 +179,11 @@ const AddOrder = () => {
         <ButtonCustom 
         type="primary"
         className="green"
-        btnTitle="Add Order" 
+        btnTitle={addOrder ? "Add Order" : "Draft Order"} 
         onClick={handleOrder}
         disabled={!selectedItems.length} 
         />
     )
 }
 
-export default AddOrder;
+export default SaveOrder;
