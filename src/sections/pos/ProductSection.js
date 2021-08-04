@@ -8,14 +8,15 @@ import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import { updateItem, deleteItem, addItem } from "../../actions/selectedItems";
-import AddOrder from "../orders/AddOrder";
+import { updateItem, deleteItem, addItem, deleteAll} from "../../actions/selectedItems";
+import SaveOrder from "../orders/SaveOrder";
 import {
   GenerateUniqueId,
   CheckforMatch,
   GetItemFromId,
 } from "../../utils/generateUniqueId";
 import { InputField } from "../../components/field/InputField";
+import swal from "sweetalert";
 
 const TableWarp = styled.div`
   margin-top: 15px;
@@ -263,7 +264,27 @@ export const ProductSection = () => {
   const handleSearch = e => {
     let letter = e.target.value;
     
-  } 
+  }
+
+  /**
+   * * Cancel the added items in order to prevent
+   * * simply remove all the items from redux store
+   */
+  const deleteOrder = () => {
+    swal({
+      title: "Cancel Order ?",
+      text: "",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((value) => {
+      if (value) {
+        dispatch(deleteAll());
+      } else {
+        swal("Process Terminated!");
+      }
+    })
+  }
 
   return (
     <div>
@@ -281,15 +302,14 @@ export const ProductSection = () => {
         />
       </TableWarp>
       <ButtonWarp>
-        <DeleteButton btnTitle="Cancel Order" disabled={true} />
-        <ButtonCustom
-          type="primary"
-          className="green"
-          btnTitle="Draft Order"
-          disabled={true}
+        <ButtonCustom 
+          btnTitle="Cancel Order"
+          disabled={!alreadyAddedItems.length}
+          onClick={deleteOrder}
+          className="btn-danger"
         />
-
-        <AddOrder />
+        <SaveOrder type="draft"/>
+        <SaveOrder type="add"/>
       </ButtonWarp>
     </div>
   );
