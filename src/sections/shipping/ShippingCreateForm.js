@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { Checkbox } from "antd";
+import { CheckboxCustom } from "../../components/checkbox";
 import { SelectField } from "../../components/field/SelectField";
 import { InputField } from "../../components/field/InputField";
 import { ButtonCustom } from "../../components/button";
@@ -167,8 +167,10 @@ export const ShippingCreateForm = (props) => {
   return (
     <Fragment>
       <div className="row">
-        <div className="col-12">
-          <Checkbox onChange={handleChecked}>Same customer</Checkbox>
+        <div className="col-12 mb-3">
+          <CheckboxCustom onChange={handleChecked}>
+            Same customer
+          </CheckboxCustom>
         </div>
         <div className="col-6">
           <InputField
