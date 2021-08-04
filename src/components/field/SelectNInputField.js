@@ -22,7 +22,7 @@ const InputWrap = styled.div`
     border-radius: ${Theme.space.BorderRadius} 0 0 ${Theme.space.BorderRadius};
   }
   .ant-input-affix-wrapper {
-    border-radius: 0 ${Theme.space.BorderRadius} ${Theme.space.BorderRadius} 0;
+    border-radius: 0 ${Theme.space.BorderRadius} ${Theme.space.BorderRadius} 0 !important;
     border-left: 0;
   }
 `;

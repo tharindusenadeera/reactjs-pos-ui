@@ -6,6 +6,7 @@ import Theme from "../../utils/Theme";
 const InputAnt = styled(Input)`
   &.ant-input-affix-wrapper {
     background-color: ${Theme.colors.$background};
+    border-radius: ${Theme.space.BorderRadius};
     input.ant-input {
       background-color: ${Theme.colors.$background};
     }

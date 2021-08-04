@@ -37,9 +37,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .btn-danger {
-    background-color: #fc2a2a;
-    border-color: #fc2a2a;
-    color: #ffffff;
+    background-color: #fc2a2a !important;
+    border-color: #fc2a2a !important;
+    color: #ffffff !important;
   }
   .btn-danger:focus,
   .btn-danger:hover {
