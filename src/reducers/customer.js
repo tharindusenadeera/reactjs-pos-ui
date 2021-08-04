@@ -22,9 +22,9 @@ const customerReducer = (state = initialState, action) => {
     case ADD_CUSTOMER:
       return { ...state, addCustomer: action.payload };
     case CUSTOMER_DETAILS:
-      return { ...state, addCustomer: action.payload };
+      return { ...state, customerDetails: action.payload };
     case SELECTED_CITY:
-      return { ...state, addCustomer: action.payload };
+      return { ...state, selectedCity: action.payload };
     case DELIVERY_INFORMATIONS:
       return { ...state, deliveryInformations: action.payload };
     default:
