@@ -1,12 +1,14 @@
 import React, { Fragment } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RadioCustom } from "../../components/radio";
 import { Radio } from "antd";
 import { addMealType } from "../../actions/common";
+import * as Constants from "../../constants/Constants";
 
 export const CatagorySection = (props) => {
   const dispatch = useDispatch();
-  const [value, setValue] = React.useState(1);
+  const mealType = useSelector((state) => state.common.mealType);
+  const [value, setValue] = React.useState(mealType);
 
   const handleMealType = (e) => {
     setValue(e.target.value);
@@ -15,9 +17,9 @@ export const CatagorySection = (props) => {
   return (
     <Fragment>
       <RadioCustom onChange={handleMealType} value={value}>
-        <Radio value={"dine_in"}>Dine In</Radio>
-        <Radio value={"take_away"}>Take Away</Radio>
-        <Radio value={"deliver"}>Deliver</Radio>
+        {Constants.mealTypes.map((item, key) => {
+          return <Radio key={key} value={item.key}>{item.value}</Radio>;
+        })}
       </RadioCustom>
     </Fragment>
   );

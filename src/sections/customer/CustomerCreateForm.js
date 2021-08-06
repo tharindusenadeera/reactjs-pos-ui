@@ -24,8 +24,17 @@ const ButtonWrap = styled.div`
   width: 100%;
 `;
 
+const tableArr = [
+  { key: 1, value: "T01" },
+  { key: 2, value: "T02" },
+  { key: 3, value: "T03" },
+  { key: 4, value: "T04" },
+  { key: 5, value: "T05" },
+];
+
 export const CustomerCreateForm = (props) => {
   const dispatch = useDispatch();
+  const mealType = useSelector((state) => state.common.mealType);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -35,6 +44,7 @@ export const CustomerCreateForm = (props) => {
   const [errorObj, setErrorObj] = useState({});
   const [phoneNumberArr, setPhoneNumberArr] = useState([]);
   const [customer, setCustomer] = useState({});
+  const [selectedTable, setSelectedTable] = useState("");
   const emailRegex = RegExp(
     '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
   );
@@ -125,6 +135,10 @@ export const CustomerCreateForm = (props) => {
         address_line_2: secondAddressLine,
       };
 
+      if (mealType == "dine_in") {
+        newCustomer.table_number = selectedTable;
+      }
+
       if (!Object.keys(errors).length) {
         swal({
           title: "Confirm to Add",
@@ -184,6 +198,11 @@ export const CustomerCreateForm = (props) => {
   const handlePhoneNumberSearch = (value) => {
     setErrorObj({});
     setPhoneNumber(value);
+  };
+
+  const handleSelectedTable = (value) => {
+    setErrorObj({});
+    setSelectedTable(value);
   };
 
   return (
@@ -274,6 +293,18 @@ export const CustomerCreateForm = (props) => {
             }}
           />
         </div>
+
+        {mealType == "dine_in" && (
+          <div className="col-12 col-sm-6">
+            <SelectField
+              showSearch={false}
+              label="Table Number"
+              options={tableArr && tableArr}
+              placeholder="Select a table"
+              onChange={handleSelectedTable}
+            />
+          </div>
+        )}
 
         <ButtonWrap>
           <ButtonCustom btnTitle={"Cancel"} onClick={handleCancel} />
