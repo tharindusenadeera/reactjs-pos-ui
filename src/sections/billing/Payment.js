@@ -4,6 +4,7 @@ import { Radio } from "antd";
 import CashPayment from "./pay-methods/PayByCash";
 import CardPayment from "./pay-methods/PayByCard";
 import styled from "styled-components";
+import * as Constants from "../../constants/Constants";
 
 const PaymentCompWrap = styled.div`
   padding: 25px 0;
@@ -24,14 +25,23 @@ export const Payment = () => {
   };
 
   const onChecked = (item) => {
-    setPaymentMethod(item);
+    setPaymentMethod(item.target.value);
   };
 
   return (
     <Fragment>
-      <RadioCustom onChecked={onChecked}>
-        <Radio value={1}>Cash</Radio>
-        <Radio value={2}>Card</Radio>
+      <RadioCustom
+        onChange={onChecked}
+        value={paymentMethod}
+        defaultValue={paymentMethod}
+      >
+        {Constants.paymentType.map((item, key) => {
+          return (
+            <Radio key={key} value={item.key}>
+              {item.value}
+            </Radio>
+          );
+        })}
       </RadioCustom>
       <PaymentCompWrap>
         <PaymentComponent />

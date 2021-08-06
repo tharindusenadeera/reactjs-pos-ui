@@ -42,10 +42,10 @@ const Wrapper = styled.div`
 `;
 
 export const RadioCustom = (props) => {
-  const { onChange, value, children } = props;
+  const { onChange, value, children, defaultValue } = props;
   return (
     <Wrapper>
-      <Radio.Group onChange={onChange} value={value}>
+      <Radio.Group onChange={onChange} value={value} defaultValue={defaultValue}>
         {children}
       </Radio.Group>
     </Wrapper>
