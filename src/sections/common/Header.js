@@ -74,7 +74,7 @@ export const Header = () => {
 
             <TimeWrap>
               <Clock
-                format={"hh:mm:ssa"}
+                format={"hh:mm a"}
                 ticking={true}
                 timezone={currentTimeZone}
               />
