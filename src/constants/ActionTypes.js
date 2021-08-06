@@ -3,6 +3,7 @@ export const ADD_ITEM = 'ADD_ITEM';
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const DELETE_ITEM = 'DELETE_ITEM';
 export const ALL_ITEMS = 'ALL_ITEMS';
+export const DELETE_ALL = 'DELETE_ALL';
 
 //---------- Customer ------------------//
 export const ADD_CUSTOMER_TRIGGERED = 'ADD_CUSTOMER_TRIGGERED';
