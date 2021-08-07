@@ -99,7 +99,7 @@ export const Header = () => {
                 showModal={showModal}
                 isModalVisible={isModalVisible}
               >
-                <OrderView />
+                <OrderView clickOK={clickOK}/>
               </ModalCustom>
               <DropdownCustom
                 btnTitle={Theme.icons.$user}

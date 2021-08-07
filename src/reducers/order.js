@@ -1,14 +1,20 @@
-import { ADD_ORDER } from "../constants/ActionTypes";
-  
-const orderReducer = (state = [], action) => {
-    switch (action.type) {
-        case ADD_ORDER:
-            return [...state, action.payload];
+import { ADD_ORDER, ORDER } from "../constants/ActionTypes";
 
-        default:
-            return state;
-    }
+const initialState = {
+  addOrder: [],
+  order: {},
+};
+
+const orderReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_ORDER:
+      return { ...state, addOrder: action.payload };
+    case ORDER:
+      return { ...state, order: action.payload };
+
+    default:
+      return state;
+  }
 };
 
 export default orderReducer;
-  

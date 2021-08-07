@@ -21,7 +21,6 @@ export const addCutomer = (data) => {
 };
 
 export const customerDetails = (data) => {
-  console.log("=== action data ====", data);
   return {
     type: CUSTOMER_DETAILS,
     payload: data,

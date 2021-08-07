@@ -1,4 +1,4 @@
-import { ADD_ORDER } from '../constants/ActionTypes';
+import { ADD_ORDER, ORDER } from '../constants/ActionTypes';
 import * as api from '../api/order';
 
 export const addItem = (item) => async (dispatch) => {
@@ -12,3 +12,9 @@ export const addItem = (item) => async (dispatch) => {
     }
 }
 
+export const orderById = item => {
+    return {
+        type: ORDER,
+        payload: item,
+      };
+}

@@ -1,98 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { DeleteButton } from "../../components/button/DeleteButton";
-import { ModalCustom } from "../../components/modal";
-import { Warning } from "../../sections/common/Warning";
-import { getAllOrders } from "../../api/order";
-
-const orderArr = [
-  {
-    title: "Order 1",
-    customer: {
-      name: "Sophia Hale",
-      address: "9825 Johnsaon Dr.Columbo,MD21044",
-    },
-    status: "Pending",
-    totalItems: 10,
-    amount: 500,
-  },
-  {
-    title: "Order 2",
-    customer: {
-      name: "Putram Jaya Isla",
-      address:
-        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
-    },
-    status: "Pending",
-    totalItems: 12,
-    amount: 400,
-  },
-  {
-    title: "Order 3",
-    customer: {
-      name: "Sophia Hale",
-      address: "9825 Johnsaon Dr.Columbo,MD21044",
-    },
-    status: "Pending",
-    totalItems: 12,
-    amount: 400,
-  },
-  {
-    title: "Order 4",
-    customer: {
-      name: "Putram Jaya Isla",
-      address:
-        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
-    },
-    status: "On Hold",
-    totalItems: 12,
-    amount: 455,
-  },
-  {
-    title: "Order 5",
-    customer: {
-      name: "Sophia Hale",
-      address: "9825 Johnsaon Dr.Columbo,MD21044",
-    },
-    status: "On Hold",
-    totalItems: 11,
-    amount: 232,
-  },
-  {
-    title: "Order 6",
-    customer: {
-      name: "Putram Jaya Isla",
-      address:
-        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
-    },
-    status: "Delevering",
-    totalItems: 15,
-    amount: 1456,
-  },
-  {
-    title: "Order 7",
-    customer: {
-      name: "Sophia Hale",
-      address:
-        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
-    },
-    status: "Delevering",
-    totalItems: 6,
-    amount: 320,
-  },
-  {
-    title: "Order 8",
-    customer: {
-      name: "Putram Jaya Isla",
-      address:
-        "9825 Johnsaon Dr.Columbo,MD21044. Manning PLace, ColomoDr.Columbo,MD21044.",
-    },
-    status: "Pending",
-    totalItems: 8,
-    amount: 769,
-  },
-];
+import { PayEditButton } from "../../components/button/PayEditButton";
+import { getAllOrders, getOrder } from "../../api/order";
+import { orderById } from "../../actions/order";
 
 const Wrapper = styled.div`
   .order-box {
@@ -119,21 +32,22 @@ const ActionButtons = styled.div`
   display: flex;
 `;
 
-export const OrderView = () => {
+export const OrderView = (props) => {
+  const { clickOK } = props;
+  const dispatch = useDispatch();
   const [orders, setOrders] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    setOrders(orderArr);
     getAllOrders().then((res) => {
-      if (res.data.data) {
+      if (res.data.status == "success") {
         handleAllOrders(res.data.data);
       }
     });
   }, []);
 
   const handleAllOrders = (data) => {
-    console.log("====data====", data);
+    setOrders(data);
   };
 
   const handleConfirm = () => {
@@ -144,71 +58,82 @@ export const OrderView = () => {
     setIsModalVisible(false);
   };
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const renderPaymentStatus = (status) => {
+    let paymentStatus = "";
+    if (status == 1) {
+      paymentStatus = "Paid";
+    } else if (status == 0) {
+      paymentStatus = "Pending";
+    } else {
+      paymentStatus = "Cancelled";
+    }
+
+    return paymentStatus;
+  };
+
+  const getOrderDetails = (id) => {
+    getOrder(id).then((res) => {
+      if (res.data.status == "success") {
+        dispatch(orderById(res.data.data));
+      }
+    });
+  };
+
+  const handlePay = (id) => {
+    getOrderDetails(id);
+    clickOK();
   };
 
   return (
     <Wrapper>
       <div className="row">
         {orders &&
-          orders.map((order) => (
-            <div className="col col-sm-6 col-md-4">
+          orders.map((order, key) => (
+            <div className="col col-sm-6 col-md-4" key={key}>
               <div className="order-box">
-                <h3>{order.title}</h3>
+                <h3>Order {key + 1}</h3>
 
                 <div className="d-flex">
                   <p>
                     <label>Name</label>
-                    {order.customer.name}
+                    {order?.customer?.first_name} {order?.customer?.last_name}
                   </p>
                 </div>
 
                 <div className="d-flex">
                   <p>
                     <label>Address</label>
-                    {order.customer.address}
+                    {order?.customer?.address_line_1},{" "}
+                    {order?.customer?.address_line_2}
                   </p>
                 </div>
 
                 <div className="d-flex">
                   <p>
                     <label>Payment Status</label>
-                    {order.status}
+                    {renderPaymentStatus(order?.status)}
                   </p>
                 </div>
 
                 <div className="d-flex">
                   <p>
                     <label>Total Items</label>
-                    {order.totalItems}
+                    {order?.order_menu_items_full?.length}
                   </p>
                 </div>
 
                 <div className="d-flex">
                   <p>
-                    <label>Amount to Pay</label>$ {order.amount}
+                    <label>Amount to Pay</label>$ {order?.total}
                   </p>
                 </div>
 
                 <ActionButtons>
-                  <ModalCustom
-                    btnTitle={Theme.icons.$edit}
-                    type="primary"
+                  <PayEditButton
                     btnClass="mr-2 yellow"
-                    okText="Draft/Save current order"
-                    cancelText="Discard current order"
-                    handleOk={handleConfirm}
-                    handleCancel={handleCancel}
-                    showModal={showModal}
-                    isModalVisible={isModalVisible}
-                  >
-                    <Warning
-                      title="Save current order"
-                      text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                    />
-                  </ModalCustom>
-
+                    type="primary"
+                    onClick={() => handlePay(order?.id)}
+                  />
                   <DeleteButton confirm={handleConfirm} cancel={handleCancel} />
                 </ActionButtons>
               </div>
