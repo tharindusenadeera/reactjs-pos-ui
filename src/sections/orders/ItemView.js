@@ -41,7 +41,8 @@ const TagRow = styled.div`
 `;
 
 export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
-  
+  console.log(selectedProperties);
+
   const onClickPlus = () => {
     const newQty = selectedProperties?.quantity
       ? selectedProperties?.quantity + 1
@@ -69,74 +70,32 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
   };
 
   /**
-   * * If a Category selected from dropdown then the displaying Item will remove and new One will show (with isShow property)
-   * @param {* Id of the Category Dropdown} id
-   */
-
-  const onChangeCategory = (id) => {
-    // categories which are not selected
-    if (
-      !selectedProperties.categories?.find((category) => category.id === id)
-    ) {
-      const array = selectedProperties?.categories
-        ? selectedProperties?.categories
-        : [];
-      const selectedCategory = selectedProperties?.menu_option_categories?.find(
-        (category) => category.id === id
-      );
-      // other categories hide
-      array?.map((category) => (category.isShow = false));
-      // new category show and push to the array
-      array.push({
-        id: id,
-        key: id,
-        categoryName: selectedCategory?.name,
-        value: selectedCategory?.name,
-        item: "",
-        isShow: true,
-      });
-
-      updateSelectedproperties({ ...selectedProperties, categories: array });
-    } else {
-      // selected category showing and hiding others
-      const categories = selectedProperties?.categories?.map((category) => ({
-        ...category,
-        isShow: category.key === id,
-      }));
-      updateSelectedproperties({
-        ...selectedProperties,
-        categories: categories,
-      });
-    }
-  };
-
-  /**
    * * Selected item will be update in selectedProperties under the key 'item'
    * @param {* Id of the Category Items Dropdown} id
    */
 
   const onChangeCategoryItem = (key) => {
-    // Get the displaying category Item
-    const categoryItemObject = selectedProperties.categories.find(
-      (category) => category?.isShow
-    );
-    // Get the displaying category Item's details
-    const selectedCategoryItemList = selectedProperties?.menu_option_categories.find(
-      (category) => category.key === categoryItemObject.key
-    );;
-    // From that find the selecting item detail
-    const selectedCategoryItem = selectedCategoryItemList?.menu_item_options.find(
-      (item) => item.key === key
-    );
+    let selectCategory = undefined;
+    let selectOption = undefined;
 
+    selectedProperties.menu_option_categories.forEach((category) => {
+      category.menu_item_options.forEach((menuItemOption) => {
+        if (menuItemOption.key === key) {
+          selectCategory =  category;
+          selectOption = menuItemOption;
+        }
+      });
+    });
+
+    // create the new categories object and update with dispatch
     const categories = selectedProperties?.categories?.map((category) => {
-      if (category.key === categoryItemObject.key) {
+      if (category.key === selectCategory.key) {
         return {
           ...category,
-          item: selectedCategoryItem,
-          tag: `${category.categoryName} : ${selectedCategoryItem.value}`,
-          tagId: `${category.key}-${selectedCategoryItem.key}`,
-          itemName: selectedCategoryItem.value,
+          item: selectOption,
+          tag: `${category.categoryName} : ${selectOption.value}`,
+          tagId: `${category.key}-${selectOption.key}`,
+          itemName: selectOption.value,
         };
       } else {
         return category;
@@ -147,13 +106,18 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
   };
 
   /**
-   * * Simply delete the item from the selectedProperties.categories
+   * * Simply delete the item from the selectedProperties.categories.item
    * @param {* id of the tag which is deleted} } tagId
    */
 
   const onCloseTag = (tagId) => {
-    const categories = selectedProperties?.categories?.filter(
-      (category) => category.tagId !== tagId
+    const categories = selectedProperties?.categories?.map(
+      (category) => {
+        return {
+          ...category,
+          item: ""
+        }
+      }
     );
     updateSelectedproperties({ ...selectedProperties, categories: categories });
   };
@@ -187,19 +151,11 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
 
       <ItemForm className="mt-3 mt-sm-0">
         <h3>{selectedProperties && selectedProperties.name}</h3>
+
         <div className="row">
-          <div className="col-6">
-            <SelectField
-              label="Category Options"
-              value="Choose a Category"
-              options={selectedProperties.menu_option_categories}
-              onChange={onChangeCategory}
-            />
-          </div>
-          <div className="col-6">
             {selectedProperties?.categories?.map(
               (category) =>
-                category.isShow && (
+                <div className="col-6" key={category.key}>
                   <SelectField
                     label={getCategoryItemLabel(category.key)}
                     key={category.key}
@@ -207,11 +163,11 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
                     options={getCategoryItemOptions(category.key)}
                     onChange={onChangeCategoryItem}
                     value={category.itemName || "Choose a Category"}
-                  />
-                )
+                    />
+                </div>
             )}
-          </div>
         </div>
+
         <TagRow className="row">
           {selectedProperties?.categories?.map(
             (category) =>
@@ -225,6 +181,7 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
               )
           )}
         </TagRow>
+
         <div className="row">
           <div className="col-6">
             <InputNumberField
@@ -239,6 +196,7 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
             />
           </div>
         </div>
+
       </ItemForm>
     </ItemDetail>
   );

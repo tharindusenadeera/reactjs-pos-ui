@@ -254,7 +254,19 @@ export const ItemSection = () => {
    * @param { use clicked item from Production section} item
    */
   const selectItem = (item) => {
-    setSelectedProperties(item);
+    const array = [];
+
+    item.menu_option_categories.forEach((option) => {
+      array.push({
+        id: option?.id,
+        key: option?.key,
+        categoryName: option?.name,
+        value: option?.name,
+        item: "",
+      });
+      
+    })
+    setSelectedProperties({...item, categories: array});
   };
 
   const handleCategories = (data) => {
