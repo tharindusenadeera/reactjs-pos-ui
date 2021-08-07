@@ -41,7 +41,6 @@ const TagRow = styled.div`
 `;
 
 export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
-  console.log(selectedProperties);
 
   const onClickPlus = () => {
     const newQty = selectedProperties?.quantity
