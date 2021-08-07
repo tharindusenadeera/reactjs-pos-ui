@@ -5,7 +5,7 @@ import styled from "styled-components";
 const Wrapper = styled.div``;
 
 export const TagCustom = (props) => {
-    const {onClose, tag, value} = props;
+    const {onClose, tag, value } = props;
 
     const handleClose = (id) => {
         onClose(id);
@@ -13,7 +13,7 @@ export const TagCustom = (props) => {
 
     return (
         <Wrapper>
-            <Tag closable onClose={() => handleClose(value)} color="#63b10e">
+            <Tag onClose={() => handleClose(value)} color="#63b10e">
                 {tag}
             </Tag>
         </Wrapper>
