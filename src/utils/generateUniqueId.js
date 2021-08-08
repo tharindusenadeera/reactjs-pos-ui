@@ -67,7 +67,6 @@ const Search = (newId, existingItems) => {
                 itemMatch = false;
                 return;
             }
-
         })
         
         if (itemMatch) {

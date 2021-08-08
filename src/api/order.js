@@ -11,5 +11,5 @@ export const addOrder = (newOrder) => {
 };
 
 export const getOrder = (id) => {
-  return axios.post(`${process.env.REACT_APP_API_URL}/v1/get-order/${id}`);
+  return axios.get(`${process.env.REACT_APP_API_URL}/v1/get-order/${id}`);
 }

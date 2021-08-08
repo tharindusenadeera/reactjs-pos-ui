@@ -4,7 +4,7 @@ import { ButtonCustom } from "../../components/button";
 import { addItem } from "../../actions/order";
 import swal from "sweetalert";
 
-import { deleteAll } from "../../actions/selectedItems";
+import { deleteAllItems } from "../../actions/selectedItems";
 
 const SaveOrder = ({ type }) => {
   const dispatch = useDispatch();
@@ -24,10 +24,12 @@ const SaveOrder = ({ type }) => {
 
     selectedItems?.forEach((product) => {
       const menu_option_category_menu_option_array = [];
-
+      
       if (product?.categories?.length > 0) {
         product.categories.forEach((category) => {
-          menu_option_category_menu_option_array.push(category?.item?.id);
+          if (category?.item?.menu_option_category_menu_option_id) {
+            menu_option_category_menu_option_array.push(category.item.menu_option_category_menu_option_id);
+          }
         });
 
         order.push({
@@ -150,7 +152,7 @@ const SaveOrder = ({ type }) => {
     let obj = {};
 
     if (data?.status === "success") {
-      dispatch(deleteAll());
+      dispatch(deleteAllItems());
       obj = {
         message: "Order Draft Successfully !",
         status: "success",

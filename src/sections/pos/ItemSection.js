@@ -13,6 +13,7 @@ import {
 } from "../../utils/generateUniqueId";
 import { categoryList } from "../../api/category";
 
+import { SAVE_PRODUCT } from "../../constants/ActionTypes"
 import { productsList } from "../../api/products";
 import { SelectNInputField } from "../../components/field/SelectNInputField";
 import { InputField } from "../../components/field/InputField";
@@ -161,7 +162,9 @@ export const ItemSection = () => {
         };
         itemArr.push(obj);
       });
+
     setProducts(itemArr);
+    dispatch({type : SAVE_PRODUCT, payload : itemArr});
   };
 
   const handleItemsSelect = (value) => {

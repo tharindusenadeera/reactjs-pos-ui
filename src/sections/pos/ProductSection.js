@@ -8,7 +8,7 @@ import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import { updateItem, deleteItem, addItem, deleteAll} from "../../actions/selectedItems";
+import { updateItem, deleteItem, addItem, deleteAllItems} from "../../actions/selectedItems";
 import SaveOrder from "../orders/SaveOrder";
 import {
   GenerateUniqueId,
@@ -279,7 +279,7 @@ export const ProductSection = () => {
       dangerMode: true,
     }).then((value) => {
       if (value) {
-        dispatch(deleteAll());
+        dispatch(deleteAllItems());
       } else {
         swal("Process Terminated!");
       }
