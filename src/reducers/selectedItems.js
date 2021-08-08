@@ -4,6 +4,7 @@ import {
   DELETE_ITEM,
   ALL_ITEMS,
   DELETE_ALL,
+  UPDATE_ALL,
 } from "../constants/ActionTypes";
 
 const selectedItemReducer = (selectedItems = [], action) => {
@@ -24,7 +25,10 @@ const selectedItemReducer = (selectedItems = [], action) => {
 
     case DELETE_ALL:
       return [];
-      
+    
+    case UPDATE_ALL:
+      return action.payload;
+
     default:
       return selectedItems;
   }

@@ -6,6 +6,8 @@ import { DeleteButton } from "../../components/button/DeleteButton";
 import { PayEditButton } from "../../components/button/PayEditButton";
 import { getAllOrders, getOrder } from "../../api/order";
 import { orderById } from "../../actions/order";
+import { addAllItems } from "../../actions/selectedItems";
+import { getFormattedOrder } from "./OrderConvertions";
 
 const Wrapper = styled.div`
   .order-box {
@@ -74,7 +76,9 @@ export const OrderView = (props) => {
   const getOrderDetails = (id) => {
     getOrder(id).then((res) => {
       if (res.data.status == "success") {
-        dispatch(orderById(res.data.data));
+        // dispatch(orderById(res.data.data));
+        const selectedItems = getFormattedOrder(res.data.data);
+        dispatch(addAllItems(selectedItems));
       }
     });
   };

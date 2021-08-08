@@ -4,7 +4,7 @@ import { ButtonCustom } from "../../components/button";
 import { addItem } from "../../actions/order";
 import swal from "sweetalert";
 
-import { deleteAll } from "../../actions/selectedItems";
+import { deleteAllItems } from "../../actions/selectedItems";
 
 const SaveOrder = ({ type }) => {
   const dispatch = useDispatch();
@@ -150,7 +150,7 @@ const SaveOrder = ({ type }) => {
     let obj = {};
 
     if (data?.status === "success") {
-      dispatch(deleteAll());
+      dispatch(deleteAllItems());
       obj = {
         message: "Order Draft Successfully !",
         status: "success",
