@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { DeleteButton } from "../../components/button/DeleteButton";
@@ -40,6 +40,8 @@ export const OrderView = (props) => {
   const [orders, setOrders] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const products = useSelector((state) => state.products);
+
   useEffect(() => {
     getAllOrders().then((res) => {
       if (res.data.status == "success") {
@@ -75,9 +77,9 @@ export const OrderView = (props) => {
 
   const getOrderDetails = (id) => {
     getOrder(id).then((res) => {
-      if (res.data.status == "success") {
+      if (res.data.status === "success") {
         // dispatch(orderById(res.data.data));
-        const selectedItems = getFormattedOrder(res.data.data);
+        const selectedItems = getFormattedOrder(res.data.data, products);
         dispatch(addAllItems(selectedItems));
       }
     });

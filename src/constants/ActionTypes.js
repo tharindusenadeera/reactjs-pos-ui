@@ -20,3 +20,6 @@ export const MEAL_TYPE = 'MEAL_TYPE';
 //---------- Order ------------------//
 export const ADD_ORDER = 'ADD_ORDER';
 export const ORDER = 'ORDER';
+
+//---------- Products ------------------//
+export const SAVE_PRODUCT = 'SAVE_PRODUCT';

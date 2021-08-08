@@ -24,10 +24,12 @@ const SaveOrder = ({ type }) => {
 
     selectedItems?.forEach((product) => {
       const menu_option_category_menu_option_array = [];
-
+      
       if (product?.categories?.length > 0) {
         product.categories.forEach((category) => {
-          menu_option_category_menu_option_array.push(category?.item?.id);
+          if (category?.item?.menu_option_category_menu_option_id) {
+            menu_option_category_menu_option_array.push(category.item.menu_option_category_menu_option_id);
+          }
         });
 
         order.push({
