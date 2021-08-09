@@ -268,12 +268,13 @@ export const ProductSection = () => {
   }
 
   /**
-   * * Cancel the added items in order to prevent
+   * * Cancel and clear the added items in order to prevent
    * * simply remove all the items from redux store
    */
   const deleteOrder = () => {
+    const title = orderMetaData && orderMetaData.order_id ? "Clear Order ?" : "Cancel Order ?";
     swal({
-      title: "Cancel Order ?",
+      title: title,
       text: "",
       icon: "warning",
       buttons: true,
@@ -303,23 +304,14 @@ export const ProductSection = () => {
         />
       </TableWarp>
 
-      {orderMetaData && orderMetaData.order_id ? (
-        <ButtonWarp>
-          <SaveOrder type="update" order_id={orderMetaData.order_id}/>
-        </ButtonWarp>
-        ) : (
-        <ButtonWarp>
-          <ButtonCustom 
-            btnTitle="Cancel Order"
-            disabled={!alreadyAddedItems.length}
-            onClick={deleteOrder}
-            className="btn-danger"
-          />
-          <SaveOrder type="draft"/>
-          <SaveOrder type="add"/>
-        </ButtonWarp>
-      )}
-
+      <ButtonWarp>
+        <ButtonCustom 
+          btnTitle={orderMetaData && orderMetaData.order_id ? "Clear Order" : "Cancel Order"}
+          disabled={!alreadyAddedItems.length}
+          onClick={deleteOrder}
+          className="btn-danger"
+        />
+      </ButtonWarp>
     </div>
   );
 };

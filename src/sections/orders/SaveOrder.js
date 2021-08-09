@@ -6,7 +6,7 @@ import swal from "sweetalert";
 
 import { deleteAllItems } from "../../actions/selectedItems";
 
-const SaveOrder = ({ type, order_id }) => {
+const SaveOrder = ({ type, order_id, width}) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const customer = useSelector((state) => state.customer);
@@ -229,6 +229,7 @@ const SaveOrder = ({ type, order_id }) => {
 
   return (
     <ButtonCustom
+      width={width}
       type="primary"
       className="green"
       btnTitle={addOrder ? "Add Order" : updateOrder ? "Update Order" : "Draft Order"}

@@ -7,7 +7,9 @@ import { ModalCustom } from "../../components/modal";
 import { Label } from "../../components/field/Label";
 import { Payment } from "../billing/Payment";
 import { SelectField } from "../../components/field/SelectField";
-import { convertToDecimal } from "../../utils/formats"
+import { convertToDecimal } from "../../utils/formats";
+import SaveOrder from "../orders/SaveOrder";
+
 
 const ShopDetail = styled.div`
   display: flex;
@@ -94,6 +96,7 @@ export const BillingSection = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const selectedItems = useSelector((state) => state.selectedItems.productList);
+  const orderMetaData = useSelector((state) => state.selectedItems.metaData);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -226,12 +229,29 @@ export const BillingSection = (props) => {
         </FieldRow>
       </BillDetail>
 
+      {orderMetaData && orderMetaData.order_id ? (
+        <div className="d-flex justify-content-end mt-4">
+          <div style={{width: '48%'}}>
+            <SaveOrder type="update" width="block" order_id={orderMetaData.order_id}/>
+          </div>
+        </div>
+        ) : (
+        <div className="d-flex justify-content-between mt-4">
+          <div style={{width: '48%'}}>
+            <SaveOrder type="draft" width="block"/>
+          </div>
+          <div style={{width: '48%'}}>
+            <SaveOrder type="add" width="block"/>
+          </div>
+        </div>
+      )}
+
       <div className="d-flex flex-column mt-4">
         <ModalCustom
           btnTitle="Pay the bill"
           type="primary"
           btnClass="mb-3 w-100 green"
-          btnDisabled={false}
+          btnDisabled={!selectedItems.length}
           title="Payment"
           okText="Pay Now"
           showModal={showModal}
