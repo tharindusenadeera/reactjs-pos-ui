@@ -13,3 +13,7 @@ export const addOrder = (newOrder) => {
 export const getOrder = (id) => {
   return axios.get(`${process.env.REACT_APP_API_URL}/v1/get-order/${id}`);
 }
+
+export const updateOrder = (id, updatedOrder) => {
+  return axios.patch(`${process.env.REACT_APP_API_URL}/v1/edit-order/${id}`, updatedOrder);
+};

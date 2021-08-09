@@ -93,7 +93,7 @@ export const BillingSection = (props) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const selectedItems = useSelector((state) => state.selectedItems);
+  const selectedItems = useSelector((state) => state.selectedItems.productList);
 
   const showModal = () => {
     setIsModalVisible(true);

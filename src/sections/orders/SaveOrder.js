@@ -1,18 +1,19 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ButtonCustom } from "../../components/button";
-import { addItem } from "../../actions/order";
+import { addItem, updateItem } from "../../actions/order";
 import swal from "sweetalert";
 
 import { deleteAllItems } from "../../actions/selectedItems";
 
-const SaveOrder = ({ type }) => {
+const SaveOrder = ({ type, order_id }) => {
   const dispatch = useDispatch();
-  const selectedItems = useSelector((state) => state.selectedItems);
+  const selectedItems = useSelector((state) => state.selectedItems.productList);
   const customer = useSelector((state) => state.customer);
   const orderType = useSelector((state) => state.common);
 
   const addOrder = type === "add";
+  const updateOrder = type === "update";
 
   /**
    * * mandatory order details will be extracted and formatted in this func
@@ -111,6 +112,36 @@ const SaveOrder = ({ type }) => {
   };
 
   /**
+     * * this func will update the order
+     * @returns status of the updated order
+     */
+  const handleUpdateOrder = async () => {
+    const order = createOrder();
+    let obj = {};
+    if (order) {
+      const data = await dispatch(updateItem(order_id, order));
+
+      if (data?.status === "success") {
+        obj = {
+          message: "Order Updated Successfully !",
+          status: "success",
+        };
+      } else {
+        obj = {
+          message: "Something went wrong !",
+          status: "error",
+        };
+      }
+    } else {
+      obj = {
+        message: "Please add delivery details !",
+        status: "error",
+      };
+    }
+    return obj;
+  }
+
+  /**
    * * this func will add the order
    * @returns status of the add order
    */
@@ -171,8 +202,8 @@ const SaveOrder = ({ type }) => {
    */
 
   const handleOrder = () => {
-    const title = addOrder ? "Confirm Order ?" : "Draft Order ?";
-    const orderHandle = addOrder ? handleAddOrder : handleDraftOrder;
+    const title = addOrder ? "Confirm Order ?" : updateOrder ? "Update Order ?" : "Draft Order ?";
+    const orderHandle = addOrder ? handleAddOrder : updateOrder ? handleUpdateOrder : handleDraftOrder;
 
     swal({
       title: title,
@@ -200,7 +231,7 @@ const SaveOrder = ({ type }) => {
     <ButtonCustom
       type="primary"
       className="green"
-      btnTitle={addOrder ? "Add Order" : "Draft Order"}
+      btnTitle={addOrder ? "Add Order" : updateOrder ? "Update Order" : "Draft Order"}
       onClick={handleOrder}
       disabled={!selectedItems.length}
     />

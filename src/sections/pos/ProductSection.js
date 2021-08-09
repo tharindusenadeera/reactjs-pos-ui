@@ -69,13 +69,14 @@ const ButtonWarp = styled.div`
 `;
 
 export const ProductSection = () => {
-  const alreadyAddedItems = useSelector((state) => state.selectedItems);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const alreadyAddedItems = useSelector((state) => state.selectedItems.productList);
+  const orderMetaData = useSelector((state) => state.selectedItems.metaData);
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState({});
   const [itemBeforeEdit, setItemBeforeEdit] = useState({});
-
   const [disableOk, setDisableOk] = useState(false);
+
   const dispatch = useDispatch();
 
   const isRealValue = (obj) => {
@@ -301,16 +302,24 @@ export const ProductSection = () => {
           scroll={{ x: 730, y: 200 }}
         />
       </TableWarp>
-      <ButtonWarp>
-        <ButtonCustom 
-          btnTitle="Cancel Order"
-          disabled={!alreadyAddedItems.length}
-          onClick={deleteOrder}
-          className="btn-danger"
-        />
-        <SaveOrder type="draft"/>
-        <SaveOrder type="add"/>
-      </ButtonWarp>
+
+      {orderMetaData && orderMetaData.order_id ? (
+        <ButtonWarp>
+          <SaveOrder type="update" order_id={orderMetaData.order_id}/>
+        </ButtonWarp>
+        ) : (
+        <ButtonWarp>
+          <ButtonCustom 
+            btnTitle="Cancel Order"
+            disabled={!alreadyAddedItems.length}
+            onClick={deleteOrder}
+            className="btn-danger"
+          />
+          <SaveOrder type="draft"/>
+          <SaveOrder type="add"/>
+        </ButtonWarp>
+      )}
+
     </div>
   );
 };

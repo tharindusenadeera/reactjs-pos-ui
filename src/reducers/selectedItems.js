@@ -7,27 +7,44 @@ import {
   UPDATE_ALL,
 } from "../constants/ActionTypes";
 
-const selectedItemReducer = (selectedItems = [], action) => {
+const initilailState = {
+  metaData: null,
+  productList: []
+}
+
+const selectedItemReducer = (selectedItems = initilailState, action) => {
   switch (action.type) {
     case ADD_ITEM:
-      return [...selectedItems, action.payload];
+      return {
+        ...selectedItems,
+        productList : [...selectedItems.productList, action.payload]
+        };
 
     case UPDATE_ITEM:
-      return selectedItems.map((item) =>
+      return {
+        ...selectedItems,
+        productList : selectedItems.productList.map((item) =>
         item.key === action.payload.key ? action.payload : item
-      );
+        )
+      };
 
     case DELETE_ITEM:
-      return selectedItems.filter((item) => item.key !== action.payload.key);
+      return  {
+        ...selectedItems,
+        productList : selectedItems.productList.filter((item) => item.key !== action.payload.key)
+      };
 
     case ALL_ITEMS:
-      return [...selectedItems, action.payload];
+      return selectedItems.productList;
 
     case DELETE_ALL:
-      return [];
+      return initilailState;
     
     case UPDATE_ALL:
-      return action.payload;
+      return {
+        metaData: action.payload.metaData,
+        productList: action.payload.productList
+      };
 
     default:
       return selectedItems;

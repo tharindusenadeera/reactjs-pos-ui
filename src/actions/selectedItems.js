@@ -40,9 +40,9 @@ export const deleteAllItems = () => {
 }
 
 /** update selected products list from given list*/
-export const addAllItems = (items) => {
+export const addAllItems = (data) => {
     return {
         type: UPDATE_ALL,
-        payload: items
+        payload: data
     }
 }
