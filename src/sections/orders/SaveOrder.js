@@ -6,7 +6,7 @@ import swal from "sweetalert";
 
 import { deleteAllItems } from "../../actions/selectedItems";
 
-const SaveOrder = ({ type, order_id, width}) => {
+const SaveOrder = ({ type, order_id, width }) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const customer = useSelector((state) => state.customer);
@@ -25,11 +25,13 @@ const SaveOrder = ({ type, order_id, width}) => {
 
     selectedItems?.forEach((product) => {
       const menu_option_category_menu_option_array = [];
-      
+
       if (product?.categories?.length > 0) {
         product.categories.forEach((category) => {
           if (category?.item?.menu_option_category_menu_option_id) {
-            menu_option_category_menu_option_array.push(category.item.menu_option_category_menu_option_id);
+            menu_option_category_menu_option_array.push(
+              category.item.menu_option_category_menu_option_id
+            );
           }
         });
 
@@ -112,9 +114,9 @@ const SaveOrder = ({ type, order_id, width}) => {
   };
 
   /**
-     * * this func will update the order
-     * @returns status of the updated order
-     */
+   * * this func will update the order
+   * @returns status of the updated order
+   */
   const handleUpdateOrder = async () => {
     const order = createOrder();
     let obj = {};
@@ -139,7 +141,7 @@ const SaveOrder = ({ type, order_id, width}) => {
       };
     }
     return obj;
-  }
+  };
 
   /**
    * * this func will add the order
@@ -149,26 +151,34 @@ const SaveOrder = ({ type, order_id, width}) => {
   const handleAddOrder = async () => {
     const order = createOrder();
     let obj = {};
-    if (order) {
-      const data = await dispatch(addItem(order));
+    if (customer?.customerDetails?.id) {
+      if (order) {
+        const data = await dispatch(addItem(order));
 
-      if (data?.status === "success") {
-        obj = {
-          message: "Order Placed Successfully !",
-          status: "success",
-        };
+        if (data?.status === "success") {
+          obj = {
+            message: "Order Placed Successfully !",
+            status: "success",
+          };
+        } else {
+          obj = {
+            message: "Something went wrong !",
+            status: "error",
+          };
+        }
       } else {
         obj = {
-          message: "Something went wrong !",
+          message: "Please add delivery details !",
           status: "error",
         };
       }
     } else {
       obj = {
-        message: "Please add delivery details !",
+        message: "Please add customer details !",
         status: "error",
       };
     }
+
     return obj;
   };
 
@@ -181,16 +191,22 @@ const SaveOrder = ({ type, order_id, width}) => {
     const order = createOrder();
     const data = await dispatch(addItem(order));
     let obj = {};
-
-    if (data?.status === "success") {
-      dispatch(deleteAllItems());
-      obj = {
-        message: "Order Draft Successfully !",
-        status: "success",
-      };
+    if (customer?.customerDetails?.id) {
+      if (data?.status === "success") {
+        dispatch(deleteAllItems());
+        obj = {
+          message: "Order Draft Successfully !",
+          status: "success",
+        };
+      } else {
+        obj = {
+          message: "Something went wrong !",
+          status: "error",
+        };
+      }
     } else {
       obj = {
-        message: "Something went wrong !",
+        message: "Please add customer details !",
         status: "error",
       };
     }
@@ -202,8 +218,16 @@ const SaveOrder = ({ type, order_id, width}) => {
    */
 
   const handleOrder = () => {
-    const title = addOrder ? "Confirm Order ?" : updateOrder ? "Update Order ?" : "Draft Order ?";
-    const orderHandle = addOrder ? handleAddOrder : updateOrder ? handleUpdateOrder : handleDraftOrder;
+    const title = addOrder
+      ? "Confirm Order ?"
+      : updateOrder
+      ? "Update Order ?"
+      : "Draft Order ?";
+    const orderHandle = addOrder
+      ? handleAddOrder
+      : updateOrder
+      ? handleUpdateOrder
+      : handleDraftOrder;
 
     swal({
       title: title,
@@ -232,7 +256,9 @@ const SaveOrder = ({ type, order_id, width}) => {
       width={width}
       type="primary"
       className="green"
-      btnTitle={addOrder ? "Add Order" : updateOrder ? "Update Order" : "Draft Order"}
+      btnTitle={
+        addOrder ? "Add Order" : updateOrder ? "Update Order" : "Draft Order"
+      }
       onClick={handleOrder}
       disabled={!selectedItems.length}
     />

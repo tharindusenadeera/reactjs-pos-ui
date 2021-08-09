@@ -248,7 +248,7 @@ export const BillingSection = (props) => {
 
       <div className="d-flex flex-column mt-4">
         <ModalCustom
-          btnTitle="Pay the bill"
+          btnTitle="Confirm & Pay"
           type="primary"
           btnClass="mb-3 w-100 green"
           btnDisabled={!selectedItems.length}
