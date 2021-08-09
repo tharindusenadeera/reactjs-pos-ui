@@ -33,14 +33,33 @@ const Body = styled.div`
 export const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [errorObj, setErrorObj] = useState({});
 
   const handleSubmit = () => {
-    if (!name || !password) {
-      return ;
+    if (!name && !password) {
+      setErrorObj({
+        all: "Required !",
+        name: "Required !",
+        password: "Required !",
+      });
+      return;
+    } else if (!name) {
+      setErrorObj({
+        name: "Required !",
+      });
+      return;
+    } else if (!password) {
+      setErrorObj({
+        password: "Required !",
+      });
+      return;
     } else {
-      
+      let obj = {
+        username: name,
+        password: password,
+      };
     }
-  }
+  };
 
   return (
     <Wrapper>
@@ -49,13 +68,34 @@ export const Login = () => {
         <Title>Sign In</Title>
         <Body>
           <div className="field-row">
-            <InputField label="User Name" errorMsg="this is error" onChange={e => setName(e.target.value)}/>
+            <InputField
+              label="Username"
+              errorMsg={errorObj.name || errorObj.all ? errorObj.name : ""}
+              onChange={(e) => {
+                setName(e.target.value);
+                setErrorObj({});
+              }}
+            />
           </div>
           <div className="field-row">
-            <PasswordField label="Password" onChange={e => setPassword(e.target.value)}/>
+            <PasswordField
+              label="Password"
+              errorMsg={
+                errorObj.password || errorObj.all ? errorObj.password : ""
+              }
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrorObj({});
+              }}
+            />
           </div>
         </Body>
-        <ButtonCustom type="primary" btnTitle="Login" className="w-100" onClick={handleSubmit}/>
+        <ButtonCustom
+          type="primary"
+          btnTitle="Login"
+          className="w-100"
+          onClick={handleSubmit}
+        />
       </Box>
     </Wrapper>
   );
