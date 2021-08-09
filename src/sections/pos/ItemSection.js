@@ -97,7 +97,7 @@ export const ItemSection = () => {
   const [selectedProperties, setSelectedProperties] = useState({});
   const [disableOk, setDisableOk] = useState(true);
 
-  const alreadyAddedItems = useSelector((state) => state.selectedItems);
+  const alreadyAddedItems = useSelector((state) => state.selectedItems.productList);
   const dispatch = useDispatch();
 
   useEffect(() => {

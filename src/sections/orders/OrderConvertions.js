@@ -10,6 +10,8 @@ import { GenerateUniqueId } from '../../utils/generateUniqueId';
  */
 export const getFormattedOrder = (order, products) => {
     const formattedOrder = [];
+    const {customer, customer_id, order_type, status, id} = order;
+
 
     order?.ordermenuitems?.forEach((orderProduct) => {
         const quantity = orderProduct.qty;
@@ -50,5 +52,14 @@ export const getFormattedOrder = (order, products) => {
         formattedOrder.push({...processedOrder, key: uniqueKey});
     })
 
-    return formattedOrder;
+    return {
+        productList: formattedOrder,
+        metaData: {
+            customer: customer,
+            customer_id: customer_id,
+            order_type: order_type,
+            status: status,
+            order_id: id
+        }
+    };
 }
