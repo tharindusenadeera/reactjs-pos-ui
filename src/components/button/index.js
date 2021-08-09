@@ -40,9 +40,12 @@ const ButtonAnt = styled(Button)`
 `;
 
 export const ButtonCustom = (props) => {
-  const { type, className, btnTitle, onClick, disabled } = props;
+  const { type, className, btnTitle, onClick, disabled, width } = props;
+  const blockWidth = width === "block";
+
   return (
     <ButtonAnt
+      block = {blockWidth}
       type={type}
       onClick={onClick}
       className={className}
