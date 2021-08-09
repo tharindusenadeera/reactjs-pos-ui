@@ -36,40 +36,39 @@ const FieldRow = styled.div`
 `;
 
 const PayByCard = (props) => {
+  const { total } = props;
 
-  const handleReceivedAmount = e => {
+  const handleCardNo = (e) => {};
 
-  }
+  const handleBank = (e) => {}
 
-  const handleCardNo = e => {
-
-  }
-
-  const handleComments = e => {
-
-  }
+  const handleComments = (e) => {};
 
   return (
     <Fragment>
       <FieldRow className="total">
         <Label label="Total Amount to Pay" className="custom-label" />
-        <p>$ 485</p>
+        <p>$ {total}</p>
       </FieldRow>
 
       <FieldRow>
         <InputField
-          label="Recived Amount ($)"
-          errorMsg="This is error message"
-          onChange={handleReceivedAmount}
+          label="Card No"
+          placeholder="Please enter last 4 digits"
+          onChange={handleCardNo}
         />
       </FieldRow>
 
       <FieldRow>
-        <InputField label="Card No" onChange={handleCardNo}/>
+        <InputField
+          label="Bank"
+          placeholder="Please enter bank name"
+          onChange={handleBank}
+        />
       </FieldRow>
 
       <FieldRow>
-        <TextAreaField label="Note (If Any)" onChange={handleComments}/>
+        <TextAreaField label="Note (If Any)" onChange={handleComments} />
       </FieldRow>
     </Fragment>
   );

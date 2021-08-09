@@ -239,7 +239,7 @@ export const BillingSection = (props) => {
           handleOk={handleOk}
           handleCancel={handleCancel}
         >
-          <Payment />
+          <Payment total={tot}/>
         </ModalCustom>
       </div>
 

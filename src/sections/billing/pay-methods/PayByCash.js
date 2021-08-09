@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import styled from "styled-components";
 import Theme from "../../../utils/Theme";
 import { Label } from "../../../components/field/Label";
@@ -46,20 +46,25 @@ const Balance = styled.div`
 `;
 
 const PayByCash = (props) => {
+  const { total } = props;
+  const [amountToReturn, setAmountToReturn] = useState(0);
 
-  const handleComments = e => {
+  const handleComments = (e) => {};
 
-  }
-
-  const handleAmount = e => {
-    
-  }
+  const handleAmount = (e) => {
+    let paidAmount = e.target.value;
+    let returnAmount = "";
+    if (paidAmount > total) {
+      returnAmount = parseFloat(paidAmount) - parseFloat(total);
+    }
+    setAmountToReturn(returnAmount.toFixed(2))
+  };
 
   return (
     <Fragment>
       <FieldRow className="total">
         <Label label="Total Amount to Pay" className="custom-label" />
-        <p>$ 233.46</p>
+        <p>$ {total}</p>
       </FieldRow>
 
       <FieldRow>
@@ -72,11 +77,11 @@ const PayByCash = (props) => {
 
       <Balance>
         <h4>Amount to Return :</h4>
-        <h4>$20</h4>
+        <h4>${amountToReturn}</h4>
       </Balance>
 
       <FieldRow>
-        <TextAreaField label="Note (If Any)" onChange={handleComments}/>
+        <TextAreaField label="Note (If Any)" onChange={handleComments} />
       </FieldRow>
     </Fragment>
   );

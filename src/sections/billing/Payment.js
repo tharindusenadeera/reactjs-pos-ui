@@ -10,17 +10,18 @@ const PaymentCompWrap = styled.div`
   padding: 25px 0;
 `;
 
-export const Payment = () => {
+export const Payment = (props) => {
+  const { total } = props;
   const [paymentMethod, setPaymentMethod] = useState(1);
 
   const PaymentComponent = () => {
     switch (paymentMethod) {
       case 1:
-        return <CashPayment />;
+        return <CashPayment total={total}/>;
       case 2:
-        return <CardPayment />;
+        return <CardPayment total={total}/>;
       default:
-        return <CashPayment />;
+        return <CashPayment total={total}/>;
     }
   };
 
