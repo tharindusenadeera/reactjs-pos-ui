@@ -308,7 +308,7 @@ export const ProductSection = () => {
 
       <ButtonWarp>
         <ButtonCustom 
-          btnTitle={orderMetaData && orderMetaData.order_id ? "Clear" : "Cancel"}
+          btnTitle={orderMetaData && orderMetaData.order_id ? "Clear Order" : "Cancel Order"}
           disabled={!alreadyAddedItems.length}
           onClick={deleteOrder}
           className="btn-danger"
