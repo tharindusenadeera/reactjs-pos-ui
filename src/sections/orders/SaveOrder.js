@@ -6,7 +6,7 @@ import swal from "sweetalert";
 
 import { deleteAllItems } from "../../actions/selectedItems";
 
-const SaveOrder = ({ type, order_id, width, disabled}) => {
+const SaveOrder = ({ type, order_id, width}) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const customer = useSelector((state) => state.customer);
@@ -119,6 +119,7 @@ const SaveOrder = ({ type, order_id, width, disabled}) => {
   const handleUpdateOrder = async () => {
     const order = createOrder();
     let obj = {};
+    
     if (order) {
       const data = await dispatch(updateItem(order_id, order));
 
@@ -150,26 +151,35 @@ const SaveOrder = ({ type, order_id, width, disabled}) => {
   const handleAddOrder = async () => {
     const order = createOrder();
     let obj = {};
-    if (order) {
-      const data = await dispatch(addItem(order));
 
-      if (data?.status === "success") {
-        obj = {
-          message: "Order Placed Successfully !",
-          status: "success",
-        };
+    if (customer?.customerDetails?.id) {
+      if (order) {
+        const data = await dispatch(addItem(order));
+
+        if (data?.status === "success") {
+          obj = {
+            message: "Order Placed Successfully !",
+            status: "success",
+          };
+        } else {
+          obj = {
+            message: "Something went wrong !",
+            status: "error",
+          };
+        }
       } else {
         obj = {
-          message: "Something went wrong !",
+          message: "Please add delivery details !",
           status: "error",
         };
       }
     } else {
       obj = {
-        message: "Please add delivery details !",
+        message: "Please add customer details !",
         status: "error",
       };
     }
+
     return obj;
   };
 
@@ -209,15 +219,22 @@ const SaveOrder = ({ type, order_id, width, disabled}) => {
     const data = await dispatch(addItem(order));
     let obj = {};
 
-    if (data?.status === "success") {
-      dispatch(deleteAllItems());
-      obj = {
-        message: "Order Draft Successfully !",
-        status: "success",
-      };
+    if (customer?.customerDetails?.id) {
+      if (data?.status === "success") {
+        dispatch(deleteAllItems());
+        obj = {
+          message: "Order Draft Successfully !",
+          status: "success",
+        };
+      } else {
+        obj = {
+          message: "Something went wrong !",
+          status: "error",
+        };
+      }
     } else {
       obj = {
-        message: "Something went wrong !",
+        message: "Please add customer details !",
         status: "error",
       };
     }
@@ -256,7 +273,7 @@ const SaveOrder = ({ type, order_id, width, disabled}) => {
 
   return (
     <ButtonCustom
-      disabled={disabled}
+      disabled={!selectedItems.length}
       width={width}
       type="primary"
       className="green"

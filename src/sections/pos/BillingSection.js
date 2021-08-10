@@ -250,10 +250,10 @@ export const BillingSection = (props) => {
           // newly adding or drafting orders
         <div className="d-flex justify-content-between mt-4">
           <div style={{width: '48%'}}>
-            <SaveOrder type="draft" width="block" disabled={!selectedItems.length}/>
+            <SaveOrder type="draft" width="block"/>
           </div>
           <div style={{width: '48%'}}>
-            <SaveOrder type="add" width="block" disabled={!selectedItems.length}/>
+            <SaveOrder type="add" width="block"/>
           </div>
         </div>
       )}
