@@ -224,6 +224,7 @@ export const ProductSection = () => {
           <Fragment>
             <ModalCustom
               btnTitle={Theme.icons.$edit}
+              btnDisabled={orderMetaData && orderMetaData.kitchen_user_id}
               btnClass="mr-2 yellow"
               type="primary"
               title="Edit item in order"
@@ -256,6 +257,7 @@ export const ProductSection = () => {
       render: (text, record) => (
         <DeleteButton
           confirmTitle="Delete item ?"
+          disabled={orderMetaData && orderMetaData.kitchen_user_id}
           confirm={() => handleDelete(record)}
         />
       ),

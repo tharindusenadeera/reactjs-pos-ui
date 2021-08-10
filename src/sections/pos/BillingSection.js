@@ -230,12 +230,24 @@ export const BillingSection = (props) => {
       </BillDetail>
 
       {orderMetaData && orderMetaData.order_id ? (
-        <div className="d-flex justify-content-end mt-4">
-          <div style={{width: '48%'}}>
-            <SaveOrder type="update" width="block" order_id={orderMetaData.order_id}/>
-          </div>
-        </div>
+          orderMetaData.status === "draft" ? (
+            // already added draft orders changes saving
+            <div className="d-flex justify-content-between mt-4">
+              <div style={{width: '48%'}}>
+                <SaveOrder type="updateDraft" width="block"/>
+              </div>
+              <div style={{width: '48%'}}>
+                <SaveOrder type="add" width="block"/>
+              </div>
+            </div>
+          ) : (
+            // already added orders changes saving
+            <div className="d-flex flex-column mt-4">
+                <SaveOrder type="update" width="block" order_id={orderMetaData.order_id}/>
+            </div>
+          )
         ) : (
+          // newly adding or drafting orders
         <div className="d-flex justify-content-between mt-4">
           <div style={{width: '48%'}}>
             <SaveOrder type="draft" width="block"/>
