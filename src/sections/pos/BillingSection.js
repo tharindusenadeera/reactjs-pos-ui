@@ -230,10 +230,8 @@ export const BillingSection = (props) => {
       </BillDetail>
 
       {orderMetaData && orderMetaData.order_id ? (
-        <div className="d-flex justify-content-end mt-4">
-          <div style={{width: '48%'}}>
+        <div className="d-flex flex-column mt-4">
             <SaveOrder type="update" width="block" order_id={orderMetaData.order_id}/>
-          </div>
         </div>
         ) : (
         <div className="d-flex justify-content-between mt-4">

@@ -234,7 +234,6 @@ const SaveOrder = ({ type, order_id, width}) => {
       className="green"
       btnTitle={addOrder ? "Add Order" : updateOrder ? "Update Order" : "Draft Order"}
       onClick={handleOrder}
-      disabled={!selectedItems.length}
     />
   );
 };
