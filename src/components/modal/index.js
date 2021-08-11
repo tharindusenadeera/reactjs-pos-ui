@@ -6,6 +6,8 @@ import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { addCustomerTriggered } from "../../actions/customer";
 
+import SaveOrder from "../../sections/orders/SaveOrder";
+
 /* Props
 
 count = Intiger (Show count as label top of the button)
@@ -105,6 +107,8 @@ export const ModalCustom = (props) => {
     showModal,
     record,
     editRow,
+    customButtonType,
+    customButton,
   } = props;
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const [disablePropertiesCancel, setDisablePropertiesCancel] = useState({});
@@ -174,19 +178,30 @@ export const ModalCustom = (props) => {
     }
   }
 
+  const clickCustomButton = () =>{
+    onClick(record);
+  }
+
   return (
     <Fragment>
-      <ButtonWrap>
-        <ButtonCustom
-          type={type}
-          btnTitle={btnTitle}
-          onClick={() => onClick(record)}
-          className={btnClass}
-          disabled={btnDisabled}
-        />
-        {CountComp.current}
-      </ButtonWrap>
-
+      
+      { customButton ? (
+        <ButtonWrap>
+          <SaveOrder type={customButtonType} width="block" cls={btnClass} click={clickCustomButton}/>
+        </ButtonWrap>
+       ): (
+        <ButtonWrap>
+          <ButtonCustom
+            type={type}
+            btnTitle={btnTitle}
+            onClick={() => onClick(record)}
+            className={btnClass}
+            disabled={btnDisabled}
+          />
+          {CountComp.current}
+        </ButtonWrap>
+      )}
+      
       <ModalAnt
         title={title}
         visible={isModalVisible}
