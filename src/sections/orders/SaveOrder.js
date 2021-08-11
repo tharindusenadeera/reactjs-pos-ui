@@ -6,7 +6,7 @@ import swal from "sweetalert";
 
 import { deleteAllItems } from "../../actions/selectedItems";
 
-const SaveOrder = ({ type, order_id, width}) => {
+const SaveOrder = ({ type, order_id, width, cls, click}) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const customer = useSelector((state) => state.customer);
@@ -15,6 +15,7 @@ const SaveOrder = ({ type, order_id, width}) => {
   const addOrder = type === "add";
   const updateOrder = type === "update";
   const updateDraft = type === "updateDraft";
+  const confirmPay = type === "confirmPay";
 
   /**
    * * mandatory order details will be extracted and formatted in this func
@@ -246,8 +247,13 @@ const SaveOrder = ({ type, order_id, width}) => {
    */
 
   const handleOrder = () => {
-    const title = addOrder ? "Confirm Order ?" : updateOrder ? "Update Order ?" : updateDraft ? "Update Draft ?" : "Draft Order ?";
-    const orderHandle = addOrder ? handleAddOrder : updateOrder ? handleUpdateOrder : updateDraft ? handleUpdateDraftOrder: handleDraftOrder;
+    const title = addOrder ? "Confirm Order ?" :
+                  updateOrder ? "Update Order ?" :
+                  updateDraft ? "Update Draft ?" : "Draft Order ?";
+                  
+    const orderHandle = addOrder ? handleAddOrder :
+                        updateOrder ? handleUpdateOrder :
+                        updateDraft ? handleUpdateDraftOrder: handleDraftOrder;
 
     swal({
       title: title,
@@ -271,14 +277,49 @@ const SaveOrder = ({ type, order_id, width}) => {
     });
   };
 
+  /**
+   ** This function will handle the confirm and pay
+   ** With click() the modal will enable to pay
+   */
+
+  const handleConfirmAndPay = () => {
+    swal({
+      title: "Confirm Order ?",
+      text: "",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((value) => {
+      if (value) {
+        handleAddOrder().then((res) => {
+          if (res.status === "success") {
+            swal(res.message, "", "success").then(() => {
+                  click();
+            });
+            
+          } else {
+            swal(res.message, "Please Try Again!", "error");
+          }
+        });
+      } else {
+        swal("Process Terminated!");
+      }
+    });
+  }
+
   return (
     <ButtonCustom
       disabled={!selectedItems.length}
       width={width}
       type="primary"
-      className="green"
-      btnTitle={addOrder ? "Add Order" : updateOrder ? "Update Order" : updateDraft ? "Update Draft" :  "Draft Order"}
-      onClick={handleOrder}
+      className={cls ? cls : "green"}
+      btnTitle={
+        addOrder ? "Add Order" :
+        updateOrder ? "Update Order" :
+        updateDraft ? "Update Draft" :
+        confirmPay ? "Confirm & Pay" : "Draft Order"
+        }
+      onClick={confirmPay ? handleConfirmAndPay : handleOrder}
     />
   );
 };
