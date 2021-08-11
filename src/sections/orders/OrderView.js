@@ -35,11 +35,11 @@ const ActionButtons = styled.div`
 `;
 
 export const OrderView = (props) => {
-  const { clickOK } = props;
+  const { clickOK, tab } = props;
   const dispatch = useDispatch();
   const [orders, setOrders] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [selectedTab, setSelectedTab] = useState(tab);
   const products = useSelector((state) => state.products);
 
   useEffect(() => {
@@ -48,10 +48,20 @@ export const OrderView = (props) => {
         handleAllOrders(res.data.data);
       }
     });
-  }, []);
+  }, [selectedTab]);
 
   const handleAllOrders = (data) => {
-    setOrders(data);
+    let orders = categoriesOrders(data);
+    setOrders(orders);
+  };
+
+  const categoriesOrders = (data) => {
+    return (
+      data &&
+      data.filter((item) => {
+        return item.status == selectedTab;
+      })
+    );
   };
 
   const handleConfirm = () => {
