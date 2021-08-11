@@ -10,7 +10,6 @@ import { SelectField } from "../../components/field/SelectField";
 import { convertToDecimal } from "../../utils/formats";
 import SaveOrder from "../orders/SaveOrder";
 
-
 const ShopDetail = styled.div`
   display: flex;
 
@@ -75,8 +74,11 @@ const calculateOrderSummary = (selectedItems, disc) => {
   const dis = convertToDecimal(discount, 2);
   const tax = convertToDecimal(subTot * taxPer, 2);
   const ship = convertToDecimal(shipping, 2);
-  const tot = convertToDecimal(subTot - discount + subTot * taxPer + shipping, 2);
-  
+  const tot = convertToDecimal(
+    subTot - discount + subTot * taxPer + shipping,
+    2
+  );
+
   return {
     totItems: selectedItems.length,
     subTot: subT,
@@ -176,7 +178,7 @@ export const BillingSection = (props) => {
         </div>
       </div>
 
-      <hr />
+      <Hr />
 
       <BillDetail>
         <FieldRow>
@@ -230,30 +232,34 @@ export const BillingSection = (props) => {
       </BillDetail>
 
       {orderMetaData && orderMetaData.order_id ? (
-          orderMetaData.status === "draft" ? (
-            // already added draft orders changes saving
-            <div className="d-flex justify-content-between mt-4">
-              <div style={{width: '48%'}}>
-                <SaveOrder type="updateDraft" width="block"/>
-              </div>
-              <div style={{width: '48%'}}>
-                <SaveOrder type="add" width="block"/>
-              </div>
+        orderMetaData.status === "draft" ? (
+          // already added draft orders changes saving
+          <div className="d-flex justify-content-between mt-4">
+            <div style={{ width: "48%" }}>
+              <SaveOrder type="updateDraft" width="block" />
             </div>
-          ) : (
-            // already added orders changes saving
-            <div className="d-flex flex-column mt-4">
-                <SaveOrder type="update" width="block" order_id={orderMetaData.order_id}/>
+            <div style={{ width: "48%" }}>
+              <SaveOrder type="add" width="block" />
             </div>
-          )
-        ) : (
-          // newly adding or drafting orders
-        <div className="d-flex justify-content-between mt-4">
-          <div style={{width: '48%'}}>
-            <SaveOrder type="draft" width="block"/>
           </div>
-          <div style={{width: '48%'}}>
-            <SaveOrder type="add" width="block"/>
+        ) : (
+          // already added orders changes saving
+          <div className="d-flex flex-column mt-4">
+            <SaveOrder
+              type="update"
+              width="block"
+              order_id={orderMetaData.order_id}
+            />
+          </div>
+        )
+      ) : (
+        // newly adding or drafting orders
+        <div className="d-flex justify-content-between mt-4">
+          <div style={{ width: "48%" }}>
+            <SaveOrder type="draft" width="block" />
+          </div>
+          <div style={{ width: "48%" }}>
+            <SaveOrder type="add" width="block" />
           </div>
         </div>
       )}
@@ -271,11 +277,9 @@ export const BillingSection = (props) => {
           handleOk={handleOk}
           handleCancel={handleCancel}
         >
-          <Payment total={tot}/>
+          <Payment total={tot} />
         </ModalCustom>
       </div>
-
-      <Hr />
     </Fragment>
   );
 };
