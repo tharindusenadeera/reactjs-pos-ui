@@ -8,7 +8,8 @@ import { PopoverCustom } from "../../components/popover";
 import { Calculator } from "../../components/calculator/index";
 import { DropdownCustom } from "../../components/dropdown";
 import { Menu } from "antd";
-import { OrderView } from "../orders/OrderView";
+//import { OrderView } from "../orders/OrderView";
+import { OrderGroup } from "../orders/OrderGroup";
 
 const Wrapper = styled.header`
   padding: 15px 0;
@@ -99,7 +100,8 @@ export const Header = () => {
                 showModal={showModal}
                 isModalVisible={isModalVisible}
               >
-                <OrderView clickOK={clickOK}/>
+                {/* <OrderView clickOK={clickOK}/> */}
+                <OrderGroup />
               </ModalCustom>
               <DropdownCustom
                 btnTitle={Theme.icons.$user}
