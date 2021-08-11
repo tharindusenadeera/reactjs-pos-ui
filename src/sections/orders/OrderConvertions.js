@@ -13,16 +13,16 @@ export const getFormattedOrder = (order, products) => {
     const {customer, customer_id, order_type, status, id} = order;
 
 
-    order?.ordermenuitems?.forEach((orderProduct) => {
-        const quantity = orderProduct.qty;
-        const productId = orderProduct.menu_item_id;
+    order?.order_menu_items_full?.forEach((orderProduct) => {
+        const quantity = orderProduct?.qty;
+        const productId = orderProduct?.id;
         let array = [];
 
         const fullProduct = products.find((product) => product.productKey === productId);
 
         fullProduct?.menu_option_categories.forEach((option) => {
             const orderCategoryTypes = option?.id;
-            const categoryTypes =  orderProduct?.menuitem?.order_menu_item_option_categories;
+            const categoryTypes =  orderProduct?.order_menu_item_option_categories;
             const orderItem = categoryTypes?.find((category) => category.id === orderCategoryTypes)
             const item = orderItem?.order_menu_item_options[0];
             const tagName = `${option?.name} : ${item?.name}`;
