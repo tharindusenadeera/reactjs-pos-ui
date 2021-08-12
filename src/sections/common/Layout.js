@@ -21,7 +21,6 @@ const Wrapper = styled.div`
 `;
 
 const Section = styled.section`
-  height: 100vh;
   @media ${Theme.device.xs} {
     padding-top: 139px;
   }
