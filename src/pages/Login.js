@@ -9,6 +9,7 @@ import { ButtonCustom } from "../components/button/index";
 import { login } from "../api/common";
 import { authenticate } from "../actions/common";
 import swal from "sweetalert";
+import { ACCESS_TOKEN } from "../constants/ActionTypes";
 
 const Wrapper = styled.section`
   background: ${Theme.colors.$gradientBackground};
