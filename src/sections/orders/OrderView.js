@@ -5,8 +5,12 @@ import Theme from "../../utils/Theme";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { PayEditButton } from "../../components/button/PayEditButton";
 import { getAllOrders, getOrder } from "../../api/order";
+
 import { orderById } from "../../actions/order";
 import { addAllItems } from "../../actions/selectedItems";
+import { addMealType } from "../../actions/common";
+import { addDeliveryInformations } from "../../actions/customer";
+
 import { getFormattedOrder } from "./OrderConvertions";
 
 const Wrapper = styled.div`
@@ -89,7 +93,23 @@ export const OrderView = (props) => {
     getOrder(id).then((res) => {
       if (res.data.status === "success") {
         // dispatch(orderById(res.data.data));
-        const selectedItems = getFormattedOrder(res.data.data, products);
+        const order = res.data.data;
+
+        const order_type = order?.order_type;
+        const shippingDetail = {
+          customer_id: order?.customer_id,
+          delivery_first_name: order?.delivery_first_name,
+          delivery_last_name:  order?.delivery_last_name,
+          delivery_city_id:  order?.delivery_city_id,
+          delivery_address_line_1:  order?.delivery_address_line_1,
+          delivery_address_line_2:  order?.delivery_address_line_2,
+          delivery_phone_number:  order?.delivery_phone_number,
+        };
+
+        dispatch(addMealType(order_type));
+        dispatch(addDeliveryInformations(shippingDetail));
+
+        const selectedItems = getFormattedOrder(order, products);
         dispatch(addAllItems(selectedItems));
       }
     });
