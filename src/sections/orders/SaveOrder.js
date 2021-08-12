@@ -9,6 +9,8 @@ import { deleteAllItems } from "../../actions/selectedItems";
 const SaveOrder = ({ type, order_id, width, cls, click}) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
+  const orderMetaData = useSelector((state) => state.selectedItems.metaData);
+
   const customer = useSelector((state) => state.customer);
   const orderType = useSelector((state) => state.common);
 
@@ -16,31 +18,47 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
   const updateOrder = type === "update";
   const updateDraft = type === "updateDraft";
   const confirmPay = type === "confirmPay";
+  const draftOrder = type === "draft";
 
   /**
    * * mandatory order details will be extracted and formatted in this func
+   * @param {parameter for update} isUpdate
    * @returns order details as a object
    */
 
-  const getOrderMenuItems = () => {
+  const getOrderMenuItems = (isUpdate) => {
     const order = [];
 
     selectedItems?.forEach((product) => {
       const menu_option_category_menu_option_array = [];
+      // this id may be changes after finalize the services for update
+      let order_menu_item_id = undefined;
       
       if (product?.categories?.length > 0) {
         product.categories.forEach((category) => {
           if (category?.item?.menu_option_category_menu_option_id) {
+            order_menu_item_id = category?.item?.id;
             menu_option_category_menu_option_array.push(category.item.menu_option_category_menu_option_id);
           }
         });
+        
+        if (isUpdate) {
+          order.push({
+            id: product.productKey,
+            qty: product.quantity,
+            order_menu_item_id: order_menu_item_id,
+            menu_option_category_menu_option_id:
+              menu_option_category_menu_option_array,
+          });
+        } else {
+          order.push({
+            id: product.productKey,
+            qty: product.quantity,
+            menu_option_category_menu_option_id:
+              menu_option_category_menu_option_array,
+          });
+        }
 
-        order.push({
-          id: product.productKey,
-          qty: product.quantity,
-          menu_option_category_menu_option_id:
-            menu_option_category_menu_option_array,
-        });
       } else {
         order.push({
           id: product.productKey,
@@ -75,6 +93,67 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
   };
 
   /**
+   * * General func implimented for create update order
+   * @returns order object
+   */
+
+  const createUpdateOrder = () => {
+    const orderMenuItemsObj = getOrderMenuItems(true);
+    const diliveryDetailsObj = getOrderDiliveryDetails();
+    const saveType = (draftOrder || updateDraft) ? 'draft' : 'add';
+
+    if (orderType?.mealType === "deliver") {
+      let valueMisssig = false;
+
+      for (const detailKey in diliveryDetailsObj) {
+        if (!diliveryDetailsObj[detailKey]) {
+          valueMisssig = true;
+        }
+      }
+
+      if (valueMisssig && addOrder) {
+        return false;
+      } else {
+        return {
+          order_id: orderMetaData?.order_id,
+          customer_id: orderMetaData?.customer_id,
+          billing_address_1: orderMetaData?.billing_address_1 || null,
+          billing_address_2: orderMetaData?.billing_address_2 || null,
+
+          delivery_first_name: diliveryDetailsObj?.delivery_first_name || null,
+          delivery_last_name: diliveryDetailsObj?.delivery_last_name || null,
+          delivery_city_id: diliveryDetailsObj?.delivery_city_id || null,
+          delivery_address_line_1: diliveryDetailsObj?.delivery_address_line_1 || null,
+          delivery_address_line_2: diliveryDetailsObj?.delivery_address_line_2 || null,
+          delivery_phone_number: diliveryDetailsObj?.delivery_phone_number || null,
+
+          order_type: orderType?.mealType,
+          status: saveType,
+          order_menu_items: orderMenuItemsObj,
+        };
+      }
+    } else {
+      return {
+        order_id: orderMetaData?.order_id,
+        customer_id: orderMetaData?.customer_id,
+        billing_address_1: orderMetaData?.billing_address_1 || null,
+        billing_address_2: orderMetaData?.billing_address_2 || null,
+
+        delivery_first_name: diliveryDetailsObj?.delivery_first_name || null,
+        delivery_last_name: diliveryDetailsObj?.delivery_last_name || null,
+        delivery_city_id: diliveryDetailsObj?.delivery_city_id || null,
+        delivery_address_line_1: diliveryDetailsObj?.delivery_address_line_1 || null,
+        delivery_address_line_2: diliveryDetailsObj?.delivery_address_line_2 || null,
+        delivery_phone_number: diliveryDetailsObj?.delivery_phone_number || null,
+
+        order_type: orderType?.mealType,
+        status: saveType,
+        order_menu_items: orderMenuItemsObj,
+      };
+    }
+  };
+
+    /**
    * * General func implimented for draft and add orders
    * @returns order object
    */
@@ -82,6 +161,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
   const createOrder = () => {
     const orderMenuItemsObj = getOrderMenuItems();
     const diliveryDetailsObj = getOrderDiliveryDetails();
+    const saveType = (draftOrder || updateDraft) ? 'draft' : 'add';
 
     if (orderType?.mealType === "deliver") {
       let valueMisssig = false;
@@ -100,7 +180,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
           customer_id: customer?.customerDetails?.id,
           order_type: orderType?.mealType,
           order_menu_items: orderMenuItemsObj,
-          status: type,
+          status: saveType,
         };
       }
     } else {
@@ -108,19 +188,20 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
         order_type: orderType?.mealType,
         customer_id: customer?.customerDetails?.id,
         order_menu_items: orderMenuItemsObj,
-        status: type,
+        status: saveType,
       };
     }
   };
+
 
   /**
      * * this func will update the order
      * @returns status of the updated order
      */
   const handleUpdateOrder = async () => {
-    const order = createOrder();
+    const order = createUpdateOrder();
     let obj = {};
-    
+
     if (order) {
       const data = await dispatch(updateItem(order_id, order));
 
@@ -190,7 +271,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
    */
 
    const handleUpdateDraftOrder = async () => {
-    const order = createOrder();
+    const order = createUpdateOrder();
     const data = await dispatch(addItem(order));
     let obj = {};
 
