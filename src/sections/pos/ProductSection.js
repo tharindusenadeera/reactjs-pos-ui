@@ -8,8 +8,12 @@ import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import { updateItem, deleteItem, addItem, deleteAllItems} from "../../actions/selectedItems";
 import SaveOrder from "../orders/SaveOrder";
+
+import { updateItem, deleteItem, addItem, deleteAllItems} from "../../actions/selectedItems";
+import { resetMealType } from "../../actions/common"
+import { addDeliveryInformations, customerDetails }  from "../../actions/customer";
+
 import {
   GenerateUniqueId,
   CheckforMatch,
@@ -269,6 +273,17 @@ export const ProductSection = () => {
     
   }
 
+    /**
+   * * This function will clean out redux stores
+   */
+
+     const cleanStores = () => {
+      dispatch(deleteAllItems());
+      dispatch(resetMealType());
+      dispatch(addDeliveryInformations({}));
+      dispatch(customerDetails({}));
+    }
+
   /**
    * * Cancel and clear the added items in order to prevent
    * * simply remove all the items from redux store
@@ -283,7 +298,7 @@ export const ProductSection = () => {
       dangerMode: true,
     }).then((value) => {
       if (value) {
-        dispatch(deleteAllItems());
+        cleanStores();
       } else {
         swal("Process Terminated!");
       }

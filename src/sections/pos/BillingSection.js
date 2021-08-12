@@ -239,7 +239,7 @@ export const BillingSection = (props) => {
               <SaveOrder type="updateDraft" width="block" />
             </div>
             <div style={{ width: "48%" }}>
-              <SaveOrder type="add" width="block" />
+              <SaveOrder type="add" width="block" prevType="draft"/>
             </div>
           </div>
         ) : (

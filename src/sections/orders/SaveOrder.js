@@ -1,12 +1,14 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ButtonCustom } from "../../components/button";
-import { addItem, updateItem } from "../../actions/order";
 import swal from "sweetalert";
 
+import { addItem, updateItem } from "../../actions/order";
 import { deleteAllItems } from "../../actions/selectedItems";
+import { resetMealType } from "../../actions/common";
+import { addDeliveryInformations, customerDetails } from "../../actions/customer";
 
-const SaveOrder = ({ type, order_id, width, cls, click}) => {
+const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
@@ -19,6 +21,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
   const updateDraft = type === "updateDraft";
   const confirmPay = type === "confirmPay";
   const draftOrder = type === "draft";
+
 
   /**
    * * mandatory order details will be extracted and formatted in this func
@@ -71,6 +74,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
     return order;
   };
 
+
   /**
    * * delivery deatisl get from redux store
    * @returns details of delivery
@@ -91,6 +95,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
       };
     }
   };
+
 
   /**
    * * General func implimented for create update order
@@ -153,6 +158,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
     }
   };
 
+
     /**
    * * General func implimented for draft and add orders
    * @returns order object
@@ -195,17 +201,31 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
 
 
   /**
+   * * This function will clean out redux stores
+   */
+
+  const cleanStores = () => {
+    dispatch(deleteAllItems());
+    dispatch(resetMealType());
+    dispatch(addDeliveryInformations({}));
+    dispatch(customerDetails({}));
+  }
+
+
+  /**
      * * this func will update the order
      * @returns status of the updated order
      */
+
   const handleUpdateOrder = async () => {
     const order = createUpdateOrder();
     let obj = {};
 
     if (order) {
-      const data = await dispatch(updateItem(order_id, order));
+      const data = await dispatch(updateItem(order));
 
       if (data?.status === "success") {
+        cleanStores();
         obj = {
           message: "Order Updated Successfully !",
           status: "success",
@@ -225,6 +245,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
     return obj;
   }
 
+
   /**
    * * this func will add the order
    * @returns status of the add order
@@ -239,6 +260,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
         const data = await dispatch(addItem(order));
 
         if (data?.status === "success") {
+          cleanStores();
           obj = {
             message: "Order Placed Successfully !",
             status: "success",
@@ -265,6 +287,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
     return obj;
   };
 
+
   /**
    * * this func will save the order and reset the table if the saving sucess
    * @returns status of the updated draft
@@ -272,11 +295,11 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
 
    const handleUpdateDraftOrder = async () => {
     const order = createUpdateOrder();
-    const data = await dispatch(addItem(order));
+    const data = await dispatch(updateItem(order));
     let obj = {};
 
     if (data?.status === "success") {
-      dispatch(deleteAllItems());
+      cleanStores();
       obj = {
         message: "Update Draft Successfully !",
         status: "success",
@@ -303,7 +326,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
 
     if (customer?.customerDetails?.id) {
       if (data?.status === "success") {
-        dispatch(deleteAllItems());
+        cleanStores();
         obj = {
           message: "Order Draft Successfully !",
           status: "success",
@@ -323,6 +346,7 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
     return obj;
   };
 
+
   /**
    * *Common function used for handle add and draft order
    */
@@ -332,9 +356,12 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
                   updateOrder ? "Update Order ?" :
                   updateDraft ? "Update Draft ?" : "Draft Order ?";
                   
-    const orderHandle = addOrder ? handleAddOrder :
+    const handleFunc = addOrder ? handleAddOrder :
                         updateOrder ? handleUpdateOrder :
                         updateDraft ? handleUpdateDraftOrder: handleDraftOrder;
+    
+    // prev draft saved now adding as order --> update as updateOrder
+    const orderHandle = (prevType === "draft" && addOrder) ? handleUpdateOrder : handleFunc;
 
     swal({
       title: title,
@@ -358,12 +385,16 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
     });
   };
 
+
   /**
    ** This function will handle the confirm and pay
    ** With click() the modal will enable to pay
    */
 
   const handleConfirmAndPay = () => {
+    // if there is a order id then it should be existing order --> update order
+    const handleFunc = orderMetaData?.order_id ? handleUpdateOrder: handleAddOrder;
+
     swal({
       title: "Confirm Order ?",
       text: "",
@@ -372,8 +403,9 @@ const SaveOrder = ({ type, order_id, width, cls, click}) => {
       dangerMode: true,
     }).then((value) => {
       if (value) {
-        handleAddOrder().then((res) => {
+        handleFunc().then((res) => {
           if (res.status === "success") {
+            cleanStores();
             swal(res.message, "", "success").then(() => {
                   click();
             });

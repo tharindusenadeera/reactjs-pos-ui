@@ -11,9 +11,9 @@ export const addItem = (item) => async (dispatch) => {
     }
 }
 
-export const updateItem = (id, item) => async (dispatch) => {
+export const updateItem = (item) => async (dispatch) => {
     try {
-        const {data} = await api.updateOrder(id, item);
+        const {data} = await api.updateOrder(item?.order_id, item);
 
         return data;
     } catch (error) {

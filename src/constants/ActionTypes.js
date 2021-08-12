@@ -16,6 +16,7 @@ export const DELIVERY_INFORMATIONS = 'DELIVERY_INFORMATIONS';
 //----------- Common -------------------//
 export const ERROR = 'ERROR';
 export const MEAL_TYPE = 'MEAL_TYPE';
+export const RESET_MEAL_TYPE = 'RESET_MEAL_TYPE';
 
 //---------- Order ------------------//
 export const ADD_ORDER = 'ADD_ORDER';

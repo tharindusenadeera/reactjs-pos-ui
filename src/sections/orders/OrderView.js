@@ -9,7 +9,7 @@ import { getAllOrders, getOrder } from "../../api/order";
 import { orderById } from "../../actions/order";
 import { addAllItems } from "../../actions/selectedItems";
 import { addMealType } from "../../actions/common";
-import { addDeliveryInformations } from "../../actions/customer";
+import { addDeliveryInformations, customerDetails} from "../../actions/customer";
 
 import { getFormattedOrder } from "./OrderConvertions";
 
@@ -106,8 +106,10 @@ export const OrderView = (props) => {
           delivery_phone_number:  order?.delivery_phone_number,
         };
 
+        // populating stores with selected order
         dispatch(addMealType(order_type));
         dispatch(addDeliveryInformations(shippingDetail));
+        dispatch(customerDetails(order?.customer));
 
         const selectedItems = getFormattedOrder(order, products);
         dispatch(addAllItems(selectedItems));
