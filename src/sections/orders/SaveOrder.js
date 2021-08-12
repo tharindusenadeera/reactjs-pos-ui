@@ -427,7 +427,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
       type="primary"
       className={cls ? cls : "green"}
       btnTitle={
-        addOrder ? "Add Order" :
+        addOrder ? "Place Order" :
         updateOrder ? "Update Order" :
         updateDraft ? "Update Draft" :
         confirmPay ? "Confirm & Pay" : "Draft Order"
