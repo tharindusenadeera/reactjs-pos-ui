@@ -1,4 +1,8 @@
-import { ERROR, MEAL_TYPE, RESET_MEAL_TYPE } from "../constants/ActionTypes";
+import { AUTHENTICATED, ERROR, MEAL_TYPE, RESET_MEAL_TYPE } from "../constants/ActionTypes";
+
+export const authenticate = payload => {
+  return { type: AUTHENTICATED, payload };
+};
 
 export const addError = (data) => {
   return {

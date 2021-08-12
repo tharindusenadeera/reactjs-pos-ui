@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Theme from "../utils/Theme";
 import GlobalStyle from "../utils/globalStyles";
 import { InputField } from "../components/field/InputField";
 import { PasswordField } from "../components/field/PasswordField";
 import { ButtonCustom } from "../components/button/index";
+import { login } from "../api/common";
+import { authenticate } from "../actions/common";
+import swal from "sweetalert";
 
 const Wrapper = styled.section`
   background: ${Theme.colors.$gradientBackground};
@@ -31,21 +35,23 @@ const Body = styled.div`
 `;
 
 export const Login = () => {
-  const [name, setName] = useState("");
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorObj, setErrorObj] = useState({});
+  const [deviceName, setDeviceName] = useState("");
 
   const handleSubmit = () => {
-    if (!name && !password) {
+    if (!email && !password) {
       setErrorObj({
         all: "Required !",
-        name: "Required !",
+        email: "Required !",
         password: "Required !",
       });
       return;
-    } else if (!name) {
+    } else if (!email) {
       setErrorObj({
-        name: "Required !",
+        email: "Required !",
       });
       return;
     } else if (!password) {
@@ -54,10 +60,21 @@ export const Login = () => {
       });
       return;
     } else {
+      let device_name = deviceName ? deviceName : "localhost";
       let obj = {
-        username: name,
-        password: password,
+        email,
+        password,
+        device_name,
       };
+      login(obj).then((res) => {
+        if (res.data.status == "success") {
+          dispatch(authenticate(true));
+          localStorage.setItem(ACCESS_TOKEN, `Bearer ${res.data.status}`);
+          swal("Successfully Submitted !", "", "success");
+        } else {
+          swal("Something Went Wrong !", "Please Try Again!", "error");
+        }
+      });
     }
   };
 
@@ -69,10 +86,10 @@ export const Login = () => {
         <Body>
           <div className="field-row">
             <InputField
-              label="Username"
-              errorMsg={errorObj.name || errorObj.all ? errorObj.name : ""}
+              label="Email"
+              errorMsg={errorObj.email || errorObj.all ? errorObj.email : ""}
               onChange={(e) => {
-                setName(e.target.value);
+                setEmail(e.target.value);
                 setErrorObj({});
               }}
             />
