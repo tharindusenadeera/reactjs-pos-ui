@@ -18,6 +18,7 @@ export const ERROR = 'ERROR';
 export const MEAL_TYPE = 'MEAL_TYPE';
 export const RESET_MEAL_TYPE = 'RESET_MEAL_TYPE';
 export const AUTHENTICATED = 'AUTHENTICATED';
+export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 
 //---------- Order ------------------//
 export const ADD_ORDER = 'ADD_ORDER';
