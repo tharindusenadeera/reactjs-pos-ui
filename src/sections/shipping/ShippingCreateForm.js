@@ -22,6 +22,7 @@ const ButtonWrap = styled.div`
 export const ShippingCreateForm = (props) => {
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.customer.customerDetails);
+  const mealType = useSelector((state) => state.common.mealType);
   const [deliveryFirstName, setDeliveryFirstName] = useState("");
   const [deliveryLastName, setDeliveryLastName] = useState("");
   const [firstDeliveryAddress, setFirstDeliveryAddress] = useState("");
@@ -186,7 +187,11 @@ export const ShippingCreateForm = (props) => {
               setDeliveryFirstName(e.target.value);
               setErrorObj({});
             }}
-            disabled={isSame ? true : false}
+            disabled={
+              isSame || mealType == "dine_in" || mealType == "take_away"
+                ? true
+                : false
+            }
           />
         </div>
 
@@ -204,7 +209,11 @@ export const ShippingCreateForm = (props) => {
               setDeliveryLastName(e.target.value);
               setErrorObj({});
             }}
-            disabled={isSame ? true : false}
+            disabled={
+              isSame || mealType == "dine_in" || mealType == "take_away"
+                ? true
+                : false
+            }
           />
         </div>
 
@@ -237,7 +246,11 @@ export const ShippingCreateForm = (props) => {
               setFirstDeliveryAddress(e.target.value);
               setErrorObj({});
             }}
-            disabled={isSame ? true : false}
+            disabled={
+              isSame || mealType == "dine_in" || mealType == "take_away"
+                ? true
+                : false
+            }
           />
         </div>
 
@@ -250,7 +263,11 @@ export const ShippingCreateForm = (props) => {
               setSecondDeliveryAddress(e.target.value);
               setErrorObj({});
             }}
-            disabled={isSame ? true : false}
+            disabled={
+              isSame || mealType == "dine_in" || mealType == "take_away"
+                ? true
+                : false
+            }
           />
         </div>
 
@@ -268,7 +285,11 @@ export const ShippingCreateForm = (props) => {
               setDeliveryPhoneNo(e.target.value);
               setErrorObj({});
             }}
-            disabled={isSame ? true : false}
+            disabled={
+              isSame || mealType == "dine_in" || mealType == "take_away"
+                ? true
+                : false
+            }
           />
         </div>
 
@@ -286,7 +307,11 @@ export const ShippingCreateForm = (props) => {
               setDeliveryEmail(e.target.value);
               setErrorObj({});
             }}
-            disabled={isSame ? true : false}
+            disabled={
+              isSame || mealType == "dine_in" || mealType == "take_away"
+                ? true
+                : false
+            }
           />
         </div>
         <div className="col-6"></div>
