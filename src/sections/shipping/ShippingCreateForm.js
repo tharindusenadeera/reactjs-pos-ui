@@ -21,7 +21,7 @@ const ButtonWrap = styled.div`
 
 export const ShippingCreateForm = (props) => {
   const dispatch = useDispatch();
-  const customer = useSelector((state) => state.customer);
+  const customer = useSelector((state) => state.customer.customerDetails);
   const [deliveryFirstName, setDeliveryFirstName] = useState("");
   const [deliveryLastName, setDeliveryLastName] = useState("");
   const [firstDeliveryAddress, setFirstDeliveryAddress] = useState("");
@@ -47,12 +47,12 @@ export const ShippingCreateForm = (props) => {
 
   useEffect(() => {
     if (isSame) {
-      setDeliveryFirstName(customer.addCustomer.first_name);
-      setDeliveryLastName(customer.addCustomer.last_name);
-      setDeliveryPhoneNo(customer.addCustomer.contact_number);
-      setFirstDeliveryAddress(customer.addCustomer.address_line_1);
-      setSecondDeliveryAddress(customer.addCustomer.address_line_2);
-      setDeliveryEmail(customer.addCustomer.email);
+      setDeliveryFirstName(customer.first_name);
+      setDeliveryLastName(customer.last_name);
+      setDeliveryPhoneNo(customer.contact_number);
+      setFirstDeliveryAddress(customer.address_line_1);
+      setSecondDeliveryAddress(customer.address_line_2);
+      setDeliveryEmail(customer.email);
     } else {
       setDeliveryFirstName("");
       setDeliveryLastName("");
