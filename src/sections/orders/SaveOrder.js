@@ -221,7 +221,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
     const order = createUpdateOrder();
     let obj = {};
 
-    if (order) {
+    // if (order) {
       const data = await dispatch(updateItem(order));
 
       if (data?.status === "success") {
@@ -236,12 +236,12 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
           status: "error",
         };
       }
-    } else {
-      obj = {
-        message: "Please add delivery details !",
-        status: "error",
-      };
-    }
+    // } else {
+    //   obj = {
+    //     message: "Please add delivery details !",
+    //     status: "error",
+    //   };
+    // }
     return obj;
   }
 
@@ -255,8 +255,8 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
     const order = createOrder();
     let obj = {};
 
-    if (customer?.customerDetails?.id) {
-      if (order) {
+    // if (customer?.customerDetails?.id) {
+      // if (order) {
         const data = await dispatch(addItem(order));
 
         if (data?.status === "success") {
@@ -271,18 +271,18 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
             status: "error",
           };
         }
-      } else {
-        obj = {
-          message: "Please add delivery details !",
-          status: "error",
-        };
-      }
-    } else {
-      obj = {
-        message: "Please add customer details !",
-        status: "error",
-      };
-    }
+    //   } else {
+    //     obj = {
+    //       message: "Please add delivery details !",
+    //       status: "error",
+    //     };
+    //   }
+    // } else {
+    //   obj = {
+    //     message: "Please add customer details !",
+    //     status: "error",
+    //   };
+    // }
 
     return obj;
   };
@@ -324,7 +324,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
     const data = await dispatch(addItem(order));
     let obj = {};
 
-    if (customer?.customerDetails?.id) {
+    // if (customer?.customerDetails?.id) {
       if (data?.status === "success") {
         cleanStores();
         obj = {
@@ -337,12 +337,12 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
           status: "error",
         };
       }
-    } else {
-      obj = {
-        message: "Please add customer details !",
-        status: "error",
-      };
-    }
+    // } else {
+    //   obj = {
+    //     message: "Please add customer details !",
+    //     status: "error",
+    //   };
+    // }
     return obj;
   };
 
@@ -420,6 +420,37 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
     });
   }
 
+
+  const handleClick = () => {
+    // need to check if (delivery order) => both should be there
+
+    const diliveryDetailsObj = getOrderDiliveryDetails();
+
+    let deliveryInfoMissing = false;
+    let customerInfoMissing =  !customer?.customerDetails?.id;
+
+    if (orderType?.mealType === "deliver") {
+      for (const detailKey in diliveryDetailsObj) {
+        if (!diliveryDetailsObj[detailKey]) {
+          deliveryInfoMissing = true;
+        }
+      }
+    }
+
+    if (deliveryInfoMissing || customerInfoMissing) {
+      const message = customerInfoMissing ?
+       'Please add customer details !' : 'Please add delivery details !'
+      swal(message, "Please Try Again!", "error");
+
+    } else {
+      if (confirmPay) {
+        handleConfirmAndPay();
+      } else {
+        handleOrder();
+      }
+    }
+  }
+
   return (
     <ButtonCustom
       disabled={!selectedItems.length}
@@ -432,7 +463,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
         updateDraft ? "Update Draft" :
         confirmPay ? "Confirm & Pay" : "Draft Order"
         }
-      onClick={confirmPay ? handleConfirmAndPay : handleOrder}
+      onClick={handleClick}
     />
   );
 };
