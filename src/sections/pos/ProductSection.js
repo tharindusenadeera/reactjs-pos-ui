@@ -76,6 +76,8 @@ export const ProductSection = () => {
   const alreadyAddedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
 
+  const [tableContent, setTableContent] = useState(alreadyAddedItems);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProperties, setSelectedProperties] = useState({});
   const [itemBeforeEdit, setItemBeforeEdit] = useState({});
@@ -86,6 +88,10 @@ export const ProductSection = () => {
   const isRealValue = (obj) => {
     return obj && obj !== 'null' && obj !== 'undefined' && obj !== '';
   }
+
+  useEffect(() => {
+    setTableContent(alreadyAddedItems);
+  },[alreadyAddedItems]);
 
   useEffect(() => {
     let isCategoryAvailable = selectedProperties?.menu_option_categories?.length > 0;
@@ -269,8 +275,14 @@ export const ProductSection = () => {
   ];
 
   const handleSearch = e => {
-    let letter = e.target.value;
-    
+    let text = e.target.value;
+    const lower_text = text?.toLowerCase();
+
+    const filteredOrders = alreadyAddedItems.filter((order) => (
+      order?.name?.toLowerCase().includes(lower_text)
+    ))
+
+    setTableContent(filteredOrders);
   }
 
     /**
@@ -316,7 +328,7 @@ export const ProductSection = () => {
       <TableWarp>
         <TableCustom
           columns={columns}
-          dataSource={alreadyAddedItems}
+          dataSource={tableContent}
           scroll={{ x: 730, y: 200 }}
         />
       </TableWarp>
