@@ -5,5 +5,5 @@ export const getCities = () => {
 }
 
 export const login = data => {
-    return Axios.get(`${process.env.REACT_APP_API_URL}/v1/login`);
+    return Axios.post(`${process.env.REACT_APP_API_URL}/v1/login`, data);
 }

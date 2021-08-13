@@ -35,6 +35,7 @@ const tableArr = [
 export const CustomerCreateForm = (props) => {
   const dispatch = useDispatch();
   const mealType = useSelector((state) => state.common.mealType);
+  const storedCustomerDetails = useSelector((state) => state.customer.customerDetails);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -61,6 +62,12 @@ export const CustomerCreateForm = (props) => {
     setFirstAddressLine(customer.address_line_1);
     setSecondAddressLine(customer.address_line_2);
   }, [customer]);
+
+  useEffect(() => {
+    if (storedCustomerDetails) {
+      setFirstName(storedCustomerDetails.first_name);
+    }
+  }, [storedCustomerDetails])
 
   const handleAllCustomers = () => {
     getAllCustomers().then((res) => {
