@@ -440,7 +440,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
     if (deliveryInfoMissing || customerInfoMissing) {
       const message = customerInfoMissing ?
        'Please add customer details !' : 'Please add delivery details !'
-      swal(message, "Please Try Again!", "error");
+      swal(message, "", "error");
 
     } else {
       if (confirmPay) {
