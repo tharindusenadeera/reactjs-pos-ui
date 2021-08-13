@@ -25,7 +25,7 @@ const InputAnt = styled(Input)`
 `;
 
 export const InputCustom = (props) => {
-  const { placeholder, value, disabled, type, onChange } = props;
+  const { placeholder, value, disabled, type, onChange, step, onKeyDown } = props;
 
   const DisableState = useRef("");
   if (disabled === true) {
@@ -42,6 +42,8 @@ export const InputCustom = (props) => {
       allowClear
       onChange={(e) => onChange(e)}
       disabled={DisableState.current}
+      step={step}
+      onKeyDown={onKeyDown}
     />
   );
 };

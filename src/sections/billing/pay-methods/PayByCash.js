@@ -57,7 +57,19 @@ const PayByCash = (props) => {
     if (paidAmount > total) {
       returnAmount = parseFloat(paidAmount) - parseFloat(total);
     }
-    setAmountToReturn(returnAmount.toFixed(2))
+    setAmountToReturn(returnAmount.toFixed(2));
+  };
+
+  const handleKeyDown = (event) => {
+    // console.log("key down", event.keyCode);
+    // if (
+    //   (event.which != 46 || event.target.value.indexOf(".") != -1) &&
+    //   (event.which < 48 || event.which > 57)
+    // ) {
+    //   return event.preventDefault();
+    // } else {
+    //   return true;
+    // }
   };
 
   return (
@@ -69,9 +81,12 @@ const PayByCash = (props) => {
 
       <FieldRow>
         <InputField
+          type="number"
+          step=".01"
           label="Recived Amount ($)"
           errorMsg="This is error message"
           onChange={handleAmount}
+          onKeyDown={handleKeyDown}
         />
       </FieldRow>
 

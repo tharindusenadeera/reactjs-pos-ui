@@ -40,7 +40,7 @@ const PayByCard = (props) => {
 
   const handleCardNo = (e) => {};
 
-  const handleBank = (e) => {}
+  const handleBank = (e) => {};
 
   const handleComments = (e) => {};
 
@@ -53,6 +53,7 @@ const PayByCard = (props) => {
 
       <FieldRow>
         <InputField
+          type="number"
           label="Card No"
           placeholder="Please enter last 4 digits"
           onChange={handleCardNo}

@@ -25,6 +25,8 @@ export const InputField = (props) => {
     errorMsg,
     type,
     onChange,
+    step,
+    onKeyDown
   } = props;
   return (
     <div className="field-row">
@@ -35,6 +37,8 @@ export const InputField = (props) => {
         value={value}
         disabled={disabled}
         onChange={onChange}
+        step={step}
+        onKeyDown={onKeyDown}
       />
       <Error errorMsg={errorMsg} />
     </div>
