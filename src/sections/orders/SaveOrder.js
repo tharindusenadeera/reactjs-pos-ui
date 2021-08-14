@@ -16,7 +16,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const customer = useSelector((state) => state.customer);
   const orderType = useSelector((state) => state.common);
 
-  const addOrder = type === "add";
+  const addOrder = type === "placed";
   const updateOrder = type === "update";
   const updateDraft = type === "updateDraft";
   const confirmPay = type === "confirmPay";
@@ -105,7 +105,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const createUpdateOrder = () => {
     const orderMenuItemsObj = getOrderMenuItems(true);
     const diliveryDetailsObj = getOrderDiliveryDetails();
-    const saveType = (draftOrder || updateDraft) ? 'draft' : 'add';
+    const saveType = (draftOrder || updateDraft) ? 'draft' : 'placed';
 
     if (orderType?.mealType === "deliver") {
       let valueMisssig = false;
@@ -167,7 +167,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const createOrder = () => {
     const orderMenuItemsObj = getOrderMenuItems();
     const diliveryDetailsObj = getOrderDiliveryDetails();
-    const saveType = (draftOrder || updateDraft) ? 'draft' : 'add';
+    const saveType = (draftOrder || updateDraft) ? 'draft' : 'placed';
 
     if (orderType?.mealType === "deliver") {
       let valueMisssig = false;

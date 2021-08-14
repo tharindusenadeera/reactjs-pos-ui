@@ -146,12 +146,12 @@ export const OrderView = (props) => {
                   </p>
                 </div>
 
-                <div className="d-flex">
+                {/* <div className="d-flex">
                   <p>
                     <label>Payment Status</label>
                     {renderPaymentStatus(order?.status)}
                   </p>
-                </div>
+                </div> */}
 
                 <div className="d-flex">
                   <p>

@@ -10,11 +10,11 @@ export const OrderGroup = (props) => {
 
   return (
     <TabsCustom>
-      <TabPane tab="Tab 1 Title" key="1">
-        <OrderView clickOK={clickOK} tab={1}/>
+      <TabPane tab="Placed Orders" key="1">
+        <OrderView clickOK={clickOK} tab={"placed"}/>
       </TabPane>
-      <TabPane tab="Tab 2 Title" key="2">
-        <OrderView clickOK={clickOK} tab={2}/>
+      <TabPane tab="Preparing Orders" key="2">
+        <OrderView clickOK={clickOK} tab={"preparing"}/>
       </TabPane>
       <TabPane tab="Draft Orders" key="draft">
         <OrderView clickOK={clickOK} tab={"draft"}/>
