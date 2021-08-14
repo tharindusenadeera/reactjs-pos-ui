@@ -5,6 +5,6 @@ export const mealTypes = [
 ];
 
 export const paymentType = [
-  { key: 1, value: "Card" },
-  { key: 2, value: "Cash" },
+  { key: 1, value: "Cash" },
+  { key: 2, value: "Card" },
 ];
