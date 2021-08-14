@@ -15,5 +15,5 @@ export const getOrder = (id) => {
 }
 
 export const updateOrder = (id, updatedOrder) => {
-  return axios.patch(`${process.env.REACT_APP_API_URL}/v1/edit-order/${id}`, updatedOrder);
+  return axios.post(`${process.env.REACT_APP_API_URL}/v1/edit-order/${id}`, updatedOrder);
 };
