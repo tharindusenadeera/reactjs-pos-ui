@@ -162,7 +162,7 @@ export const OrderView = (props) => {
 
                 <div className="d-flex">
                   <p>
-                    <label>Amount to Pay</label>$ {order?.total}
+                    <label>Due Amount</label>$ {order?.total}
                   </p>
                 </div>
 
