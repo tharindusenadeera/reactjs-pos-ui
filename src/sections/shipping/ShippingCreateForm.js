@@ -80,21 +80,17 @@ export const ShippingCreateForm = (props) => {
 
   const validate = (data) => {
     let errors = {};
-    if (!data.deliveryFirstName) {
+    if (!data.delivery_first_name) {
       errors.deliveryFirstName = "First Name Required !";
-    } else if (!data.deliveryLastName) {
+    } else if (!data.delivery_last_name) {
       errors.deliveryLastName = "Last Name Required !";
-    } else if (!data.deliveryEmail) {
-      errors.deliveryEmail = "Email Required !";
-    } else if (!emailRegex.test(data.deliveryEmail)) {
-      errors.deliveryEmail = "Invalid Email !";
-    } else if (!data.deliveryPhoneNo) {
+    } else if (!data.delivery_phone_number) {
       errors.deliveryPhoneNo = "Phone number Required !";
-    } else if (!mobileNoRegex.test(data.deliveryPhoneNo)) {
+    } else if (!mobileNoRegex.test(data.delivery_phone_number)) {
       errors.deliveryPhoneNo = "Invalid Phone number !";
-    } else if (!data.firstDeliveryAddress) {
+    } else if (!data.delivery_address_line_1) {
       errors.deliveryAddress = "Address is Required !";
-    } else if (!data.selectedCity) {
+    } else if (!data.delivery_city_id) {
       errors.selectedCity = "City is Required !";
     }
     setErrorObj(errors);
@@ -106,54 +102,48 @@ export const ShippingCreateForm = (props) => {
   };
 
   const handleSubmit = () => {
-    if (isSame) {
+    if (!deliveryFirstName || !deliveryLastName || !deliveryPhoneNo) {
+      setErrorObj({
+        all: "all",
+        deliveryFirstName: "Required !",
+        deliveryLastName: "Required !",
+        deliveryPhoneNo: "Required !",
+        selectedCity: "Required !",
+      });
+      return;
     } else {
-      if (
-        !deliveryFirstName ||
-        !deliveryLastName ||
-        !deliveryPhoneNo ||
-        !selectedCity
-      ) {
-        setErrorObj({
-          all: "all",
-          deliveryFirstName: "Required !",
-          deliveryLastName: "Required !",
-          deliveryPhoneNo: "Required !",
-          selectedCity: "Required !",
+      let shippingDetail = {
+        customer_id: customer.id,
+        delivery_first_name: deliveryFirstName,
+        delivery_last_name: deliveryLastName,
+        delivery_city_id: selectedCity,
+        delivery_address_line_1: firstDeliveryAddress,
+        delivery_address_line_2: secondDeliveryAddress,
+        delivery_phone_number: deliveryPhoneNo,
+      };
+
+      const errors = validate(shippingDetail);
+      if (!Object.keys(errors).length) {
+        swal({
+          title: "Confirm to Add",
+          text: "",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willDelete) => {
+          if (willDelete) {
+            dispatch(addDeliveryInformations(shippingDetail));
+          } else {
+            swal("Process Terminated!");
+          }
         });
-        return;
-      } else {
-        let shippingDetail = {
-          customer_id: customer.addCustomer.id,
-          delivery_first_name: deliveryFirstName,
-          delivery_last_name: deliveryLastName,
-          delivery_city_id: selectedCity,
-          delivery_address_line_1: firstDeliveryAddress,
-          delivery_address_line_2: secondDeliveryAddress,
-          delivery_phone_number: deliveryPhoneNo,
-        };
-        const errors = validate(shippingDetail);
-        if (!Object.keys(errors).length) {
-          swal({
-            title: "Confirm to Add",
-            text: "",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-          }).then((willDelete) => {
-            if (willDelete) {
-              dispatch(addDeliveryInformations(shippingDetail));
-            } else {
-              swal("Process Terminated!");
-            }
-          });
-        }
       }
     }
   };
 
   const handleChecked = (e) => {
     setIsSame(e.target.checked);
+    setErrorObj({});
   };
 
   const handleSelectedCity = (value) => {
@@ -168,11 +158,16 @@ export const ShippingCreateForm = (props) => {
   return (
     <Fragment>
       <div className="row">
-        <div className="col-12 mb-3">
-          <CheckboxCustom onChange={handleChecked}>
-            Same customer
-          </CheckboxCustom>
-        </div>
+        {customer.id ? (
+          <div className="col-12 mb-3">
+            <CheckboxCustom onChange={handleChecked}>
+              Same customer
+            </CheckboxCustom>
+          </div>
+        ) : (
+          <Fragment />
+        )}
+
         <div className="col-6">
           <InputField
             label="Delivery First Name"
