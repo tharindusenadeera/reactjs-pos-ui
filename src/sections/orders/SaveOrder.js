@@ -7,6 +7,7 @@ import { addItem, updateItem } from "../../actions/order";
 import { deleteAllItems } from "../../actions/selectedItems";
 import { resetMealType } from "../../actions/common";
 import { addDeliveryInformations, customerDetails } from "../../actions/customer";
+import { getProducts } from "../../actions/products";
 
 const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const dispatch = useDispatch();
@@ -34,13 +35,10 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
     selectedItems?.forEach((product) => {
       const menu_option_category_menu_option_array = [];
-      // this id may be changes after finalize the services for update
-      let order_menu_item_id = undefined;
       
       if (product?.categories?.length > 0) {
         product.categories.forEach((category) => {
           if (category?.item?.menu_option_category_menu_option_id) {
-            order_menu_item_id = category?.item?.id;
             menu_option_category_menu_option_array.push(category.item.menu_option_category_menu_option_id);
           }
         });
@@ -49,7 +47,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
           order.push({
             id: product.productKey,
             qty: product.quantity,
-            order_menu_item_id: order_menu_item_id,
+            order_menu_item_id: product?.order_menu_item_id,
             menu_option_category_menu_option_id:
               menu_option_category_menu_option_array,
           });
@@ -211,6 +209,13 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     dispatch(customerDetails({}));
   }
 
+  /**
+   * * This function get the updated products and save
+   */
+
+   const updateProducts = () => {
+     dispatch(getProducts());
+  }
 
   /**
      * * this func will update the order
@@ -226,6 +231,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
       if (data?.status === "success") {
         cleanStores();
+        updateProducts();
         obj = {
           message: "Order Updated Successfully !",
           status: "success",
@@ -261,6 +267,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
         if (data?.status === "success") {
           cleanStores();
+          updateProducts();
           obj = {
             message: "Order Placed Successfully !",
             status: "success",
@@ -300,6 +307,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
     if (data?.status === "success") {
       cleanStores();
+      updateProducts();
       obj = {
         message: "Update Draft Successfully !",
         status: "success",
@@ -327,6 +335,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     // if (customer?.customerDetails?.id) {
       if (data?.status === "success") {
         cleanStores();
+        updateProducts();
         obj = {
           message: "Order Draft Successfully !",
           status: "success",
@@ -362,7 +371,6 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     
     // prev draft saved now adding as order --> update as updateOrder
     const orderHandle = (prevType === "draft" && addOrder) ? handleUpdateOrder : handleFunc;
-
     swal({
       title: title,
       text: "",
@@ -407,6 +415,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
           if (res.status === "success") {
             const orderSnapshot = Object.assign({},{'productList': selectedItems})
             cleanStores();
+            updateProducts();
             
             swal(res.message, "", "success").then(() => {
               callBack(orderSnapshot);

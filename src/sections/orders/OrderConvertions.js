@@ -14,8 +14,9 @@ export const getFormattedOrder = (order, products) => {
 
 
     order?.order_menu_items_full?.forEach((orderProduct) => {
-        const quantity = orderProduct?.qty;
+        const quantity = orderProduct?.order_menu_item_qty;
         const productId = orderProduct?.id;
+        const order_menu_item_id = orderProduct?.order_menu_item_id;
         let array = [];
 
         const fullProduct = products.find((product) => product.productKey === productId);
@@ -44,6 +45,7 @@ export const getFormattedOrder = (order, products) => {
             ...fullProduct,
             categories: array,
             quantity: quantity,
+            order_menu_item_id: order_menu_item_id,
             subtotal: fullProduct?.price * quantity,
         }
 
