@@ -90,7 +90,9 @@ const ProductImg = styled.img`
 `;
 
 export const ItemSection = () => {
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
+  const products = useSelector((state) => state.products);
+
   const [selectedItems, setSelectedItems] = useState(0);
   const [categories, setCategories] = useState([]);
 
@@ -163,7 +165,7 @@ export const ItemSection = () => {
         itemArr.push(obj);
       });
 
-    setProducts(itemArr);
+    // setProducts(itemArr);
     dispatch({type : SAVE_PRODUCT, payload : itemArr});
   };
 
