@@ -109,6 +109,7 @@ export const ModalCustom = (props) => {
     editRow,
     customButtonType,
     customButton,
+    callBackCutomButton,
   } = props;
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const [disablePropertiesCancel, setDisablePropertiesCancel] = useState({});
@@ -178,8 +179,12 @@ export const ModalCustom = (props) => {
     }
   }
 
-  const clickCustomButton = () =>{
-    onClick(record);
+  const clickCustomButton = (orderSnapshot) =>{
+    onClick();
+    
+    if (orderSnapshot) {
+      callBackCutomButton(orderSnapshot)
+    }
   }
 
   return (
@@ -187,7 +192,7 @@ export const ModalCustom = (props) => {
       
       { customButton ? (
         <ButtonWrap>
-          <SaveOrder type={customButtonType} width="block" cls={btnClass} click={clickCustomButton}/>
+          <SaveOrder type={customButtonType} width="block" cls={btnClass} callBack={clickCustomButton}/>
         </ButtonWrap>
        ): (
         <ButtonWrap>

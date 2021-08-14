@@ -96,6 +96,7 @@ export const BillingSection = (props) => {
   const [savedDis, setSavedDis] = useState(initialDiscount);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [orderSnapShot, setOrderSnapShot] =  useState({});
 
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
@@ -141,6 +142,12 @@ export const BillingSection = (props) => {
   const DiscountLabel = `Discount  (${savedDis.value} ${
     savedDis.key === "1" ? "%)" : "$)"
   }`;
+
+  const confirmAndPayClicked = (orderSnapshot) => {
+    const orderBillSummary = calculateOrderSummary(orderSnapshot?.productList, savedDis);
+
+    setOrderSnapShot({...orderSnapshot, 'orderBillSummary' : orderBillSummary});
+  }
 
   return (
     <Fragment>
@@ -269,6 +276,7 @@ export const BillingSection = (props) => {
           btnTitle="Confirm & Pay"
           customButton={true}
           customButtonType="confirmPay"
+          callBackCutomButton={confirmAndPayClicked}
           type="primary"
           btnClass="mb-3 w-100 green"
           btnDisabled={!selectedItems.length}
@@ -279,7 +287,7 @@ export const BillingSection = (props) => {
           handleOk={handleOk}
           handleCancel={handleCancel}
         >
-          <Payment total={tot} />
+          <Payment orderSnapShot={orderSnapShot}/>
         </ModalCustom>
       </div>
     </Fragment>

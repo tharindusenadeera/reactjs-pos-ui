@@ -8,7 +8,7 @@ import { deleteAllItems } from "../../actions/selectedItems";
 import { resetMealType } from "../../actions/common";
 import { addDeliveryInformations, customerDetails } from "../../actions/customer";
 
-const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
+const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
@@ -405,9 +405,15 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, click}) => {
       if (value) {
         handleFunc().then((res) => {
           if (res.status === "success") {
+            const orderSnapshot = Object.assign({},
+              {'productList': selectedItems},
+              {'customer': customer},
+              {'orderMetaData': orderMetaData},
+              {'orderType': orderType})
+
             cleanStores();
             swal(res.message, "", "success").then(() => {
-                  click();
+              callBack(orderSnapshot);
             });
             
           } else {

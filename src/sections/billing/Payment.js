@@ -10,18 +10,19 @@ const PaymentCompWrap = styled.div`
   padding: 25px 0;
 `;
 
-export const Payment = (props) => {
-  const { total } = props;
+export const Payment = ({orderSnapShot}) => {
+  // all the properties related to order comes here
+  const { orderBillSummary, customer, orderMetaData, orderType, productList} = orderSnapShot;
   const [paymentMethod, setPaymentMethod] = useState(1);
-
+  
   const PaymentComponent = () => {
     switch (paymentMethod) {
       case 1:
-        return <CashPayment total={total}/>;
+        return <CashPayment total={orderBillSummary?.tot}/>;
       case 2:
-        return <CardPayment total={total}/>;
+        return <CardPayment total={orderBillSummary?.tot}/>;
       default:
-        return <CashPayment total={total}/>;
+        return <CashPayment total={orderBillSummary?.tot}/>;
     }
   };
 
