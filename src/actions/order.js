@@ -1,4 +1,4 @@
-import { ORDER, ADD_ORDER } from '../constants/ActionTypes';
+import { ORDER, ADD_ORDER, TABLE_NUMBER } from '../constants/ActionTypes';
 import * as api from '../api/order';
 
 export const addItem = (item) => async (dispatch) => {
@@ -30,6 +30,13 @@ export const updateItem = (item) => async (dispatch) => {
 export const orderById = item => {
     return {
         type: ORDER,
+        payload: item,
+      };
+}
+
+export const addTable = item => {
+    return {
+        type: TABLE_NUMBER,
         payload: item,
       };
 }

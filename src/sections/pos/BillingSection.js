@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import ShopLogo from "../../assests/images/grill-logo.png";
 import Theme from "../../utils/Theme";
@@ -9,6 +9,7 @@ import { Payment } from "../billing/Payment";
 import { SelectField } from "../../components/field/SelectField";
 import { convertToDecimal } from "../../utils/formats";
 import SaveOrder from "../orders/SaveOrder";
+import { addTable } from "../../actions/order";
 
 const ShopDetail = styled.div`
   display: flex;
@@ -58,6 +59,14 @@ const Hr = styled.hr`
 
 const customerArr = [{ key: 1, value: "Walk in Customer" }];
 
+const tableArr = [
+  { key: 1, value: "T01" },
+  { key: 2, value: "T02" },
+  { key: 3, value: "T03" },
+  { key: 4, value: "T04" },
+  { key: 5, value: "T05" },
+];
+
 const calculateOrderSummary = (selectedItems, disc) => {
   let subTot = 0;
 
@@ -91,6 +100,7 @@ const calculateOrderSummary = (selectedItems, disc) => {
 
 export const BillingSection = (props) => {
   // key 1 -> percentage  2 -> fixed value
+  const dispatch = useDispatch();
   const initialDiscount = { key: "1", value: 0 };
   const [dis, setDis] = useState(initialDiscount);
   const [savedDis, setSavedDis] = useState(initialDiscount);
@@ -101,6 +111,9 @@ export const BillingSection = (props) => {
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
   const mealType = useSelector((state) => state.common.mealType);
+  const tableNumber = useSelector(
+    (state) => state.order.tableNumber
+  );
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -153,6 +166,10 @@ export const BillingSection = (props) => {
     setOrderSnapShot({ orderBillSummary: orderBillSummary });
   };
 
+  const handleSelectedTable = (value) => {
+    dispatch(addTable(value));
+  };
+
   return (
     <Fragment>
       {/* <ShopDetail>
@@ -186,6 +203,21 @@ export const BillingSection = (props) => {
               okText="Add Address"
               hideCancel={true}
               hideSubmit={true}
+            />
+          </div>
+        ) : (
+          <Fragment />
+        )}
+
+        {mealType == "dine_in" ? (
+          <div className="col-12">
+            <SelectField
+              showSearch={false}
+              label="Table Number"
+              value={tableNumber ? tableNumber : undefined}
+              options={tableArr && tableArr}
+              placeholder="Select a table"
+              onChange={handleSelectedTable}
             />
           </div>
         ) : (

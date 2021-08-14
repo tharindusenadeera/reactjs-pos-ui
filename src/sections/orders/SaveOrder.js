@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ButtonCustom } from "../../components/button";
 import swal from "sweetalert";
 
-import { addItem, updateItem } from "../../actions/order";
+import { addItem, addTable, updateItem } from "../../actions/order";
 import { deleteAllItems } from "../../actions/selectedItems";
 import { resetMealType } from "../../actions/common";
 import { addDeliveryInformations, customerDetails } from "../../actions/customer";
@@ -16,6 +16,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
   const customer = useSelector((state) => state.customer);
   const orderType = useSelector((state) => state.common);
+  const tableNumber = useSelector((state) => state.order.tableNumber)
 
   const addOrder = type === "add";
   const updateOrder = type === "update";
@@ -259,6 +260,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
   const handleAddOrder = async () => {
     const order = createOrder();
+    if (orderType?.mealType == 'dine_in') {
+      order.table_number = tableNumber
+    }
     let obj = {};
 
     // if (customer?.customerDetails?.id) {
@@ -268,6 +272,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
         if (data?.status === "success") {
           cleanStores();
           updateProducts();
+          dispatch(addTable(null))
           obj = {
             message: "Order Placed Successfully !",
             status: "success",
