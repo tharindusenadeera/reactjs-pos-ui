@@ -95,8 +95,6 @@ export const CustomerCreateForm = (props) => {
       errors.firstName = "First Name Required !";
     } else if (!data.lastName) {
       errors.lastName = "Last Name Required !";
-    } else if (!emailRegex.test(data.email)) {
-      errors.email = "Invalid Email !";
     } else if (!data.phoneNumber) {
       errors.phoneNumber = "Phone number Required !";
     } else if (!mobileNoRegex.test(data.phoneNumber)) {
