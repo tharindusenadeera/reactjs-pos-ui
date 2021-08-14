@@ -17,7 +17,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const customer = useSelector((state) => state.customer);
   const orderType = useSelector((state) => state.common);
 
-  const addOrder = type === "placed";
+  const addOrder = type === "add";
   const updateOrder = type === "update";
   const updateDraft = type === "updateDraft";
   const confirmPay = type === "confirmPay";
