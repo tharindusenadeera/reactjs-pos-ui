@@ -405,13 +405,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
       if (value) {
         handleFunc().then((res) => {
           if (res.status === "success") {
-            const orderSnapshot = Object.assign({},
-              {'productList': selectedItems},
-              {'customer': customer},
-              {'orderMetaData': orderMetaData},
-              {'orderType': orderType})
-
+            const orderSnapshot = Object.assign({},{'productList': selectedItems})
             cleanStores();
+            
             swal(res.message, "", "success").then(() => {
               callBack(orderSnapshot);
             });

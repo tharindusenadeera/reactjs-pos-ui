@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import { useSelector } from "react-redux";
 import { RadioCustom } from "../../components/radio";
 import { Radio } from "antd";
 import CashPayment from "./pay-methods/PayByCash";
@@ -11,8 +12,11 @@ const PaymentCompWrap = styled.div`
 `;
 
 export const Payment = ({orderSnapShot}) => {
-  // all the properties related to order comes here
-  const { orderBillSummary, customer, orderMetaData, orderType, productList} = orderSnapShot;
+  // order bill properties 
+  const { orderBillSummary} = orderSnapShot;
+  // order other details
+  const orderProperty = useSelector((state) => state?.order?.addOrder);
+  
   const [paymentMethod, setPaymentMethod] = useState(1);
   
   const PaymentComponent = () => {

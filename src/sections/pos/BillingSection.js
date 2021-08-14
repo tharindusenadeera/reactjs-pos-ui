@@ -146,7 +146,7 @@ export const BillingSection = (props) => {
   const confirmAndPayClicked = (orderSnapshot) => {
     const orderBillSummary = calculateOrderSummary(orderSnapshot?.productList, savedDis);
 
-    setOrderSnapShot({...orderSnapshot, 'orderBillSummary' : orderBillSummary});
+    setOrderSnapShot({'orderBillSummary' : orderBillSummary});
   }
 
   return (
