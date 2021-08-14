@@ -96,10 +96,11 @@ export const BillingSection = (props) => {
   const [savedDis, setSavedDis] = useState(initialDiscount);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [orderSnapShot, setOrderSnapShot] =  useState({});
+  const [orderSnapShot, setOrderSnapShot] = useState({});
 
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
+  const mealType = useSelector((state) => state.common.mealType);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -144,10 +145,13 @@ export const BillingSection = (props) => {
   }`;
 
   const confirmAndPayClicked = (orderSnapshot) => {
-    const orderBillSummary = calculateOrderSummary(orderSnapshot?.productList, savedDis);
+    const orderBillSummary = calculateOrderSummary(
+      orderSnapshot?.productList,
+      savedDis
+    );
 
-    setOrderSnapShot({'orderBillSummary' : orderBillSummary});
-  }
+    setOrderSnapShot({ orderBillSummary: orderBillSummary });
+  };
 
   return (
     <Fragment>
@@ -172,17 +176,21 @@ export const BillingSection = (props) => {
             hideSubmit={true}
           />
         </div>
-        <div className="col-12">
-          <SelectField
-            showSearch={true}
-            label="Delivery Address"
-            plusComp="shipping-create"
-            placeholder="Select Address"
-            okText="Add Address"
-            hideCancel={true}
-            hideSubmit={true}
-          />
-        </div>
+        {mealType == "deliver" ? (
+          <div className="col-12">
+            <SelectField
+              showSearch={true}
+              label="Delivery Address"
+              plusComp="shipping-create"
+              placeholder="Select Address"
+              okText="Add Address"
+              hideCancel={true}
+              hideSubmit={true}
+            />
+          </div>
+        ) : (
+          <Fragment />
+        )}
       </div>
 
       <Hr />
@@ -246,7 +254,7 @@ export const BillingSection = (props) => {
               <SaveOrder type="updateDraft" width="block" />
             </div>
             <div style={{ width: "48%" }}>
-              <SaveOrder type="add" width="block" prevType="draft"/>
+              <SaveOrder type="add" width="block" prevType="draft" />
             </div>
           </div>
         ) : (
@@ -287,7 +295,7 @@ export const BillingSection = (props) => {
           handleOk={handleOk}
           handleCancel={handleCancel}
         >
-          <Payment orderSnapShot={orderSnapShot}/>
+          <Payment orderSnapShot={orderSnapShot} />
         </ModalCustom>
       </div>
     </Fragment>
