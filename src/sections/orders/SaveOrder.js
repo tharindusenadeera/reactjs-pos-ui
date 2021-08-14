@@ -416,11 +416,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
             const orderSnapshot = Object.assign({},{'productList': selectedItems})
             cleanStores();
             updateProducts();
-            
-            swal(res.message, "", "success").then(() => {
-              callBack(orderSnapshot);
-            });
-            
+            callBack(orderSnapshot);            
           } else {
             swal(res.message, "Please Try Again!", "error");
           }

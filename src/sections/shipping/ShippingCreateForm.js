@@ -133,6 +133,7 @@ export const ShippingCreateForm = (props) => {
         }).then((willDelete) => {
           if (willDelete) {
             dispatch(addDeliveryInformations(shippingDetail));
+            props.handleCancel();
           } else {
             swal("Process Terminated!");
           }
