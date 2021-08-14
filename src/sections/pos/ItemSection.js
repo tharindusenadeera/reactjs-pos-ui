@@ -98,6 +98,7 @@ export const ItemSection = () => {
 
   const [selectedProperties, setSelectedProperties] = useState({});
   const [disableOk, setDisableOk] = useState(true);
+  const [quantityError, setQuantityError] = useState({});
 
   const alreadyAddedItems = useSelector((state) => state.selectedItems.productList);
   const dispatch = useDispatch();
@@ -124,7 +125,8 @@ export const ItemSection = () => {
     if (
       isItemSelected &&
       selectedProperties?.quantity &&
-      selectedProperties?.quantity !== 0
+      selectedProperties?.quantity !== 0 &&
+      (!quantityError.status || quantityError.status === 0)
     ) {
       setDisableOk(false);
     }
@@ -271,7 +273,9 @@ export const ItemSection = () => {
       });
       
     })
+    
     setSelectedProperties({...item, categories: array});
+    setQuantityError({});
   };
 
   const handleCategories = (data) => {
@@ -307,6 +311,11 @@ export const ItemSection = () => {
       return;
     }
   };
+
+  const qunatityErrorHandle = (data) => {
+    setQuantityError(data);
+  }
+
 
   return (
     <Fragment>
@@ -360,6 +369,9 @@ export const ItemSection = () => {
                   <ItemView
                     selectedProperties={selectedProperties}
                     updateSelectedproperties={updateSelectedproperties}
+                    alreadyAddedItems={alreadyAddedItems}
+                    qunatityErrorHandle={qunatityErrorHandle}
+                    quantityError={quantityError}
                   />
                 </ContentModal>
               </div>

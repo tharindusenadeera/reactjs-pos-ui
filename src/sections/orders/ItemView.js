@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SelectField } from "../../components/field/SelectField";
 import { InputNumberField } from "../../components/field/InputNumberField";
 import { TagCustom } from "../../components/tag";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
+
+import { Typography } from 'antd';
 
 const ItemDetail = styled.div`
   @media ${Theme.device.sm} {
@@ -40,13 +42,35 @@ const TagRow = styled.div`
   margin-bottom: 5px;
 `;
 
-export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
+export const ItemView = ({ selectedProperties, updateSelectedproperties, alreadyAddedItems, qunatityErrorHandle, quantityError}) => {
+
+  const setQuantityStatus = (currentQuantity) => {
+    // get the other orders of from selected product list which is not itself (importance when edit happen from table)
+    const prevAddedItems = alreadyAddedItems?.filter(item => item.productKey === selectedProperties.productKey &&
+       item.key !== selectedProperties.key);
+    let prevAddedQuantity = 0;
+
+    prevAddedItems.forEach((item) => {
+      prevAddedQuantity += item.quantity
+    })
+
+    let isCurrentQuantityAvailable = prevAddedQuantity + currentQuantity <= selectedProperties?.qty;
+
+    if (isCurrentQuantityAvailable) {
+      qunatityErrorHandle({status: 0, message: ''});
+    } else {
+      qunatityErrorHandle({status: 1, message: `Only ${selectedProperties?.qty - prevAddedQuantity} items available !`});
+    }
+
+  }
   
   const onClickPlus = () => {
     const newQty = selectedProperties?.quantity
       ? selectedProperties?.quantity + 1
       : 1;
+
     updateSelectedproperties({ ...selectedProperties, quantity: newQty });
+    setQuantityStatus(newQty);
   };
 
   const onClickMinus = () => {
@@ -56,16 +80,20 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
       selectedProperties?.quantity === 0
         ? 0
         : selectedProperties?.quantity - 1;
+
     updateSelectedproperties({ ...selectedProperties, quantity: newQty });
+    setQuantityStatus(newQty);
   };
 
   const onChangeQuantity = (quantity) => {
     if (!isNaN(quantity)) {
+
       updateSelectedproperties({
         ...selectedProperties,
         quantity: parseInt(quantity),
       });
     }
+    setQuantityStatus(parseInt(quantity) || 0);
   };
 
   /**
@@ -196,6 +224,11 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties }) => {
           </div>
         </div>
 
+        {quantityError && quantityError?.status === 1 &&
+          <Typography.Text type="danger" strong>
+              {quantityError.message}
+          </Typography.Text>
+        }
       </ItemForm>
     </ItemDetail>
   );

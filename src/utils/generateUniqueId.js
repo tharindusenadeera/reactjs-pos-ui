@@ -35,46 +35,52 @@ const Search = (newId, existingItems) => {
     let isMatch = false;
     let matchedItem = {};
 
-    existingItems?.forEach((item) => {
+    for (let i = 0; i < existingItems?.length; i++) {
+        let item = existingItems[i];
         let idArray = item?.key?.split('|');
         let itemMatch = false;
 
         // Id's Dont match if the product keys are not matching
-        if (idArray[0] !== sections[0]) return;
+        if (idArray[0] !== sections[0]) break;
 
         // categories and its items should match
-        if (idArray.length !== sections?.length) return;
+        if (idArray.length !== sections?.length) break;
         
         let categoriesId = idArray?.slice(1);
-        
-        categoriesId?.forEach((categoryId) => {
+
+        for (let j = 0; j < categoriesId?.length; j++) {
+            let categoryId = categoriesId[j];
             let categoryOld = categoryId?.split('-')[0];
             let itemOld = categoryId?.split('-')[1];
-            let status = false;
+            let status = true;
 
-            newItemCategoriesId?.forEach((newItemCategoryId) => {
+            for (let k = 0; k < newItemCategoriesId?.length; k++) {
+                let newItemCategoryId = newItemCategoriesId[k];
                 let categoryNew = newItemCategoryId?.split('-')[0];
                 let itemNew = newItemCategoryId?.split('-')[1];
-
-                if (categoryOld === categoryNew && itemOld === itemNew) {
-                    status = true;
+                
+                if (categoryOld === categoryNew && itemOld !== itemNew) {
+                    status = false;
+                    break;
                 }
-            })
+            }
 
             if (status) {
                 itemMatch = true;
             } else {
                 itemMatch = false;
-                return;
+                break;
             }
-        })
+
+        }
         
         if (itemMatch) {
             isMatch = true;
             matchedItem = item;
-            return;
+            break;
         }
-    })
+
+    }
 
     return {isMatch, matchedItem};
 }

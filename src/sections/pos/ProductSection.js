@@ -82,11 +82,16 @@ export const ProductSection = () => {
   const [selectedProperties, setSelectedProperties] = useState({});
   const [itemBeforeEdit, setItemBeforeEdit] = useState({});
   const [disableOk, setDisableOk] = useState(false);
+  const [quantityError, setQuantityError] = useState({});
 
   const dispatch = useDispatch();
 
   const isRealValue = (obj) => {
     return obj && obj !== 'null' && obj !== 'undefined' && obj !== '';
+  }
+
+  const isEmpty = (obj) => {
+    return Object.keys(obj).length === 0;
   }
 
   useEffect(() => {
@@ -98,7 +103,11 @@ export const ProductSection = () => {
     let items = selectedProperties?.categories?.filter((category) => isRealValue(category.item));
     let isItemSelected = (items && items?.length) || !isCategoryAvailable;
 
-    if (selectedProperties?.quantity && selectedProperties?.quantity !== 0 && isItemSelected) {
+    if (selectedProperties?.quantity &&
+       selectedProperties?.quantity !== 0 &&
+       isItemSelected &&
+      (!quantityError.status || quantityError.status === 0)
+    ) {
       setDisableOk(false);
     } else {
       setDisableOk(true);
@@ -202,7 +211,12 @@ export const ProductSection = () => {
     const selectedItem = { ...item, visibleModal: true };
     setSelectedProperties(selectedItem);
     setItemBeforeEdit(item);
+    setQuantityError({});
   };
+
+  const qunatityErrorHandle = (data) => {
+    setQuantityError(data);
+  }
 
   const columns = [
     {
@@ -252,6 +266,9 @@ export const ProductSection = () => {
               <ItemView
                 selectedProperties={selectedProperties}
                 updateSelectedproperties={updateSelectedproperties}
+                alreadyAddedItems={alreadyAddedItems}
+                qunatityErrorHandle={qunatityErrorHandle}
+                quantityError={quantityError}
               />
             </ModalCustom>
           </Fragment>
