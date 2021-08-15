@@ -1,9 +1,16 @@
-import { ERROR, MEAL_TYPE, RESET_MEAL_TYPE, AUTHENTICATED } from "../constants/ActionTypes";
+import {
+  ERROR,
+  MEAL_TYPE,
+  RESET_MEAL_TYPE,
+  AUTHENTICATED,
+  IS_FETCHING,
+} from "../constants/ActionTypes";
 
 const initialState = {
   isError: false,
   mealType: "dine_in",
-  authenticated: false
+  authenticated: false,
+  isFetching: false
 };
 
 const commonReducer = (state = initialState, action) => {
@@ -16,6 +23,8 @@ const commonReducer = (state = initialState, action) => {
       return initialState;
     case AUTHENTICATED:
       return { ...state, authenticated: action.payload };
+    case IS_FETCHING:
+      return { ...state, isFetching: action.payload };
     default:
       return state;
   }

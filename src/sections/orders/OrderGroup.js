@@ -19,6 +19,9 @@ export const OrderGroup = (props) => {
       <TabPane tab="Draft Orders" key="draft">
         <OrderView clickOK={clickOK} tab={"draft"}/>
       </TabPane>
+      <TabPane tab="Settled Orders" key="settled">
+        <OrderView clickOK={clickOK} tab={"settled"}/>
+      </TabPane>
     </TabsCustom>
   );
 };
