@@ -166,6 +166,8 @@ export const CustomerCreateForm = (props) => {
                   handleAllCustomers();
                   swal("Successfully Submitted !", "", "success");
                   props.handleCancel();
+                } else {
+                  
                 }
               })
               .catch((error) => {
