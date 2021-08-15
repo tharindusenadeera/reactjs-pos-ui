@@ -1,26 +1,54 @@
 
 /**
  * * Key Generation Scenario 
- * * {product_id | category_id1-item_id1 | category_id2-item_id2 | ...}
+ * * {product_id | menu_option_category_menu_option_id | ...}
  * @param {Food Item} item 
  * @returns 
  */
 
 export const GenerateUniqueId = (item) => {
     let id_array = [];
-    const product_key = ''+item.productKey+'|';
-
+    
     item?.categories?.forEach(category => {
-        const category_key = category?.key;
-        const item_key = category?.item?.key;
+        const item_key = category?.item?.menu_option_category_menu_option_id;
         
-        if (item_key && category_key) {
-            id_array.push(`${category_key}-${item_key}`);
+        if (item_key) {
+            id_array.push(item_key);
         }
     });
 
+    const product_key = id_array.length > 0 ? ''+item.productKey+'|' : ''+item.productKey;
+
     return product_key+ id_array.join('|');
 }
+
+/**
+ * 
+ * @param { array 1} array1 
+ * @param { array 2} array2 
+ * @returns array 1 === array 2 ?
+ */
+const compareTwoArrays = (array1, array2) => {
+
+    let a1 = array1.map((item) => {
+        return parseInt(item);
+    });
+
+    let a2 = array2.map((item) => {
+        return parseInt(item);
+    });
+
+    let sortedArray1 = a1.sort((a, b) => {
+        return a - b;
+    });
+
+    let sortedArray2 = a2.sort((a, b) => {
+        return a - b;
+    });
+
+    return sortedArray1.join(',') === sortedArray2.join(',');
+}
+
 
 /**
  * @param {newly created ID} newId 
@@ -28,62 +56,45 @@ export const GenerateUniqueId = (item) => {
  * @returns { Will returen object containing isMatch and matchedItem]}
  */
 
-const Search = (newId, existingItems) => {
-    // let newId = GenerateUniqueId(item);
-    let sections =  newId?.split('|');
-    let newItemCategoriesId = sections?.slice(1);
+ const Search = (newId, existingItems) => {
+    let idArrayNew =  newId?.split('|');
+    let newProductId = idArrayNew[0];
     let isMatch = false;
     let matchedItem = {};
 
-    for (let i = 0; i < existingItems?.length; i++) {
-        let item = existingItems[i];
-        let idArray = item?.key?.split('|');
-        let itemMatch = false;
-
-        // Id's Dont match if the product keys are not matching
-        if (idArray[0] !== sections[0]) break;
-
-        // categories and its items should match
-        if (idArray.length !== sections?.length) break;
+    for (let j = 0; j < existingItems?.length; j++) {
         
-        let categoriesId = idArray?.slice(1);
-
-        for (let j = 0; j < categoriesId?.length; j++) {
-            let categoryId = categoriesId[j];
-            let categoryOld = categoryId?.split('-')[0];
-            let itemOld = categoryId?.split('-')[1];
-            let status = true;
-
-            for (let k = 0; k < newItemCategoriesId?.length; k++) {
-                let newItemCategoryId = newItemCategoriesId[k];
-                let categoryNew = newItemCategoryId?.split('-')[0];
-                let itemNew = newItemCategoryId?.split('-')[1];
-                
-                if (categoryOld === categoryNew && itemOld !== itemNew) {
-                    status = false;
-                    break;
-                }
-            }
-
-            if (status) {
-                itemMatch = true;
-            } else {
-                itemMatch = false;
+        let item = existingItems[j];
+        let idArrayOld = item?.key?.split('|');
+        
+        if (newProductId !== idArrayOld[0]) {
+            continue;
+        } else if (idArrayNew.length !== idArrayOld.length) {
+            continue;
+        } else if (idArrayNew.length === 1) {
+            if (newProductId === idArrayOld[0]) {
+                isMatch = true;
+                matchedItem = item;
                 break;
+            } else {
+                continue;
             }
-
-        }
-        
-        if (itemMatch) {
-            isMatch = true;
-            matchedItem = item;
-            break;
+        } else {
+            let isMatched = compareTwoArrays(idArrayNew?.slice(1),idArrayOld?.slice(1));
+            
+            if (isMatched) {
+                isMatch = true;
+                matchedItem = item;
+                break;
+            } else {
+                continue;
+            }
         }
 
     }
-
     return {isMatch, matchedItem};
 }
+
 
 /**
  * @param { if of the matching item } id 
