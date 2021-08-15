@@ -67,10 +67,16 @@ const compareTwoArrays = (array1, array2) => {
         let item = existingItems[j];
         let idArrayOld = item?.key?.split('|');
         
+        // if the product name not matching no need to continue further and move to next
         if (newProductId !== idArrayOld[0]) {
             continue;
+
+        // if the id's length not match no need to continue further nd move to next
         } else if (idArrayNew.length !== idArrayOld.length) {
             continue;
+
+        // if the item has only product key check the match
+        // if matching then match item found |  if it is not matching move to next
         } else if (idArrayNew.length === 1) {
             if (newProductId === idArrayOld[0]) {
                 isMatch = true;
@@ -80,6 +86,8 @@ const compareTwoArrays = (array1, array2) => {
                 continue;
             }
         } else {
+            // match for remaining id's
+            // if matching then match item found |  if it is not matching move to next
             let isMatched = compareTwoArrays(idArrayNew?.slice(1),idArrayOld?.slice(1));
             
             if (isMatched) {
