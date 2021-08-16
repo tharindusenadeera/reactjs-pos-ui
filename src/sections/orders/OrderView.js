@@ -169,7 +169,7 @@ export const OrderView = (props) => {
           orders.map((order, key) => (
             <div className="col col-sm-6 col-md-4" key={key}>
               <div className="order-box">
-                <h3>Order {key + 1}</h3>
+                <h3>Order {order?.id}</h3>
 
                 <div className="d-flex">
                   <p>
