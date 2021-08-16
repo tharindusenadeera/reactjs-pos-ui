@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, Tooltip} from "antd";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 
@@ -40,18 +40,33 @@ const ButtonAnt = styled(Button)`
 `;
 
 export const ButtonCustom = (props) => {
-  const { type, className, btnTitle, onClick, disabled, width } = props;
+  const { type, className, btnTitle, onClick, disabled, width, tooltipText} = props;
   const blockWidth = width === "block";
 
   return (
-    <ButtonAnt
-      block = {blockWidth}
-      type={type}
-      onClick={onClick}
-      className={className}
-      disabled={disabled}
-    >
-      {btnTitle}
-    </ButtonAnt>
+    <>
+    {tooltipText ? 
+      <Tooltip title={tooltipText} color={Theme.colors.$primary}>
+        <ButtonAnt
+          block = {blockWidth}
+          type={type}
+          onClick={onClick}
+          className={className}
+          disabled={disabled}
+        >
+          {btnTitle}
+        </ButtonAnt>
+      </Tooltip>  : 
+      <ButtonAnt
+        block = {blockWidth}
+        type={type}
+        onClick={onClick}
+        className={className}
+        disabled={disabled}
+      >
+        {btnTitle}
+      </ButtonAnt>
+    }
+    </>
   );
 };

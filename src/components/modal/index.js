@@ -213,7 +213,7 @@ export const ModalCustom = (props) => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        width={800}
+        width={850}
         okText={PrimaryButtonText.current}
         okType={okType}
         cancelText={SecondaryButtonText.current}
