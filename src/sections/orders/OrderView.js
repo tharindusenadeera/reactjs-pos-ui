@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { PayEditButton } from "../../components/button/PayEditButton";
+import { PdfButton } from "../../components/button/PdfButton";
 import { getAllOrders, getOrder } from "../../api/order";
 
 import { orderById } from "../../actions/order";
@@ -36,6 +37,11 @@ const Wrapper = styled.div`
 const ActionButtons = styled.div`
   margin-top: 12px;
   display: flex;
+  align-items: flex-start;
+`;
+
+const PrintButton = styled.div`
+  margin-left: 8px;
 `;
 
 export const OrderView = (props) => {
@@ -53,6 +59,12 @@ export const OrderView = (props) => {
       }
     });
   }, [selectedTab]);
+
+  useEffect(() => {
+    console.log('Rendering ...');
+  }, []);
+
+
 
   const handleAllOrders = (data) => {
     let orders = categoriesOrders(data);
@@ -122,6 +134,10 @@ export const OrderView = (props) => {
     clickOK();
   };
 
+  const printButtonClicked = (e) => {
+    console.log('print clicked', e)
+  }
+
   return (
     <Wrapper>
       <div className="row">
@@ -167,13 +183,20 @@ export const OrderView = (props) => {
                 </div>
 
                 <ActionButtons>
-                  <PayEditButton
-                    btnClass="mr-2 yellow"
-                    type="primary"
-                    onClick={() => handlePay(order?.id)}
-                  />
-                  <DeleteButton confirm={handleConfirm} cancel={handleCancel} />
+                    <PayEditButton
+                      btnClass="mr-2 yellow"
+                      type="primary"
+                      onClick={() => handlePay(order?.id)}
+                    />
+                    <DeleteButton confirm={handleConfirm} cancel={handleCancel} />
+
+                  { order?.status === "placed" && (
+                    <PrintButton>
+                      <PdfButton onClick={printButtonClicked} disabled={false} record={order}/>
+                    </PrintButton>
+                  )}
                 </ActionButtons>
+
               </div>
             </div>
           ))}

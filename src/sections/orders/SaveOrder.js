@@ -4,10 +4,12 @@ import { ButtonCustom } from "../../components/button";
 import swal from "sweetalert";
 
 import { addItem, addTable, updateItem } from "../../actions/order";
-import { deleteAllItems } from "../../actions/selectedItems";
-import { resetMealType } from "../../actions/common";
+import { deleteAllItems, addAllItems } from "../../actions/selectedItems";
+import { resetMealType, addMealType } from "../../actions/common";
 import { addDeliveryInformations, customerDetails } from "../../actions/customer";
 import { getProducts } from "../../actions/products";
+
+import { getFormattedOrder } from "./OrderConvertions";
 
 const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const dispatch = useDispatch();
@@ -16,7 +18,8 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
   const customer = useSelector((state) => state.customer);
   const orderType = useSelector((state) => state.common);
-  const tableNumber = useSelector((state) => state.order.tableNumber)
+  const tableNumber = useSelector((state) => state.order.tableNumber);
+  const products = useSelector((state) => state.products);
 
   const addOrder = type === "add";
   const updateOrder = type === "update";
@@ -210,12 +213,37 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     dispatch(customerDetails({}));
   }
 
+  const updateStoresWithPlacedOrder = (order) => {
+    const order_type = order?.order_type;
+    const shippingDetail = {
+      customer_id: order?.customer_id,
+      delivery_first_name: order?.delivery_first_name,
+      delivery_last_name:  order?.delivery_last_name,
+      delivery_city_id:  order?.delivery_city_id,
+      delivery_address_line_1:  order?.delivery_address_line_1,
+      delivery_address_line_2:  order?.delivery_address_line_2,
+      delivery_phone_number:  order?.delivery_phone_number,
+    };
+
+    // populating stores with selected order
+    dispatch(addMealType(order_type));
+    dispatch(addDeliveryInformations(shippingDetail));
+    dispatch(customerDetails(order?.customer));
+
+    const selectedItems = getFormattedOrder(order, products);
+    dispatch(addAllItems(selectedItems));
+  }
+
   /**
    * * This function get the updated products and save
    */
 
-   const updateProducts = () => {
-     dispatch(getProducts());
+   const updateProducts =  async (order) => {
+    await dispatch(getProducts());
+
+    if (order) {
+      updateStoresWithPlacedOrder(order);
+    }
   }
 
   /**
@@ -227,28 +255,21 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     const order = createUpdateOrder();
     let obj = {};
 
-    // if (order) {
-      const data = await dispatch(updateItem(order));
+    const data = await dispatch(updateItem(order));
 
-      if (data?.status === "success") {
-        cleanStores();
-        updateProducts();
-        obj = {
-          message: "Order Updated Successfully !",
-          status: "success",
-        };
-      } else {
-        obj = {
-          message: "Something went wrong !",
-          status: "error",
-        };
-      }
-    // } else {
-    //   obj = {
-    //     message: "Please add delivery details !",
-    //     status: "error",
-    //   };
-    // }
+    if (data?.status === "success") {
+      // cleanStores();
+      updateProducts(data?.data);
+      obj = {
+        message: "Order Updated Successfully !",
+        status: "success",
+      };
+    } else {
+      obj = {
+        message: "Something went wrong !",
+        status: "error",
+      };
+    }
     return obj;
   }
 
@@ -264,37 +285,22 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
       order.table_number = tableNumber
     }
     let obj = {};
+    const data = await dispatch(addItem(order));
 
-    // if (customer?.customerDetails?.id) {
-      // if (order) {
-        const data = await dispatch(addItem(order));
-
-        if (data?.status === "success") {
-          cleanStores();
-          updateProducts();
-          dispatch(addTable(null))
-          obj = {
-            message: "Order Placed Successfully !",
-            status: "success",
-          };
-        } else {
-          obj = {
-            message: "Something went wrong !",
-            status: "error",
-          };
-        }
-    //   } else {
-    //     obj = {
-    //       message: "Please add delivery details !",
-    //       status: "error",
-    //     };
-    //   }
-    // } else {
-    //   obj = {
-    //     message: "Please add customer details !",
-    //     status: "error",
-    //   };
-    // }
+    if (data?.status === "success") {
+      // cleanStores();
+      updateProducts(data?.data);
+      dispatch(addTable(null))
+      obj = {
+        message: "Order Placed Successfully !",
+        status: "success",
+      };
+    } else {
+      obj = {
+        message: "Something went wrong !",
+        status: "error",
+      };
+    }
 
     return obj;
   };
@@ -337,7 +343,6 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     const data = await dispatch(addItem(order));
     let obj = {};
 
-    // if (customer?.customerDetails?.id) {
       if (data?.status === "success") {
         cleanStores();
         updateProducts();
@@ -351,12 +356,6 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
           status: "error",
         };
       }
-    // } else {
-    //   obj = {
-    //     message: "Please add customer details !",
-    //     status: "error",
-    //   };
-    // }
     return obj;
   };
 

@@ -10,6 +10,7 @@ import { SelectField } from "../../components/field/SelectField";
 import { convertToDecimal } from "../../utils/formats";
 import SaveOrder from "../orders/SaveOrder";
 import { addTable } from "../../actions/order";
+import { PdfButton } from "../../components/button/PdfButton";
 
 const ShopDetail = styled.div`
   display: flex;
@@ -55,6 +56,11 @@ const FieldRow = styled.div`
 const Hr = styled.hr`
   margin-top: 3px;
   margin-bottom: 10px;
+`;
+
+const ButtonContent = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const customerArr = [{ key: 1, value: "Walk in Customer" }];
@@ -111,10 +117,12 @@ export const BillingSection = (props) => {
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
   const mealType = useSelector((state) => state.common.mealType);
+  const addOrder = useSelector((state) => state.order.addOrder);
+
   const tableNumber = useSelector(
     (state) => state.order.tableNumber
   );
-
+  
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -170,16 +178,12 @@ export const BillingSection = (props) => {
     dispatch(addTable(value));
   };
 
+  const printButtonClicked = () => {
+    console.log('print clicked');
+  }
+
   return (
     <Fragment>
-      {/* <ShopDetail>
-        <ShopImg src={ShopLogo} alt="Shop Logo" />
-        <div>
-          <h4>Shop Name Here</h4>
-          <p>02199+(070)234-4569</p>
-          <p>Russel st 50,Bostron,MA USA</p>
-        </div>
-      </ShopDetail> */}
       <div className="row">
         <div className="col-12">
           <SelectField
@@ -267,11 +271,6 @@ export const BillingSection = (props) => {
           <p>${shipping}</p>
         </FieldRow>
 
-        {/* <FieldRow>
-          <Label label="Additional Discount(5%)" className="label" />
-          <p>$35</p>
-        </FieldRow> */}
-
         <FieldRow>
           <Label label="Total" className="label" />
           <p>${tot}</p>
@@ -312,23 +311,36 @@ export const BillingSection = (props) => {
       )}
 
       <div className="d-flex flex-column mt-4">
-        <ModalCustom
-          btnTitle="Confirm & Pay"
-          customButton={true}
-          customButtonType="confirmPay"
-          callBackCutomButton={confirmAndPayClicked}
-          type="primary"
-          btnClass="mb-3 w-100 green"
-          btnDisabled={!selectedItems.length}
-          title="Payment"
-          okText="Pay Now"
-          showModal={showModal}
-          isModalVisible={isModalVisible}
-          handleOk={handleOk}
-          handleCancel={handleCancel}
-        >
-          <Payment orderSnapShot={orderSnapShot} />
-        </ModalCustom>
+        <ButtonContent>
+          <div style={{ width: "78%" }}>
+            <ModalCustom
+              btnTitle="Confirm & Pay"
+              customButton={true}
+              customButtonType="confirmPay"
+              callBackCutomButton={confirmAndPayClicked}
+              printDisable={true}
+              type="primary"
+              btnClass="mb-3 w-100 green"
+              btnDisabled={!selectedItems.length}
+              title="Payment"
+              okText="Pay Now"
+              showModal={showModal}
+              isModalVisible={isModalVisible}
+              handleOk={handleOk}
+              handleCancel={handleCancel}
+            >
+              <Payment orderSnapShot={orderSnapShot} />
+            </ModalCustom>
+          </div>
+
+          <div style={{ width: "18%" }}>
+            <PdfButton 
+            onClick={printButtonClicked} 
+            disabled={!(addOrder?.status === 'placed' || orderMetaData?.status === 'placed')}
+            width="block"/>
+          </div>
+
+        </ButtonContent>
       </div>
     </Fragment>
   );
