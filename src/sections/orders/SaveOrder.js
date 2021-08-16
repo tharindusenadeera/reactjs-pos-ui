@@ -4,13 +4,11 @@ import { ButtonCustom } from "../../components/button";
 import swal from "sweetalert";
 
 import { addItem, addTable, updateItem } from "../../actions/order";
-import { deleteAllItems } from "../../actions/selectedItems";
-import { resetMealType } from "../../actions/common";
-import {
-  addDeliveryInformations,
-  customerDetails,
-} from "../../actions/customer";
+import { deleteAllItems, addAllItems } from "../../actions/selectedItems";
+import { resetMealType, addMealType } from "../../actions/common";
+import { addDeliveryInformations, customerDetails } from "../../actions/customer";
 import { getProducts } from "../../actions/products";
+import { getFormattedOrder } from "./OrderConvertions";
 
 const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
   const dispatch = useDispatch();
@@ -20,12 +18,14 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
   const customer = useSelector((state) => state.customer);
   const orderType = useSelector((state) => state.common);
   const tableNumber = useSelector((state) => state.order.tableNumber);
+  const products = useSelector((state) => state.products);
 
   const addOrder = type === "add";
   const updateOrder = type === "update";
   const updateDraft = type === "updateDraft";
   const confirmPay = type === "confirmPay";
   const draftOrder = type === "draft";
+
 
   /**
    * * mandatory order details will be extracted and formatted in this func
@@ -38,7 +38,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
 
     selectedItems?.forEach((product) => {
       const menu_option_category_menu_option_array = [];
-
+      
       if (product?.categories?.length > 0) {
         product.categories.forEach((category) => {
           if (category?.item?.menu_option_category_menu_option_id) {
@@ -76,6 +76,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     return order;
   };
 
+
   /**
    * * delivery deatisl get from redux store
    * @returns details of delivery
@@ -96,6 +97,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
       };
     }
   };
+
 
   /**
    * * General func implimented for create update order
@@ -164,7 +166,8 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     }
   };
 
-  /**
+
+    /**
    * * General func implimented for draft and add orders
    * @returns order object
    */
@@ -204,6 +207,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     }
   };
 
+
   /**
    * * This function will clean out redux stores
    */
@@ -216,11 +220,41 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
   };
 
   /**
+   * * this function will populate the recentaly places order
+   * @param {newly added or updated order} order 
+   */
+
+  const updateStoresWithPlacedOrder = (order) => {
+    const order_type = order?.order_type;
+    const shippingDetail = {
+      customer_id: order?.customer_id,
+      delivery_first_name: order?.delivery_first_name,
+      delivery_last_name:  order?.delivery_last_name,
+      delivery_city_id:  order?.delivery_city_id,
+      delivery_address_line_1:  order?.delivery_address_line_1,
+      delivery_address_line_2:  order?.delivery_address_line_2,
+      delivery_phone_number:  order?.delivery_phone_number,
+    };
+
+    // populating stores with selected order
+    dispatch(addMealType(order_type));
+    dispatch(addDeliveryInformations(shippingDetail));
+    dispatch(customerDetails(order?.customer));
+
+    const selectedItems = getFormattedOrder(order, products);
+    dispatch(addAllItems(selectedItems));
+  }
+
+  /**
    * * This function get the updated products and save
    */
 
-  const updateProducts = () => {
-    dispatch(getProducts());
+   const updateProducts =  async (order) => {
+    await dispatch(getProducts());
+
+    if (order) {
+      updateStoresWithPlacedOrder(order);
+    }
   };
 
   /**
@@ -232,12 +266,11 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     const order = createUpdateOrder();
     let obj = {};
 
-    // if (order) {
     const data = await dispatch(updateItem(order));
 
     if (data?.status === "success") {
-      cleanStores();
-      updateProducts();
+      // cleanStores();
+      updateProducts(data?.data);
       obj = {
         message: "Order Updated Successfully !",
         status: "success",
@@ -248,14 +281,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
         status: "error",
       };
     }
-    // } else {
-    //   obj = {
-    //     message: "Please add delivery details !",
-    //     status: "error",
-    //   };
-    // }
     return obj;
-  };
+  }
+
 
   /**
    * * this func will add the order
@@ -268,15 +296,12 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
       order.table_id = tableNumber;
     }
     let obj = {};
-
-    // if (customer?.customerDetails?.id) {
-    // if (order) {
     const data = await dispatch(addItem(order));
 
     if (data?.status === "success") {
-      cleanStores();
-      updateProducts();
-      dispatch(addTable(null));
+      // cleanStores();
+      updateProducts(data?.data);
+      dispatch(addTable(null))
       obj = {
         message: "Order Placed Successfully !",
         status: "success",
@@ -287,21 +312,10 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
         status: "error",
       };
     }
-    //   } else {
-    //     obj = {
-    //       message: "Please add delivery details !",
-    //       status: "error",
-    //     };
-    //   }
-    // } else {
-    //   obj = {
-    //     message: "Please add customer details !",
-    //     status: "error",
-    //   };
-    // }
 
     return obj;
   };
+
 
   /**
    * * this func will save the order and reset the table if the saving sucess
@@ -329,6 +343,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     return obj;
   };
 
+
   /**
    * * this func will save the order and reset the table if the saving sucess
    * @returns status of the draft order
@@ -339,28 +354,22 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     const data = await dispatch(addItem(order));
     let obj = {};
 
-    // if (customer?.customerDetails?.id) {
-    if (data?.status === "success") {
-      cleanStores();
-      updateProducts();
-      obj = {
-        message: "Order Draft Successfully !",
-        status: "success",
-      };
-    } else {
-      obj = {
-        message: "Something went wrong !",
-        status: "error",
-      };
-    }
-    // } else {
-    //   obj = {
-    //     message: "Please add customer details !",
-    //     status: "error",
-    //   };
-    // }
+      if (data?.status === "success") {
+        cleanStores();
+        updateProducts();
+        obj = {
+          message: "Order Draft Successfully !",
+          status: "success",
+        };
+      } else {
+        obj = {
+          message: "Something went wrong !",
+          status: "error",
+        };
+      }
     return obj;
   };
+
 
   /**
    * *Common function used for handle add and draft order
@@ -407,6 +416,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
       }
     });
   };
+
 
   /**
    ** This function will handle the confirm and pay
