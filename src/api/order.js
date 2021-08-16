@@ -17,3 +17,7 @@ export const getOrder = (id) => {
 export const updateOrder = (id, updatedOrder) => {
   return axios.post(`${process.env.REACT_APP_API_URL}/v1/edit-order/${id}`, updatedOrder);
 };
+
+export const placePayment = (id, data) => {
+  return axios.post(`${process.env.REACT_APP_API_URL}/v1/settled_payment/${id}`, data);
+}

@@ -110,6 +110,7 @@ export const ModalCustom = (props) => {
     customButtonType,
     customButton,
     callBackCutomButton,
+    maskClosable
   } = props;
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const [disablePropertiesCancel, setDisablePropertiesCancel] = useState({});
@@ -220,6 +221,7 @@ export const ModalCustom = (props) => {
         cancelButtonProps={disablePropertiesCancel}
         okButtonProps={disablePropertiesSubmit}
         closable={false}
+        maskClosable={maskClosable}
       >
         {children}
       </ModalAnt>

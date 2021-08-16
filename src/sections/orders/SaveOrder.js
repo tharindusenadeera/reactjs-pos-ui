@@ -265,7 +265,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
   const handleAddOrder = async () => {
     const order = createOrder();
     if (orderType?.mealType == "dine_in") {
-      order.tbale_id = tableNumber;
+      order.table_id = tableNumber;
     }
     let obj = {};
 

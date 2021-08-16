@@ -1,9 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import styled from "styled-components";
 import Theme from "../../../utils/Theme";
+import swal from "sweetalert";
 import { Label } from "../../../components/field/Label";
 import { InputField } from "../../../components/field/InputField";
 import { TextAreaField } from "../../../components/field/TextAreaField";
+import { ButtonCustom } from "../../../components/button";
+import { placePayment } from "../../../api/order";
 
 const FieldRow = styled.div`
   display: flex;
@@ -35,14 +38,89 @@ const FieldRow = styled.div`
   }
 `;
 
+const ButtonWrap = styled.div`
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
 const PayByCard = (props) => {
-  const { total } = props;
+  const { total, order, closePopUp } = props;
+  const [bank, setBank] = useState("");
+  const [card, setCard] = useState("");
+  const [comment, setComment] = useState("");
+  const [errorObj, setErrorObj] = useState({});
 
-  const handleCardNo = (e) => {};
+  const validate = (data) => {
+    let errors = {};
 
-  const handleBank = (e) => {};
+    if (!data.bank) {
+      errors.bank = "Required !";
+    } else if (!data.card) {
+      errors.card = "Required !";
+    }
 
-  const handleComments = (e) => {};
+    setErrorObj(errors);
+    return errors;
+  };
+
+  const handleSubmit = () => {
+    let obj = {
+      bank: bank,
+      card: card,
+      order_id: order?.orderId,
+      payment_method: "card",
+    };
+
+    let errors = validate(obj);
+    if (!Object.keys(errors).length) {
+      if (comment) {
+        obj.comment = comment;
+      }
+
+      swal({
+        title: "Confirm to pay",
+        text: "",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          placePayment(order?.orderId, obj)
+            .then((res) => {
+              if (res.data.status == "success") {
+                swal(`${res.data.message}`, "", "success");
+                closePopUp();
+              } else {
+                swal(`${res.data.message}`, "Please Try Again!", "error");
+              }
+            })
+            .catch((error) => {
+              swal("Something Went Wrong !", "Please Try Again!", "error");
+            });
+        } else {
+          swal("Process Terminated!");
+        }
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    closePopUp();
+  };
+
+  const handleComments = (data) => {
+    setComment(data);
+  };
+
+  const handleBank = (data) => {
+    setBank(data);
+  };
+
+  const handleCard = (data) => {
+    setCard(data);
+  };
 
   return (
     <Fragment>
@@ -56,7 +134,8 @@ const PayByCard = (props) => {
           type="number"
           label="Card No"
           placeholder="Please enter last 4 digits"
-          onChange={handleCardNo}
+          errorMsg={errorObj.card ? "Required !" : ""}
+          onChange={(e) => handleCard(e.target.value)}
         />
       </FieldRow>
 
@@ -64,13 +143,28 @@ const PayByCard = (props) => {
         <InputField
           label="Bank"
           placeholder="Please enter bank name"
-          onChange={handleBank}
+          errorMsg={errorObj.bank ? "Required !" : ""}
+          onChange={(e) => handleBank(e.target.value)}
         />
       </FieldRow>
 
       <FieldRow>
-        <TextAreaField label="Note (If Any)" onChange={handleComments} />
+        <TextAreaField
+          label="Note (If Any)"
+          onChange={(e) => handleComments(e.target.value)}
+        />
       </FieldRow>
+
+      <ButtonWrap>
+        <ButtonCustom btnTitle={"Cancel"} onClick={handleCancel} />
+
+        <ButtonCustom
+          type="primary"
+          btnTitle={"Pay"}
+          className="ml-2 blue"
+          onClick={handleSubmit}
+        />
+      </ButtonWrap>
     </Fragment>
   );
 };

@@ -11,22 +11,43 @@ const PaymentCompWrap = styled.div`
   padding: 25px 0;
 `;
 
-export const Payment = ({orderSnapShot}) => {
-  // order bill properties 
-  const { orderBillSummary} = orderSnapShot;
+export const Payment = ({
+  orderSnapShot,
+  closePopUp
+}) => {
+  // order bill properties
+  const { orderBillSummary } = orderSnapShot;
   // order other details
   const orderProperty = useSelector((state) => state?.order?.addOrder);
-  
+
   const [paymentMethod, setPaymentMethod] = useState(1);
-  
+
   const PaymentComponent = () => {
     switch (paymentMethod) {
       case 1:
-        return <CashPayment total={orderBillSummary?.tot}/>;
+        return (
+          <CashPayment
+            total={orderBillSummary?.tot}
+            order={orderBillSummary}
+            closePopUp={closePopUp}
+          />
+        );
       case 2:
-        return <CardPayment total={orderBillSummary?.tot}/>;
+        return (
+          <CardPayment
+            total={orderBillSummary?.tot}
+            order={orderBillSummary}
+            closePopUp={closePopUp}
+          />
+        );
       default:
-        return <CashPayment total={orderBillSummary?.tot}/>;
+        return (
+          <CashPayment
+            total={orderBillSummary?.tot}
+            order={orderBillSummary}
+            closePopUp={closePopUp}
+          />
+        );
     }
   };
 

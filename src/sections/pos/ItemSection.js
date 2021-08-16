@@ -106,7 +106,6 @@ export const ItemSection = () => {
   useEffect(() => {
     getAllProducts();
     categoryList().then((res) => {
-      console.log("res.data.data", res.data.data);
       handleCategories(res.data.data);
     });
   }, []);
