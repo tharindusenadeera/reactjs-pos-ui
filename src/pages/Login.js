@@ -73,7 +73,7 @@ export const Login = () => {
         .then((res) => {
           if (res.data.status == "success") {
             dispatch(authenticate(true));
-            localStorage.setItem(ACCESS_TOKEN, `Bearer ${res.data.token}`);
+            localStorage.setItem(ACCESS_TOKEN, `Bearer ${res.data.data.token}`);
             swal("Successfully Submitted !", "", "success");
             history.push({
               pathname: "/dashboard",

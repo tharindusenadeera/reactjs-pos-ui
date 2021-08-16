@@ -5,7 +5,7 @@ export const getAllOrders = (params = {}) => {
     `${process.env.REACT_APP_API_URL}/v1/orders`,
     {
       headers: {
-        Authorization: localStorage.access_token,
+        Authorization: localStorage.ACCESS_TOKEN,
       },
     },
     params
@@ -15,7 +15,7 @@ export const getAllOrders = (params = {}) => {
 export const addOrder = (newOrder) => {
   return axios.post(`${process.env.REACT_APP_API_URL}/v1/new-order`, newOrder, {
     headers: {
-      Authorization: localStorage.access_token,
+      Authorization: localStorage.ACCESS_TOKEN,
     },
   });
 };
@@ -23,7 +23,7 @@ export const addOrder = (newOrder) => {
 export const getOrder = (id) => {
   return axios.get(`${process.env.REACT_APP_API_URL}/v1/get-order/${id}`, {
     headers: {
-      Authorization: localStorage.access_token,
+      Authorization: localStorage.ACCESS_TOKEN,
     },
   });
 };
@@ -34,7 +34,7 @@ export const updateOrder = (id, updatedOrder) => {
     updatedOrder,
     {
       headers: {
-        Authorization: localStorage.access_token,
+        Authorization: localStorage.ACCESS_TOKEN,
       },
     }
   );
@@ -46,7 +46,7 @@ export const placePayment = (id, data) => {
     data,
     {
       headers: {
-        Authorization: localStorage.access_token,
+        Authorization: localStorage.ACCESS_TOKEN,
       },
     }
   );

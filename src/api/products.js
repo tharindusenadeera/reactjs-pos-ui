@@ -5,7 +5,7 @@ export const productsList = (params = {}) => {
     `${process.env.REACT_APP_API_URL}/v1/menu-items`,
     {
       headers: {
-        Authorization: localStorage.access_token,
+        Authorization: localStorage.ACCESS_TOKEN,
       },
     },
     params
