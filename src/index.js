@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import {createStore, applyMiddleware, compose} from 'redux';
+import { createStore, applyMiddleware, compose } from "redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import thunk  from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,9 +13,12 @@ import "antd/dist/antd.css";
 import App from "./App";
 import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
-import reducers from './reducers';
+import reducers from "./reducers";
 
-const store = createStore(reducers, composeWithDevTools(compose(applyMiddleware(thunk))));
+const store = createStore(
+  reducers,
+  composeWithDevTools(compose(applyMiddleware(thunk)))
+);
 
 ReactDOM.render(
   <Provider store={store}>
@@ -23,8 +26,8 @@ ReactDOM.render(
       <Router>
         <Switch>
           <React.Fragment>
-            <Route exact path="/" component={Dashboard} />
-            <Route exact path="/login" component={Login} />
+            <Route exact path="/" component={Login} />
+            <Route exact path="/dashboard" component={Dashboard} />
           </React.Fragment>
         </Switch>
       </Router>

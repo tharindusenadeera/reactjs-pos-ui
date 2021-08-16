@@ -67,15 +67,20 @@ export const Login = () => {
         password,
         device_name,
       };
-      login(obj).then((res) => {
-        if (res.data.status == "success") {
-          dispatch(authenticate(true));
-          localStorage.setItem(ACCESS_TOKEN, `Bearer ${res.data.status}`);
-          swal("Successfully Submitted !", "", "success");
-        } else {
+      login(obj)
+        .then((res) => {
+          if (res.data.status == "success") {
+            dispatch(authenticate(true));
+            localStorage.setItem(ACCESS_TOKEN, `Bearer ${res.data.token}`);
+            swal("Successfully Submitted !", "", "success");
+          } else {
+            swal("Something Went Wrong !", "Please Try Again!", "error");
+            dispatch(authenticate(false));
+          }
+        })
+        .catch((error) => {
           swal("Something Went Wrong !", "Please Try Again!", "error");
-        }
-      });
+        });
     }
   };
 
