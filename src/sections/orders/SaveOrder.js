@@ -219,6 +219,11 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     dispatch(customerDetails({}));
   };
 
+  /**
+   * * this function will populate the recentaly places order
+   * @param {newly added or updated order} order 
+   */
+
   const updateStoresWithPlacedOrder = (order) => {
     const order_type = order?.order_type;
     const shippingDetail = {
