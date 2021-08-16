@@ -120,9 +120,7 @@ export const BillingSection = (props) => {
   const mealType = useSelector((state) => state.common.mealType);
   const addOrder = useSelector((state) => state.order.addOrder);
 
-  const tableNumber = useSelector(
-    (state) => state.order.tableNumber
-  );
+  const tableNumber = useSelector((state) => state.order.tableNumber);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -181,8 +179,9 @@ export const BillingSection = (props) => {
   };
 
   const printButtonClicked = () => {
-    console.log('print clicked');
-  }
+    console.log("print clicked");
+  };
+  
 
   const closePopUp = () => {
     setIsModalVisible(false);
@@ -222,9 +221,14 @@ export const BillingSection = (props) => {
         {mealType == "dine_in" ? (
           <div className="col-12">
             <SelectField
+              defa
               showSearch={false}
               label="Table Number"
-              value={tableNumber ? tableNumber : undefined}
+              value={
+                tableNumber
+                  ? tableArr.filter((option) => option.key == tableNumber)
+                  : undefined
+              }
               options={tableArr && tableArr}
               placeholder="Select a table"
               onChange={handleSelectedTable}
@@ -338,17 +342,22 @@ export const BillingSection = (props) => {
               hideSubmit={true}
               hideCancel={true}
             >
-              <Payment orderSnapShot={orderSnapShot} closePopUp={closePopUp}/>
+              <Payment orderSnapShot={orderSnapShot} closePopUp={closePopUp} />
             </ModalCustom>
           </div>
 
           <div style={{ width: "18%" }}>
             <PdfButton
-            onClick={printButtonClicked}
-            disabled={!(addOrder?.status === 'placed' || orderMetaData?.status === 'placed')}
-            width="block"/>
+              onClick={printButtonClicked}
+              disabled={
+                !(
+                  addOrder?.status === "placed" ||
+                  orderMetaData?.status === "placed"
+                )
+              }
+              width="block"
+            />
           </div>
-
         </ButtonContent>
       </div>
     </Fragment>
