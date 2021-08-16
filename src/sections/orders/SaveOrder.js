@@ -8,10 +8,9 @@ import { deleteAllItems, addAllItems } from "../../actions/selectedItems";
 import { resetMealType, addMealType } from "../../actions/common";
 import { addDeliveryInformations, customerDetails } from "../../actions/customer";
 import { getProducts } from "../../actions/products";
-
 import { getFormattedOrder } from "./OrderConvertions";
 
-const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
+const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
@@ -43,10 +42,12 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
       if (product?.categories?.length > 0) {
         product.categories.forEach((category) => {
           if (category?.item?.menu_option_category_menu_option_id) {
-            menu_option_category_menu_option_array.push(category.item.menu_option_category_menu_option_id);
+            menu_option_category_menu_option_array.push(
+              category.item.menu_option_category_menu_option_id
+            );
           }
         });
-        
+
         if (isUpdate) {
           order.push({
             id: product.productKey,
@@ -63,7 +64,6 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
               menu_option_category_menu_option_array,
           });
         }
-
       } else {
         order.push({
           id: product.productKey,
@@ -107,7 +107,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const createUpdateOrder = () => {
     const orderMenuItemsObj = getOrderMenuItems(true);
     const diliveryDetailsObj = getOrderDiliveryDetails();
-    const saveType = (draftOrder || updateDraft) ? 'draft' : 'placed';
+    const saveType = draftOrder || updateDraft ? "draft" : "placed";
 
     if (orderType?.mealType === "deliver") {
       let valueMisssig = false;
@@ -130,9 +130,12 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
           delivery_first_name: diliveryDetailsObj?.delivery_first_name || null,
           delivery_last_name: diliveryDetailsObj?.delivery_last_name || null,
           delivery_city_id: diliveryDetailsObj?.delivery_city_id || null,
-          delivery_address_line_1: diliveryDetailsObj?.delivery_address_line_1 || null,
-          delivery_address_line_2: diliveryDetailsObj?.delivery_address_line_2 || null,
-          delivery_phone_number: diliveryDetailsObj?.delivery_phone_number || null,
+          delivery_address_line_1:
+            diliveryDetailsObj?.delivery_address_line_1 || null,
+          delivery_address_line_2:
+            diliveryDetailsObj?.delivery_address_line_2 || null,
+          delivery_phone_number:
+            diliveryDetailsObj?.delivery_phone_number || null,
 
           order_type: orderType?.mealType,
           status: saveType,
@@ -149,9 +152,12 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
         delivery_first_name: diliveryDetailsObj?.delivery_first_name || null,
         delivery_last_name: diliveryDetailsObj?.delivery_last_name || null,
         delivery_city_id: diliveryDetailsObj?.delivery_city_id || null,
-        delivery_address_line_1: diliveryDetailsObj?.delivery_address_line_1 || null,
-        delivery_address_line_2: diliveryDetailsObj?.delivery_address_line_2 || null,
-        delivery_phone_number: diliveryDetailsObj?.delivery_phone_number || null,
+        delivery_address_line_1:
+          diliveryDetailsObj?.delivery_address_line_1 || null,
+        delivery_address_line_2:
+          diliveryDetailsObj?.delivery_address_line_2 || null,
+        delivery_phone_number:
+          diliveryDetailsObj?.delivery_phone_number || null,
 
         order_type: orderType?.mealType,
         status: saveType,
@@ -169,7 +175,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
   const createOrder = () => {
     const orderMenuItemsObj = getOrderMenuItems();
     const diliveryDetailsObj = getOrderDiliveryDetails();
-    const saveType = (draftOrder || updateDraft) ? 'draft' : 'placed';
+    const saveType = draftOrder || updateDraft ? "draft" : "placed";
 
     if (orderType?.mealType === "deliver") {
       let valueMisssig = false;
@@ -211,7 +217,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     dispatch(resetMealType());
     dispatch(addDeliveryInformations({}));
     dispatch(customerDetails({}));
-  }
+  };
 
   const updateStoresWithPlacedOrder = (order) => {
     const order_type = order?.order_type;
@@ -244,12 +250,12 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     if (order) {
       updateStoresWithPlacedOrder(order);
     }
-  }
+  };
 
   /**
-     * * this func will update the order
-     * @returns status of the updated order
-     */
+   * * this func will update the order
+   * @returns status of the updated order
+   */
 
   const handleUpdateOrder = async () => {
     const order = createUpdateOrder();
@@ -281,8 +287,8 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
   const handleAddOrder = async () => {
     const order = createOrder();
-    if (orderType?.mealType == 'dine_in') {
-      order.table_number = tableNumber
+    if (orderType?.mealType == "dine_in") {
+      order.table_id = tableNumber;
     }
     let obj = {};
     const data = await dispatch(addItem(order));
@@ -311,7 +317,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
    * @returns status of the updated draft
    */
 
-   const handleUpdateDraftOrder = async () => {
+  const handleUpdateDraftOrder = async () => {
     const order = createUpdateOrder();
     const data = await dispatch(updateItem(order));
     let obj = {};
@@ -365,16 +371,25 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
    */
 
   const handleOrder = () => {
-    const title = addOrder ? "Confirm Order ?" :
-                  updateOrder ? "Update Order ?" :
-                  updateDraft ? "Update Draft ?" : "Draft Order ?";
-                  
-    const handleFunc = addOrder ? handleAddOrder :
-                        updateOrder ? handleUpdateOrder :
-                        updateDraft ? handleUpdateDraftOrder: handleDraftOrder;
-    
+    const title = addOrder
+      ? "Confirm Order ?"
+      : updateOrder
+      ? "Update Order ?"
+      : updateDraft
+      ? "Update Draft ?"
+      : "Draft Order ?";
+
+    const handleFunc = addOrder
+      ? handleAddOrder
+      : updateOrder
+      ? handleUpdateOrder
+      : updateDraft
+      ? handleUpdateDraftOrder
+      : handleDraftOrder;
+
     // prev draft saved now adding as order --> update as updateOrder
-    const orderHandle = (prevType === "draft" && addOrder) ? handleUpdateOrder : handleFunc;
+    const orderHandle =
+      prevType === "draft" && addOrder ? handleUpdateOrder : handleFunc;
     swal({
       title: title,
       text: "",
@@ -405,7 +420,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
 
   const handleConfirmAndPay = () => {
     // if there is a order id then it should be existing order --> update order
-    const handleFunc = orderMetaData?.order_id ? handleUpdateOrder: handleAddOrder;
+    const handleFunc = orderMetaData?.order_id
+      ? handleUpdateOrder
+      : handleAddOrder;
 
     swal({
       title: "Confirm Order ?",
@@ -417,10 +434,13 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
       if (value) {
         handleFunc().then((res) => {
           if (res.status === "success") {
-            const orderSnapshot = Object.assign({},{'productList': selectedItems})
+            const orderSnapshot = Object.assign(
+              {},
+              { productList: selectedItems }
+            );
             cleanStores();
             updateProducts();
-            callBack(orderSnapshot);            
+            callBack(orderSnapshot);
           } else {
             swal(res.message, "Please Try Again!", "error");
           }
@@ -429,8 +449,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
         swal("Process Terminated!");
       }
     });
-  }
-
+  };
 
   const handleClick = () => {
     // need to check if (delivery order) => both should be there
@@ -438,7 +457,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     const diliveryDetailsObj = getOrderDiliveryDetails();
 
     let deliveryInfoMissing = false;
-    let customerInfoMissing =  !customer?.customerDetails?.id;
+    let customerInfoMissing = !customer?.customerDetails?.id;
 
     if (orderType?.mealType === "deliver") {
       for (const detailKey in diliveryDetailsObj) {
@@ -449,10 +468,12 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
     }
 
     if (deliveryInfoMissing || customerInfoMissing) {
-      const message = customerInfoMissing ?
-       'Please add customer details !' : 'Please add delivery details !'
+      const message = customerInfoMissing
+        ? "Please add customer details !"
+        : "Please add delivery details !";
       swal(message, "", "error");
-
+    } else if (orderType?.mealType === "dine_in" && !tableNumber) {
+      swal("Please select a table", "", "error");
     } else {
       if (confirmPay) {
         handleConfirmAndPay();
@@ -460,7 +481,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
         handleOrder();
       }
     }
-  }
+  };
 
   return (
     <ButtonCustom
@@ -469,11 +490,16 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack}) => {
       type="primary"
       className={cls ? cls : "green"}
       btnTitle={
-        addOrder ? "Place Order" :
-        updateOrder ? "Update Order" :
-        updateDraft ? "Update Draft" :
-        confirmPay ? "Confirm & Pay" : "Draft Order"
-        }
+        addOrder
+          ? "Place Order"
+          : updateOrder
+          ? "Update Order"
+          : updateDraft
+          ? "Update Draft"
+          : confirmPay
+          ? "Confirm & Pay"
+          : "Draft Order"
+      }
       onClick={handleClick}
     />
   );

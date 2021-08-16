@@ -1,4 +1,4 @@
-import { AUTHENTICATED, ERROR, MEAL_TYPE, RESET_MEAL_TYPE } from "../constants/ActionTypes";
+import { AUTHENTICATED, ERROR, IS_FETCHING, MEAL_TYPE, RESET_MEAL_TYPE } from "../constants/ActionTypes";
 
 export const authenticate = payload => {
   return { type: AUTHENTICATED, payload };
@@ -23,3 +23,10 @@ export const resetMealType = () => {
     type: RESET_MEAL_TYPE
   };
 };
+
+export const isFetching = (data) => {
+  return {
+    type: IS_FETCHING,
+    payload: data,
+  };
+}

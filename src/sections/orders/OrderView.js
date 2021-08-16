@@ -9,10 +9,15 @@ import { getAllOrders, getOrder } from "../../api/order";
 
 import { orderById } from "../../actions/order";
 import { addAllItems } from "../../actions/selectedItems";
-import { addMealType } from "../../actions/common";
-import { addDeliveryInformations, customerDetails} from "../../actions/customer";
+import { addMealType, isFetching } from "../../actions/common";
+import {
+  addDeliveryInformations,
+  customerDetails,
+} from "../../actions/customer";
 
 import { getFormattedOrder } from "./OrderConvertions";
+import { Typography } from "antd";
+import { Fragment } from "react";
 
 const Wrapper = styled.div`
   .order-box {
@@ -44,6 +49,12 @@ const PrintButton = styled.div`
   margin-left: 8px;
 `;
 
+const ErrorMessageDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const OrderView = (props) => {
   const { clickOK, tab } = props;
   const dispatch = useDispatch();
@@ -51,10 +62,23 @@ export const OrderView = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedTab, setSelectedTab] = useState(tab);
   const products = useSelector((state) => state.products);
+  const fetchingData = useSelector((state) => state.common.isFetching);
 
   useEffect(() => {
+    dispatch(isFetching(true));
     getAllOrders().then((res) => {
       if (res.data.status == "success") {
+        dispatch(isFetching(false));
+        handleAllOrders(res.data.data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    dispatch(isFetching(true));
+    getAllOrders().then((res) => {
+      if (res.data.status == "success") {
+        dispatch(isFetching(false));
         handleAllOrders(res.data.data);
       }
     });
@@ -111,11 +135,11 @@ export const OrderView = (props) => {
         const shippingDetail = {
           customer_id: order?.customer_id,
           delivery_first_name: order?.delivery_first_name,
-          delivery_last_name:  order?.delivery_last_name,
-          delivery_city_id:  order?.delivery_city_id,
-          delivery_address_line_1:  order?.delivery_address_line_1,
-          delivery_address_line_2:  order?.delivery_address_line_2,
-          delivery_phone_number:  order?.delivery_phone_number,
+          delivery_last_name: order?.delivery_last_name,
+          delivery_city_id: order?.delivery_city_id,
+          delivery_address_line_1: order?.delivery_address_line_1,
+          delivery_address_line_2: order?.delivery_address_line_2,
+          delivery_phone_number: order?.delivery_phone_number,
         };
 
         // populating stores with selected order
@@ -201,6 +225,16 @@ export const OrderView = (props) => {
             </div>
           ))}
       </div>
+
+      {!fetchingData && orders?.length == 0 ? (
+        <ErrorMessageDiv>
+          <Typography.Text type="danger" strong>
+            No data Found
+          </Typography.Text>
+        </ErrorMessageDiv>
+      ) : (
+        <Fragment />
+      )}
     </Wrapper>
   );
 };

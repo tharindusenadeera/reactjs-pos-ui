@@ -1,9 +1,12 @@
 import React, { Fragment, useState } from "react";
 import styled from "styled-components";
 import Theme from "../../../utils/Theme";
+import swal from "sweetalert";
 import { Label } from "../../../components/field/Label";
 import { InputField } from "../../../components/field/InputField";
 import { TextAreaField } from "../../../components/field/TextAreaField";
+import { ButtonCustom } from "../../../components/button";
+import { placePayment } from "../../../api/order";
 
 const FieldRow = styled.div`
   display: flex;
@@ -45,31 +48,76 @@ const Balance = styled.div`
   }
 `;
 
+const ButtonWrap = styled.div`
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
 const PayByCash = (props) => {
-  const { total } = props;
+  const { total, order, closePopUp } = props;
   const [amountToReturn, setAmountToReturn] = useState(0);
+  const [amountPaid, setAmountPaid] = useState();
+  const [error, setError] = useState(false);
+  const [comment, setComment] = useState("");
 
-  const handleComments = (e) => {};
-
-  const handleAmount = (e) => {
+  const handleAmountToPay = (e) => {
+    setError(false);
     let paidAmount = e.target.value;
     let returnAmount = "";
-    if (paidAmount > total) {
-      returnAmount = parseFloat(paidAmount) - parseFloat(total);
-    }
-    setAmountToReturn(returnAmount.toFixed(2));
+    returnAmount = parseFloat(paidAmount) - parseFloat(total);
+    setAmountPaid(paidAmount);
+    setAmountToReturn(returnAmount);
   };
 
-  const handleKeyDown = (event) => {
-    // console.log("key down", event.keyCode);
-    // if (
-    //   (event.which != 46 || event.target.value.indexOf(".") != -1) &&
-    //   (event.which < 48 || event.which > 57)
-    // ) {
-    //   return event.preventDefault();
-    // } else {
-    //   return true;
-    // }
+  const handleSubmit = () => {
+    if (!amountPaid) {
+      setError(true);
+    } else {
+      let obj = {
+        amount_paid: amountPaid,
+        order_id: order?.ordeId,
+        payment_method: "cash",
+      };
+
+      if (comment) {
+        obj.comment = comment;
+      }
+
+      swal({
+        title: "Confirm to pay",
+        text: "",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          placePayment(order?.orderId, obj)
+            .then((res) => {
+              if (res.data.status == "success") {
+                swal(`${res.data.message}`, "", "success");
+                closePopUp();
+              } else {
+                swal(`${res.data.message}`, "Please Try Again!", "error");
+              }
+            })
+            .catch((error) => {
+              swal("Something Went Wrong !", "Please Try Again!", "error");
+            });
+        } else {
+          swal("Process Terminated!");
+        }
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    closePopUp();
+  };
+
+  const handleComments = (data) => {
+    setComment(data);
   };
 
   return (
@@ -82,22 +130,35 @@ const PayByCash = (props) => {
       <FieldRow>
         <InputField
           type="number"
-          step=".01"
+          // step="0.01"
           label="Recived Amount ($)"
-          errorMsg="This is error message"
-          onChange={handleAmount}
-          onKeyDown={handleKeyDown}
+          errorMsg={error ? "Required" : ""}
+          onChange={(e) => handleAmountToPay(e)}
         />
       </FieldRow>
 
       <Balance>
-        <h4>Amount to Return :</h4>
+        <h4>Due Amount :</h4>
         <h4>${amountToReturn}</h4>
       </Balance>
 
       <FieldRow>
-        <TextAreaField label="Note (If Any)" onChange={handleComments} />
+        <TextAreaField
+          label="Note (If Any)"
+          onChange={(e) => handleComments(e.target.value)}
+        />
       </FieldRow>
+
+      <ButtonWrap>
+        <ButtonCustom btnTitle={"Cancel"} onClick={handleCancel} />
+
+        <ButtonCustom
+          type="primary"
+          btnTitle={"Pay"}
+          className="ml-2 blue"
+          onClick={handleSubmit}
+        />
+      </ButtonWrap>
     </Fragment>
   );
 };

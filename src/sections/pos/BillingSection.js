@@ -73,7 +73,7 @@ const tableArr = [
   { key: 5, value: "T05" },
 ];
 
-const calculateOrderSummary = (selectedItems, disc) => {
+const calculateOrderSummary = (selectedItems, disc, id) => {
   let subTot = 0;
 
   selectedItems.forEach((item) => {
@@ -101,6 +101,7 @@ const calculateOrderSummary = (selectedItems, disc) => {
     tax: tax,
     shipping: ship,
     tot: tot,
+    orderId: id,
   };
 };
 
@@ -122,7 +123,7 @@ export const BillingSection = (props) => {
   const tableNumber = useSelector(
     (state) => state.order.tableNumber
   );
-  
+
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -146,12 +147,12 @@ export const BillingSection = (props) => {
     }
   };
 
-  const handleOk = () => {
+  const handleOk = (a) => {
     setIsModalVisible(false);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    // setIsModalVisible(false);
   };
 
   const onModalClicked = () => {
@@ -168,7 +169,8 @@ export const BillingSection = (props) => {
   const confirmAndPayClicked = (orderSnapshot) => {
     const orderBillSummary = calculateOrderSummary(
       orderSnapshot?.productList,
-      savedDis
+      savedDis,
+      orderMetaData.order_id
     );
 
     setOrderSnapShot({ orderBillSummary: orderBillSummary });
@@ -181,6 +183,10 @@ export const BillingSection = (props) => {
   const printButtonClicked = () => {
     console.log('print clicked');
   }
+
+  const closePopUp = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <Fragment>
@@ -328,14 +334,17 @@ export const BillingSection = (props) => {
               isModalVisible={isModalVisible}
               handleOk={handleOk}
               handleCancel={handleCancel}
+              maskClosable={false}
+              hideSubmit={true}
+              hideCancel={true}
             >
-              <Payment orderSnapShot={orderSnapShot} />
+              <Payment orderSnapShot={orderSnapShot} closePopUp={closePopUp}/>
             </ModalCustom>
           </div>
 
           <div style={{ width: "18%" }}>
-            <PdfButton 
-            onClick={printButtonClicked} 
+            <PdfButton
+            onClick={printButtonClicked}
             disabled={!(addOrder?.status === 'placed' || orderMetaData?.status === 'placed')}
             width="block"/>
           </div>
