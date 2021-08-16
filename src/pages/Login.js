@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 import Theme from "../utils/Theme";
 import GlobalStyle from "../utils/globalStyles";
@@ -37,6 +38,7 @@ const Body = styled.div`
 
 export const Login = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorObj, setErrorObj] = useState({});
@@ -73,6 +75,9 @@ export const Login = () => {
             dispatch(authenticate(true));
             localStorage.setItem(ACCESS_TOKEN, `Bearer ${res.data.token}`);
             swal("Successfully Submitted !", "", "success");
+            history.push({
+              pathname: "/dashboard",
+            });
           } else {
             swal("Something Went Wrong !", "Please Try Again!", "error");
             dispatch(authenticate(false));
