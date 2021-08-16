@@ -170,7 +170,7 @@ export const BillingSection = (props) => {
     const orderBillSummary = calculateOrderSummary(
       orderSnapshot?.productList,
       savedDis,
-      orderMetaData.order_id
+      addOrder.id
     );
 
     setOrderSnapShot({ orderBillSummary: orderBillSummary });
