@@ -265,7 +265,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
   const handleUpdateOrder = async () => {
     const order = createUpdateOrder();
     let obj = {};
-
+    if (orderType?.mealType == "dine_in") {
+      order.table_id = tableNumber;
+    }
     const data = await dispatch(updateItem(order));
 
     if (data?.status === "success") {
