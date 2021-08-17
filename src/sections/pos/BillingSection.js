@@ -11,6 +11,7 @@ import { convertToDecimal } from "../../utils/formats";
 import SaveOrder from "../orders/SaveOrder";
 import { addTable } from "../../actions/order";
 import { PdfButton } from "../../components/button/PdfButton";
+import { printBill } from "../../api/common";
 
 const ShopDetail = styled.div`
   display: flex;
@@ -179,7 +180,11 @@ export const BillingSection = (props) => {
   };
 
   const printButtonClicked = () => {
-    console.log("print clicked");
+    printBill(addOrder.id).then(res => {
+      let mywindow = window.open("", "", "width=700,height=700")
+      mywindow.document.write(res.data);
+      window.close()
+    })
   };
   
 
@@ -224,11 +229,11 @@ export const BillingSection = (props) => {
               defa
               showSearch={false}
               label="Table Number"
-              value={
-                tableNumber
-                  ? tableArr.filter((option) => option.key == tableNumber)
-                  : undefined
-              }
+              // value={
+              //   tableNumber
+              //     ? tableArr.filter((option) => option.key == tableNumber)
+              //     : undefined
+              // }
               options={tableArr && tableArr}
               placeholder="Select a table"
               onChange={handleSelectedTable}

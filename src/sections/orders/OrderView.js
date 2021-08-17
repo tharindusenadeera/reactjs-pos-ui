@@ -18,6 +18,7 @@ import {
 import { getFormattedOrder } from "./OrderConvertions";
 import { Typography } from "antd";
 import { Fragment } from "react";
+import { printBill } from "../../api/common";
 
 const Wrapper = styled.div`
   .order-box {
@@ -85,10 +86,8 @@ export const OrderView = (props) => {
   }, [selectedTab]);
 
   useEffect(() => {
-    console.log('Rendering ...');
+    console.log("Rendering ...");
   }, []);
-
-
 
   const handleAllOrders = (data) => {
     let orders = categoriesOrders(data);
@@ -158,9 +157,22 @@ export const OrderView = (props) => {
     clickOK();
   };
 
-  const printButtonClicked = (e) => {
-    console.log('print clicked', e)
-  }
+  const printButtonClicked = (id) => {
+    printBill(id).then((res) => {
+      let mywindow = window.open("", "", "width=700,height=700");
+      mywindow.document.write(res.data);
+      window.close();
+    });
+  };
+
+  setTimeout(() => {
+    getAllOrders().then((res) => {
+      if (res.data.status == "success") {
+        dispatch(isFetching(false));
+        handleAllOrders(res.data.data);
+      }
+    });
+  }, 100000);
 
   return (
     <Wrapper>
@@ -207,20 +219,23 @@ export const OrderView = (props) => {
                 </div>
 
                 <ActionButtons>
-                    <PayEditButton
-                      btnClass="mr-2 yellow"
-                      type="primary"
-                      onClick={() => handlePay(order?.id)}
-                    />
-                    <DeleteButton confirm={handleConfirm} cancel={handleCancel} />
+                  <PayEditButton
+                    btnClass="mr-2 yellow"
+                    type="primary"
+                    onClick={() => handlePay(order?.id)}
+                  />
+                  <DeleteButton confirm={handleConfirm} cancel={handleCancel} />
 
-                  { order?.status === "placed" && (
+                  {order?.status === "placed" && (
                     <PrintButton>
-                      <PdfButton onClick={printButtonClicked} disabled={false} record={order}/>
+                      <PdfButton
+                        onClick={() => printButtonClicked(order?.id)}
+                        disabled={false}
+                        record={order}
+                      />
                     </PrintButton>
                   )}
                 </ActionButtons>
-
               </div>
             </div>
           ))}
