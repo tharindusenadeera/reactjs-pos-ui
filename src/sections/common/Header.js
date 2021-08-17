@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import moment from "moment";
 import Theme from "../../utils/Theme";
 import styled from "styled-components";
@@ -50,6 +51,7 @@ const NavControls = styled.div`
 `;
 
 export const Header = () => {
+  const history = useHistory();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const currentDate = moment().format("dddd DD MMMM YYYY");
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -65,6 +67,13 @@ export const Header = () => {
   const clickOK = () => {
     setIsModalVisible(false);
   };
+
+  const logout = () => {
+    localStorage.setItem('ACCESS_TOKEN', "");
+    history.push({
+      pathname: "/",
+    });
+  }
 
   return (
     <Wrapper>
@@ -108,10 +117,7 @@ export const Header = () => {
                 btnClass="ml-3 btn-nav"
               >
                 <Menu>
-                  <Menu.Item key="0">
-                    <a href="#">1st menu item</a>
-                  </Menu.Item>
-                  <Menu.Item key="1">{Theme.icons.$logout} Logout</Menu.Item>
+                  <Menu.Item key="1" onClick={() => logout()}>{Theme.icons.$logout} Logout</Menu.Item>
                 </Menu>
               </DropdownCustom>
             </NavControls>

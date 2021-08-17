@@ -15,10 +15,23 @@ import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
 import reducers from "./reducers";
 
+import RequireAuth from "./pages/RequireAuth";
+
 const store = createStore(
   reducers,
   composeWithDevTools(compose(applyMiddleware(thunk)))
 );
+
+window.onbeforeunload = (event) => {
+  console.log("event", event);
+  const e = event || window.event;
+  // Cancel the event
+  e.preventDefault();
+  if (e) {
+    e.returnValue = ''; // Legacy method for cross browser support
+  }
+  return ''; // Legacy method for cross browser support
+};
 
 ReactDOM.render(
   <Provider store={store}>
@@ -27,7 +40,7 @@ ReactDOM.render(
         <Switch>
           <React.Fragment>
             <Route exact path="/" component={Login} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
           </React.Fragment>
         </Switch>
       </Router>
