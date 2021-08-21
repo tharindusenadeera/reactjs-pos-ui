@@ -74,7 +74,7 @@ export const Login = () => {
           if (res.data.status == "success") {
             dispatch(authenticate(true));
             localStorage.setItem(ACCESS_TOKEN, `Bearer ${res.data.data.token}`);
-            swal("Successfully Submitted !", "", "success");
+            swal("Successfully Logged In !", "", "success");
             history.push({
               pathname: "/dashboard",
             });

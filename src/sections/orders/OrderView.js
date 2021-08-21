@@ -5,7 +5,7 @@ import Theme from "../../utils/Theme";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { PayEditButton } from "../../components/button/PayEditButton";
 import { PdfButton } from "../../components/button/PdfButton";
-import { getAllOrders, getOrder } from "../../api/order";
+import { deleteOrder, getAllOrders, getOrder } from "../../api/order";
 
 import { orderById } from "../../actions/order";
 import { addAllItems } from "../../actions/selectedItems";
@@ -19,6 +19,7 @@ import { getFormattedOrder } from "./OrderConvertions";
 import { Typography } from "antd";
 import { Fragment } from "react";
 import { printBill } from "../../api/common";
+import swal from "sweetalert";
 
 const Wrapper = styled.div`
   .order-box {
@@ -77,17 +78,17 @@ export const OrderView = (props) => {
 
   useEffect(() => {
     dispatch(isFetching(true));
+    getTabOrderList();
+  }, [selectedTab]);
+
+  const getTabOrderList = () => {
     getAllOrders().then((res) => {
       if (res.data.status == "success") {
         dispatch(isFetching(false));
         handleAllOrders(res.data.data);
       }
     });
-  }, [selectedTab]);
-
-  useEffect(() => {
-    console.log("Rendering ...");
-  }, []);
+  };
 
   const handleAllOrders = (data) => {
     let orders = categoriesOrders(data);
@@ -103,8 +104,23 @@ export const OrderView = (props) => {
     );
   };
 
-  const handleConfirm = () => {
-    setIsModalVisible(false);
+  const handleConfirm = (id) => {
+    deleteOrder(id)
+      .then((res) => {
+        if (res.data.status == "success") {
+          getTabOrderList();
+          if (selectedTab == "settled") {
+            swal("Order Deleted Successfully", "", "success");
+          } else {
+            swal(`${res.data.message}`, "", "success");
+          }
+        } else {
+          swal(`${res.data.message}`, "Please Try Again!", "error");
+        }
+      })
+      .catch((error) => {
+        swal("Something Went Wrong !", "Please Try Again!", "error");
+      });
   };
 
   const handleCancel = () => {
@@ -165,14 +181,14 @@ export const OrderView = (props) => {
     });
   };
 
-  setTimeout(() => {
-    getAllOrders().then((res) => {
-      if (res.data.status == "success") {
-        dispatch(isFetching(false));
-        handleAllOrders(res.data.data);
-      }
-    });
-  }, 100000);
+  // setTimeout(() => {
+  //   getAllOrders().then((res) => {
+  //     if (res.data.status == "success") {
+  //       dispatch(isFetching(false));
+  //       handleAllOrders(res.data.data);
+  //     }
+  //   });
+  // }, 100000);
 
   return (
     <Wrapper>
@@ -224,7 +240,12 @@ export const OrderView = (props) => {
                     type="primary"
                     onClick={() => handlePay(order?.id)}
                   />
-                  <DeleteButton confirm={handleConfirm} cancel={handleCancel} />
+
+                  <DeleteButton
+                    confirm={() => handleConfirm(order?.id)}
+                    cancel={handleCancel}
+                    disabled={order?.status === "preparing" ? true : false}
+                  />
 
                   {order?.status === "placed" && (
                     <PrintButton>

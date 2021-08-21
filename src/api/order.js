@@ -51,3 +51,15 @@ export const placePayment = (id, data) => {
     }
   );
 };
+
+export const deleteOrder = (id) => {
+  return axios.post(
+    `${process.env.REACT_APP_API_URL}/v1/cancelled_order/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: localStorage.ACCESS_TOKEN,
+      },
+    }
+  );
+};

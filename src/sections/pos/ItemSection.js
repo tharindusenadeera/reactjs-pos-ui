@@ -304,7 +304,7 @@ export const ItemSection = () => {
   const handleSearch = (e) => {
     let value = e.target.value;
     let strLength = value.length;
-console.log("value", value);
+
     if (strLength % 3 === 0) {
       getFilteredProducts("item", value);
     } else {
