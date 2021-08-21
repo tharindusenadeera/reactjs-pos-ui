@@ -53,11 +53,13 @@ const NavControls = styled.div`
 export const Header = () => {
   const history = useHistory();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [refresh, setRefresh] = useState(true);
   const currentDate = moment().format("dddd DD MMMM YYYY");
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const showModal = () => {
     setIsModalVisible(true);
+    setRefresh(() => !refresh);
   };
 
   const clickCancel = () => {
@@ -110,7 +112,7 @@ export const Header = () => {
                 isModalVisible={isModalVisible}
               >
                 {/* <OrderView clickOK={clickOK}/> */}
-                <OrderGroup clickOK={clickOK}/>
+                <OrderGroup clickOK={clickOK} refresh={refresh}/>
               </ModalCustom>
               <DropdownCustom
                 btnTitle={Theme.icons.$user}

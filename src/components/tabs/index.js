@@ -21,11 +21,17 @@ const TabAnt = styled(Tabs)`
   }
 `;
 
-function callback(key) {
-  console.log(key);
-}
 
 export const TabsCustom = (props) => {
+  const {tabCallback} = props;
+
+  const callback = (key) => {
+    // console.log(key);
+    if (tabCallback instanceof Function){
+      tabCallback(key);
+    }
+  }
+
   return (
     <TabAnt defaultActiveKey="1" onChange={callback} type="card">
       {props.children}
