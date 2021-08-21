@@ -60,8 +60,6 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
           }
         });
 
-        console.log("addon_id ", addon_id);
-
         if (isUpdate) {
           order.push({
             id: product.productKey,
