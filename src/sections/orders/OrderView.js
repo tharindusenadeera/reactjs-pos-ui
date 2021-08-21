@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { PayEditButton } from "../../components/button/PayEditButton";
 import { PdfButton } from "../../components/button/PdfButton";
-import { deleteOrder, getAllOrders, getOrder } from "../../api/order";
+import { deleteOrder, getOrder } from "../../api/order";
 
-import { orderById } from "../../actions/order";
 import { addAllItems } from "../../actions/selectedItems";
-import { addMealType, isFetching } from "../../actions/common";
+import { addMealType } from "../../actions/common";
 import {
   addDeliveryInformations,
   customerDetails,
@@ -68,58 +67,18 @@ const PreLoader = styled.div`
 `;
 
 export const OrderView = (props) => {
-  const { clickOK, tab } = props;
+  const { clickOK, tab, getTabOrders} = props;
   const dispatch = useDispatch();
-  const [orders, setOrders] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedTab, setSelectedTab] = useState(tab);
+
+  const orders = getTabOrders(tab);
   const products = useSelector((state) => state.products);
   const fetchingData = useSelector((state) => state.common.isFetching);
-
-  useEffect(() => {
-    dispatch(isFetching(true));
-    getAllOrders().then((res) => {
-      if (res.data.status == "success") {
-        dispatch(isFetching(false));
-        handleAllOrders(res.data.data);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    dispatch(isFetching(true));
-    getTabOrderList();
-  }, [selectedTab]);
-
-  const getTabOrderList = () => {
-    getAllOrders().then((res) => {
-      if (res.data.status == "success") {
-        dispatch(isFetching(false));
-        handleAllOrders(res.data.data);
-      }
-    });
-  };
-
-  const handleAllOrders = (data) => {
-    let orders = categoriesOrders(data);
-    setOrders(orders);
-  };
-
-  const categoriesOrders = (data) => {
-    return (
-      data &&
-      data.filter((item) => {
-        return item.status == selectedTab;
-      })
-    );
-  };
 
   const handleConfirm = (id) => {
     deleteOrder(id)
       .then((res) => {
-        if (res.data.status == "success") {
-          getTabOrderList();
-          if (selectedTab == "settled") {
+        if (res.data.status === "success") {
+          if (tab == "settled") {
             swal("Order Deleted Successfully", "", "success");
           } else {
             swal(`${res.data.message}`, "", "success");
@@ -134,7 +93,6 @@ export const OrderView = (props) => {
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
   };
 
   const renderPaymentStatus = (status) => {
@@ -190,15 +148,6 @@ export const OrderView = (props) => {
       window.close();
     });
   };
-
-  // setTimeout(() => {
-  //   getAllOrders().then((res) => {
-  //     if (res.data.status == "success") {
-  //       dispatch(isFetching(false));
-  //       handleAllOrders(res.data.data);
-  //     }
-  //   });
-  // }, 100000);
 
   return (
     <Wrapper>
