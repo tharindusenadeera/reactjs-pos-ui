@@ -323,7 +323,7 @@ console.log("value", value);
         <div className="row">
           <div className="col-6">
             <SelectCustom
-              showSearch={true}
+              showSearch={false}
               placeholder="Choose an item"
               options={categories && categories}
               onChange={handleItemsSelect}
