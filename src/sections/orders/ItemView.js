@@ -181,11 +181,12 @@ export const ItemView = ({
     return category?.menu_item_options || {};
   };
 
-  const plainOptions = [
-    { label: "Apple ", value: "Apple" },
-    { label: "Pears ", value: "Pear" },
-    { label: "Orange", value: "Orange" },
-  ];
+  const handleAddonChange = (checkedValues) => {
+    updateSelectedproperties({
+      ...selectedProperties,
+      selectAddons: checkedValues,
+    });
+  };
 
   return (
     <ItemDetail>
@@ -231,15 +232,19 @@ export const ItemView = ({
           )}
         </TagRow>
 
-        <div className="row">
-          <div className="col-12">
-            <CheckboxGroupField
-              label="Additions"
-              options={plainOptions}
-              defaultValue={["Apple"]}
-            />
+        {selectedProperties?.menu_item_addons > 0 && (
+          <div className="row">
+            <div className="col-12">
+              <CheckboxGroupField
+                onChange={handleAddonChange}
+                label="Additions"
+                options={selectedProperties?.menu_item_addons}
+                // defaultValue={["Apple"]}
+                value={selectedProperties?.selectAddons}
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="row">
           <div className="col-6">

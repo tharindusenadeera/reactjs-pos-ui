@@ -19,8 +19,10 @@ export const CheckboxGroupField = (props) => {
     <div className="field-row">
       {props.label ? <Label label={props.label} /> : ""}
       <CheckboxGroup
+        onChange={props.onChange}
         options={props.options}
         defaultValue={props.defaultValue}
+        value={props.value}
       />
       <Error errorMsg={props.errorMsg} />
     </div>

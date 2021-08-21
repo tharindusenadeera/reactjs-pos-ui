@@ -13,7 +13,7 @@ import {
 } from "../../utils/generateUniqueId";
 import { categoryList } from "../../api/category";
 
-import { SAVE_PRODUCT } from "../../constants/ActionTypes"
+import { SAVE_PRODUCT } from "../../constants/ActionTypes";
 import { productsList } from "../../api/products";
 import { SelectNInputField } from "../../components/field/SelectNInputField";
 import { InputField } from "../../components/field/InputField";
@@ -100,7 +100,9 @@ export const ItemSection = () => {
   const [disableOk, setDisableOk] = useState(true);
   const [quantityError, setQuantityError] = useState({});
 
-  const alreadyAddedItems = useSelector((state) => state.selectedItems.productList);
+  const alreadyAddedItems = useSelector(
+    (state) => state.selectedItems.productList
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -132,6 +134,31 @@ export const ItemSection = () => {
     }
   }, [selectedProperties]);
 
+  const addons = [
+    {
+      id: 1,
+      name: "cheese",
+      label: "cheese",
+      value: "cheese",
+      status: 1,
+      pivot: {
+        manu_item_id: 1,
+        addon_id: 1,
+      },
+    },
+    {
+      id: 2,
+      name: "butter",
+      label: "butter",
+      value: "butter",
+      status: 1,
+      pivot: {
+        manu_item_id: 1,
+        addon_id: 2,
+      },
+    },
+  ];
+
   const handleProducts = (data) => {
     let itemArr = [];
     data &&
@@ -147,6 +174,8 @@ export const ItemSection = () => {
           status: element.status,
           created_at: element.created_at,
           updated_at: element.updated_at,
+          menu_item_addons: element.menu_item_addons,
+          // menu_item_addons: addons,
           menu_option_categories: element?.menu_option_categories?.map(
             (category) => {
               return {
@@ -168,7 +197,7 @@ export const ItemSection = () => {
       });
 
     // setProducts(itemArr);
-    dispatch({type : SAVE_PRODUCT, payload : itemArr});
+    dispatch({ type: SAVE_PRODUCT, payload: itemArr });
   };
 
   const handleItemsSelect = (value) => {
@@ -262,7 +291,6 @@ export const ItemSection = () => {
    */
   const selectItem = (item) => {
     const array = [];
-
     item.menu_option_categories.forEach((option) => {
       array.push({
         id: option?.id,
@@ -271,10 +299,9 @@ export const ItemSection = () => {
         value: option?.name,
         item: "",
       });
-      
-    })
-    
-    setSelectedProperties({...item, categories: array});
+    });
+
+    setSelectedProperties({ ...item, categories: array, selectAddons: [] });
     setQuantityError({});
   };
 
@@ -314,8 +341,7 @@ export const ItemSection = () => {
 
   const qunatityErrorHandle = (data) => {
     setQuantityError(data);
-  }
-
+  };
 
   return (
     <Fragment>

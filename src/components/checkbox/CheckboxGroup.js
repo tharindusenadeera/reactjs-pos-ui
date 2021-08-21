@@ -47,11 +47,21 @@ const Wrapper = styled.div`
 `;
 
 export const CheckboxGroup = (props) => {
+  const { onChange } = props;
+
+  const change = (checkedValues) => {
+    if (onChange instanceof Function) {
+      onChange(checkedValues);
+    }
+  };
+
   return (
     <Wrapper>
       <Checkbox.Group
+        onChange={change}
         options={props.options}
         defaultValue={props.defaultValue}
+        value={props.value}
       />
     </Wrapper>
   );

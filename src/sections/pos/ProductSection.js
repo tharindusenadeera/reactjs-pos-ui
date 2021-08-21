@@ -10,9 +10,17 @@ import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
 import SaveOrder from "../orders/SaveOrder";
 
-import { updateItem, deleteItem, addItem, deleteAllItems} from "../../actions/selectedItems";
-import { resetMealType } from "../../actions/common"
-import { addDeliveryInformations, customerDetails }  from "../../actions/customer";
+import {
+  updateItem,
+  deleteItem,
+  addItem,
+  deleteAllItems,
+} from "../../actions/selectedItems";
+import { resetMealType } from "../../actions/common";
+import {
+  addDeliveryInformations,
+  customerDetails,
+} from "../../actions/customer";
 
 import {
   GenerateUniqueId,
@@ -73,7 +81,9 @@ const ButtonWarp = styled.div`
 `;
 
 export const ProductSection = () => {
-  const alreadyAddedItems = useSelector((state) => state.selectedItems.productList);
+  const alreadyAddedItems = useSelector(
+    (state) => state.selectedItems.productList
+  );
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
 
   const [tableContent, setTableContent] = useState(alreadyAddedItems);
@@ -87,25 +97,29 @@ export const ProductSection = () => {
   const dispatch = useDispatch();
 
   const isRealValue = (obj) => {
-    return obj && obj !== 'null' && obj !== 'undefined' && obj !== '';
-  }
+    return obj && obj !== "null" && obj !== "undefined" && obj !== "";
+  };
 
   const isEmpty = (obj) => {
     return Object.keys(obj).length === 0;
-  }
+  };
 
   useEffect(() => {
     setTableContent(alreadyAddedItems);
-  },[alreadyAddedItems]);
+  }, [alreadyAddedItems]);
 
   useEffect(() => {
-    let isCategoryAvailable = selectedProperties?.menu_option_categories?.length > 0;
-    let items = selectedProperties?.categories?.filter((category) => isRealValue(category.item));
+    let isCategoryAvailable =
+      selectedProperties?.menu_option_categories?.length > 0;
+    let items = selectedProperties?.categories?.filter((category) =>
+      isRealValue(category.item)
+    );
     let isItemSelected = (items && items?.length) || !isCategoryAvailable;
 
-    if (selectedProperties?.quantity &&
-       selectedProperties?.quantity !== 0 &&
-       isItemSelected &&
+    if (
+      selectedProperties?.quantity &&
+      selectedProperties?.quantity !== 0 &&
+      isItemSelected &&
       (!quantityError.status || quantityError.status === 0)
     ) {
       setDisableOk(false);
@@ -216,7 +230,7 @@ export const ProductSection = () => {
 
   const qunatityErrorHandle = (data) => {
     setQuantityError(data);
-  }
+  };
 
   const columns = [
     {
@@ -291,34 +305,37 @@ export const ProductSection = () => {
     },
   ];
 
-  const handleSearch = e => {
+  const handleSearch = (e) => {
     let text = e.target.value;
     const lower_text = text?.toLowerCase();
 
-    const filteredOrders = alreadyAddedItems.filter((order) => (
+    const filteredOrders = alreadyAddedItems.filter((order) =>
       order?.name?.toLowerCase().includes(lower_text)
-    ))
+    );
 
     setTableContent(filteredOrders);
-  }
+  };
 
-    /**
+  /**
    * * This function will clean out redux stores
    */
 
-     const cleanStores = () => {
-      dispatch(deleteAllItems());
-      dispatch(resetMealType());
-      dispatch(addDeliveryInformations({}));
-      dispatch(customerDetails({}));
-    }
+  const cleanStores = () => {
+    dispatch(deleteAllItems());
+    dispatch(resetMealType());
+    dispatch(addDeliveryInformations({}));
+    dispatch(customerDetails({}));
+  };
 
   /**
    * * Cancel and clear the added items in order to prevent
    * * simply remove all the items from redux store
    */
   const deleteOrder = () => {
-    const title = orderMetaData && orderMetaData.order_id ? "Clear Order ?" : "Cancel Order ?";
+    const title =
+      orderMetaData && orderMetaData.order_id
+        ? "Clear Order ?"
+        : "Cancel Order ?";
     swal({
       title: title,
       text: "",
@@ -331,8 +348,8 @@ export const ProductSection = () => {
       } else {
         swal("Process Terminated!");
       }
-    })
-  }
+    });
+  };
 
   return (
     <div>
@@ -341,7 +358,7 @@ export const ProductSection = () => {
         label="Selected Product"
         Selectplaceholder="Choose Type"
       /> */}
-      <InputField label="Selected Product" onChange={handleSearch}/>
+      <InputField label="Selected Product" onChange={handleSearch} />
       <TableWarp>
         <TableCustom
           columns={columns}
@@ -351,8 +368,12 @@ export const ProductSection = () => {
       </TableWarp>
 
       <ButtonWarp>
-        <ButtonCustom 
-          btnTitle={orderMetaData && orderMetaData.order_id ? "Clear Order" : "Cancel Order"}
+        <ButtonCustom
+          btnTitle={
+            orderMetaData && orderMetaData.order_id
+              ? "Clear Order"
+              : "Cancel Order"
+          }
           disabled={!alreadyAddedItems.length}
           onClick={deleteOrder}
           className="btn-danger"
