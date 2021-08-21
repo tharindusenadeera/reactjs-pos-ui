@@ -66,7 +66,7 @@ export const OrderGroup = (props) => {
       <TabPane tab="Settled Orders" key="settled">
         <OrderView 
           clickOK={clickOK} 
-          tab={"cancelled"} 
+          tab={"settled"} 
           getTabOrders={getCategoriesOrders}
         />
       </TabPane>
