@@ -20,6 +20,10 @@ import { Typography } from "antd";
 import { Fragment } from "react";
 import { printBill } from "../../api/common";
 import swal from "sweetalert";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+
+const antIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />;
 
 const Wrapper = styled.div`
   .order-box {
@@ -52,6 +56,12 @@ const PrintButton = styled.div`
 `;
 
 const ErrorMessageDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PreLoader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -192,84 +202,93 @@ export const OrderView = (props) => {
 
   return (
     <Wrapper>
-      <div className="row">
-        {orders &&
-          orders.map((order, key) => (
-            <div className="col col-sm-6 col-md-4" key={key}>
-              <div className="order-box">
-                <h3>Order {order?.id}</h3>
+      {fetchingData ? (
+        <PreLoader>
+          <Spin indicator={antIcon} />
+        </PreLoader>
+      ) : (
+        <Fragment>
+          <div className="row">
+            {orders &&
+              orders.map((order, key) => (
+                <div className="col col-sm-6 col-md-4" key={key}>
+                  <div className="order-box">
+                    <h3>Order {order?.id}</h3>
 
-                <div className="d-flex">
-                  <p>
-                    <label>Name</label>
-                    {order?.customer?.first_name} {order?.customer?.last_name}
-                  </p>
-                </div>
+                    <div className="d-flex">
+                      <p>
+                        <label>Name</label>
+                        {order?.customer?.first_name}{" "}
+                        {order?.customer?.last_name}
+                      </p>
+                    </div>
 
-                <div className="d-flex">
-                  <p>
-                    <label>Address</label>
-                    {order?.customer?.address_line_1},{" "}
-                    {order?.customer?.address_line_2}
-                  </p>
-                </div>
+                    <div className="d-flex">
+                      <p>
+                        <label>Address</label>
+                        {order?.customer?.address_line_1},{" "}
+                        {order?.customer?.address_line_2}
+                      </p>
+                    </div>
 
-                {/* <div className="d-flex">
+                    {/* <div className="d-flex">
                   <p>
                     <label>Payment Status</label>
                     {renderPaymentStatus(order?.status)}
                   </p>
                 </div> */}
 
-                <div className="d-flex">
-                  <p>
-                    <label>Total Items</label>
-                    {order?.order_menu_items_full?.length}
-                  </p>
-                </div>
+                    <div className="d-flex">
+                      <p>
+                        <label>Total Items</label>
+                        {order?.order_menu_items_full?.length}
+                      </p>
+                    </div>
 
-                <div className="d-flex">
-                  <p>
-                    <label>Due Amount</label>$ {order?.order_total}
-                  </p>
-                </div>
+                    <div className="d-flex">
+                      <p>
+                        <label>Due Amount</label>$ {order?.order_total}
+                      </p>
+                    </div>
 
-                <ActionButtons>
-                  <PayEditButton
-                    btnClass="mr-2 yellow"
-                    type="primary"
-                    onClick={() => handlePay(order?.id)}
-                  />
-
-                  <DeleteButton
-                    confirm={() => handleConfirm(order?.id)}
-                    cancel={handleCancel}
-                    disabled={order?.status === "preparing" ? true : false}
-                  />
-
-                  {order?.status === "placed" && (
-                    <PrintButton>
-                      <PdfButton
-                        onClick={() => printButtonClicked(order?.id)}
-                        disabled={false}
-                        record={order}
+                    <ActionButtons>
+                      <PayEditButton
+                        btnClass="mr-2 yellow"
+                        type="primary"
+                        onClick={() => handlePay(order?.id)}
                       />
-                    </PrintButton>
-                  )}
-                </ActionButtons>
-              </div>
-            </div>
-          ))}
-      </div>
 
-      {!fetchingData && orders?.length == 0 ? (
-        <ErrorMessageDiv>
-          <Typography.Text type="danger" strong>
-            No data Found
-          </Typography.Text>
-        </ErrorMessageDiv>
-      ) : (
-        <Fragment />
+                      <DeleteButton
+                        confirm={() => handleConfirm(order?.id)}
+                        cancel={handleCancel}
+                        disabled={order?.status === "preparing" ? true : false}
+                      />
+
+                      {order?.status === "placed" && (
+                        <PrintButton>
+                          <PdfButton
+                            onClick={() => printButtonClicked(order?.id)}
+                            disabled={false}
+                            record={order}
+                          />
+                        </PrintButton>
+                      )}
+                    </ActionButtons>
+                  </div>
+                </div>
+              ))}
+          </div>
+
+          {!fetchingData && orders?.length == 0 ? (
+            <ErrorMessageDiv>
+              <Typography.Text type="danger" strong>
+                No data Found
+              </Typography.Text>
+            </ErrorMessageDiv>
+          ) : (
+            <Fragment />
+          )}
+        </Fragment>
       )}
     </Wrapper>
   );
