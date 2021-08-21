@@ -187,8 +187,6 @@ export const ItemSection = () => {
   };
 
   const getFilteredProducts = (type, value) => {
-    console.log("test", value);
-    console.log("type", type);
     let obj = {};
     if (type === "id") {
       obj.id = value;
