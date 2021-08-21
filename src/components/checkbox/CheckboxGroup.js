@@ -52,7 +52,6 @@ export const CheckboxGroup = (props) => {
       <Checkbox.Group
         options={props.options}
         defaultValue={props.defaultValue}
-        className="xxx-123"
       />
     </Wrapper>
   );
