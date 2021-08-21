@@ -35,7 +35,9 @@ const tableArr = [
 export const CustomerCreateForm = (props) => {
   const dispatch = useDispatch();
   const mealType = useSelector((state) => state.common.mealType);
-  const storedCustomerDetails = useSelector((state) => state.customer.customerDetails);
+  const storedCustomerDetails = useSelector(
+    (state) => state.customer.customerDetails
+  );
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -67,7 +69,7 @@ export const CustomerCreateForm = (props) => {
     if (storedCustomerDetails) {
       setFirstName(storedCustomerDetails.first_name);
     }
-  }, [storedCustomerDetails])
+  }, [storedCustomerDetails]);
 
   const handleAllCustomers = () => {
     getAllCustomers().then((res) => {
@@ -80,10 +82,13 @@ export const CustomerCreateForm = (props) => {
   const handlePhoneNumbers = (data) => {
     let newArr = [];
     data.forEach((element) => {
-      let obj = {
-        key: element.id,
-        value: element.contact_number,
-      };
+      let obj = {};
+      if (element.status == 1) {
+        obj = {
+          key: element.id,
+          value: element.contact_number,
+        };
+      }
       newArr.push(obj);
     });
     setPhoneNumberArr(newArr);
@@ -167,7 +172,6 @@ export const CustomerCreateForm = (props) => {
                   swal("Successfully Submitted !", "", "success");
                   props.handleCancel();
                 } else {
-                  
                 }
               })
               .catch((error) => {
