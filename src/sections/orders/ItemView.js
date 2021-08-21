@@ -4,8 +4,9 @@ import { InputNumberField } from "../../components/field/InputNumberField";
 import { TagCustom } from "../../components/tag";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
+import { CheckboxGroupField } from "../../components/field/CheckboxGroupField";
 
-import { Typography } from 'antd';
+import { Typography } from "antd";
 
 const ItemDetail = styled.div`
   @media ${Theme.device.sm} {
@@ -42,28 +43,41 @@ const TagRow = styled.div`
   margin-bottom: 5px;
 `;
 
-export const ItemView = ({ selectedProperties, updateSelectedproperties, alreadyAddedItems, qunatityErrorHandle, quantityError}) => {
-
+export const ItemView = ({
+  selectedProperties,
+  updateSelectedproperties,
+  alreadyAddedItems,
+  qunatityErrorHandle,
+  quantityError,
+}) => {
   const setQuantityStatus = (currentQuantity) => {
     // get the other orders of from selected product list which is not itself (importance when edit happen from table)
-    const prevAddedItems = alreadyAddedItems?.filter(item => item.productKey === selectedProperties.productKey &&
-       item.key !== selectedProperties.key);
+    const prevAddedItems = alreadyAddedItems?.filter(
+      (item) =>
+        item.productKey === selectedProperties.productKey &&
+        item.key !== selectedProperties.key
+    );
     let prevAddedQuantity = 0;
 
     prevAddedItems.forEach((item) => {
-      prevAddedQuantity += item.quantity
-    })
+      prevAddedQuantity += item.quantity;
+    });
 
-    let isCurrentQuantityAvailable = prevAddedQuantity + currentQuantity <= selectedProperties?.qty;
+    let isCurrentQuantityAvailable =
+      prevAddedQuantity + currentQuantity <= selectedProperties?.qty;
 
     if (isCurrentQuantityAvailable) {
-      qunatityErrorHandle({status: 0, message: ''});
+      qunatityErrorHandle({ status: 0, message: "" });
     } else {
-      qunatityErrorHandle({status: 1, message: `Only ${selectedProperties?.qty - prevAddedQuantity} items available !`});
+      qunatityErrorHandle({
+        status: 1,
+        message: `Only ${
+          selectedProperties?.qty - prevAddedQuantity
+        } items available !`,
+      });
     }
+  };
 
-  }
-  
   const onClickPlus = () => {
     const newQty = selectedProperties?.quantity
       ? selectedProperties?.quantity + 1
@@ -87,7 +101,6 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties, already
 
   const onChangeQuantity = (quantity) => {
     if (!isNaN(quantity)) {
-
       updateSelectedproperties({
         ...selectedProperties,
         quantity: parseInt(quantity),
@@ -108,7 +121,7 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties, already
     selectedProperties.menu_option_categories.forEach((category) => {
       category.menu_item_options.forEach((menuItemOption) => {
         if (menuItemOption.key === key) {
-          selectCategory =  category;
+          selectCategory = category;
           selectOption = menuItemOption;
         }
       });
@@ -138,31 +151,41 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties, already
    */
 
   const onCloseTag = (tagId) => {
-    const categories = selectedProperties?.categories?.map(
-      (category) => {
-        return {
-          ...category,
-          item: ""
-        }
-      }
-    );
+    const categories = selectedProperties?.categories?.map((category) => {
+      return {
+        ...category,
+        item: "",
+      };
+    });
     updateSelectedproperties({ ...selectedProperties, categories: categories });
   };
 
   const getCategoryItemLabel = (key) => {
-    const category = selectedProperties?.menu_option_categories?.find((category) => category.key === key);
+    const category = selectedProperties?.menu_option_categories?.find(
+      (category) => category.key === key
+    );
     return category.value;
   };
 
   const getCategoryItemPlcaeHolder = (key) => {
-    const category = selectedProperties?.menu_option_categories?.find((category) => category.key === key);
+    const category = selectedProperties?.menu_option_categories?.find(
+      (category) => category.key === key
+    );
     return `Choose a ${category.value}`;
   };
 
   const getCategoryItemOptions = (key) => {
-    const category = selectedProperties?.menu_option_categories?.find((category) => category.key === key);
+    const category = selectedProperties?.menu_option_categories?.find(
+      (category) => category.key === key
+    );
     return category?.menu_item_options || {};
   };
+
+  const plainOptions = [
+    { label: "Apple ", value: "Apple" },
+    { label: "Pears ", value: "Pear" },
+    { label: "Orange", value: "Orange" },
+  ];
 
   return (
     <ItemDetail>
@@ -180,19 +203,18 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties, already
         <h3>{selectedProperties && selectedProperties.name}</h3>
 
         <div className="row">
-            {selectedProperties?.categories?.map(
-              (category) =>
-                <div className="col-6" key={category.key}>
-                  <SelectField
-                    label={getCategoryItemLabel(category.key)}
-                    key={category.key}
-                    placeholder={getCategoryItemPlcaeHolder(category.key)}
-                    options={getCategoryItemOptions(category.key)}
-                    onChange={onChangeCategoryItem}
-                    value={category.itemName || "Choose a Category"}
-                    />
-                </div>
-            )}
+          {selectedProperties?.categories?.map((category) => (
+            <div className="col-6" key={category.key}>
+              <SelectField
+                label={getCategoryItemLabel(category.key)}
+                key={category.key}
+                placeholder={getCategoryItemPlcaeHolder(category.key)}
+                options={getCategoryItemOptions(category.key)}
+                onChange={onChangeCategoryItem}
+                value={category.itemName || "Choose a Category"}
+              />
+            </div>
+          ))}
         </div>
 
         <TagRow className="row">
@@ -210,6 +232,16 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties, already
         </TagRow>
 
         <div className="row">
+          <div className="col-12">
+            <CheckboxGroupField
+              label="Additions"
+              options={plainOptions}
+              defaultValue={["Apple"]}
+            />
+          </div>
+        </div>
+
+        <div className="row">
           <div className="col-6">
             <InputNumberField
               label="Quantity"
@@ -224,11 +256,11 @@ export const ItemView = ({ selectedProperties, updateSelectedproperties, already
           </div>
         </div>
 
-        {quantityError && quantityError?.status === 1 &&
+        {quantityError && quantityError?.status === 1 && (
           <Typography.Text type="danger" strong>
-              {quantityError.message}
+            {quantityError.message}
           </Typography.Text>
-        }
+        )}
       </ItemForm>
     </ItemDetail>
   );
