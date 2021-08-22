@@ -174,7 +174,13 @@ export const ItemSection = () => {
           status: element.status,
           created_at: element.created_at,
           updated_at: element.updated_at,
-          menu_item_addons: element.menu_item_addons,
+          menu_item_addons: element.active_menu_item_addons.map((addon)=>{
+            return {
+              ...addon,
+              label : addon.name,
+              value: addon.name
+            }
+          }),
           // menu_item_addons: addons,
           menu_option_categories: element?.menu_option_categories?.map(
             (category) => {

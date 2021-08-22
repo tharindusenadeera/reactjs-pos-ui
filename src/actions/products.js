@@ -20,6 +20,13 @@ export const getProducts = () => async (dispatch) => {
                   status: element.status,
                   created_at: element.created_at,
                   updated_at: element.updated_at,
+                  menu_item_addons: element.active_menu_item_addons.map((addon)=>{
+                    return {
+                      ...addon,
+                      label : addon.name,
+                      value: addon.name
+                    }
+                  }),
                   menu_option_categories: element?.menu_option_categories?.map(
                     (category) => {
                       return {

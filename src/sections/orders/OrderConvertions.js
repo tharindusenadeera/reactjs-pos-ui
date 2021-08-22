@@ -17,6 +17,7 @@ export const getFormattedOrder = (order, products) => {
         const quantity = orderProduct?.order_menu_item_qty;
         const productId = orderProduct?.id;
         const order_menu_item_id = orderProduct?.order_menu_item_id;
+        const addons = orderProduct.order_menu_item_addons || [];
         let array = [];
 
         const fullProduct = products.find((product) => product.productKey === productId);
@@ -41,8 +42,11 @@ export const getFormattedOrder = (order, products) => {
             });
         })
 
+        const convertedAddons = addons.map((addon)=> addon.name);
+
         const processedOrder = {
             ...fullProduct,
+            selectAddons: convertedAddons,
             categories: array,
             quantity: quantity,
             order_menu_item_id: order_menu_item_id,

@@ -232,7 +232,7 @@ export const ItemView = ({
           )}
         </TagRow>
 
-        {selectedProperties?.menu_item_addons > 0 && (
+        {selectedProperties?.menu_item_addons.length > 0 && (
           <div className="row">
             <div className="col-12">
               <CheckboxGroupField
