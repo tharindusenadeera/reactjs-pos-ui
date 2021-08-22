@@ -1,35 +1,27 @@
 import React, { useState, useEffect } from "react";
-import {useDispatch} from "react-redux";
+import { useSelector } from "react-redux";
 import { OrderView } from "./OrderView";
 import { TabsCustom } from "../../components/tabs";
 import { Tabs } from "antd"; /* Tharindu try to remove this part */
 
-import { isFetching } from "../../actions/common";
-import { getAllOrders } from "../../api/order";
-
 const { TabPane } = Tabs;
 
 export const OrderGroup = (props) => {
-  const { clickOK, refresh } = props;
-  const [allOrders, setAllOrders] = useState([]);
+  const { clickOK, getTypeOrders, typeTab } = props;
   const [currentTab, setCurrentTab] = useState("1");
-  const dispatch = useDispatch();
+  const [allTypeOrders, setAllTypeOrders] = useState([]);
+
+  const fetchingData = useSelector((state) => state.common.isFetching);
 
   useEffect(() => {
-    dispatch(isFetching(true));
-
-    getAllOrders().then((res) => {
-      if (res.data.status === "success") {
-        dispatch(isFetching(false));
-        setAllOrders(res.data.data);
-      }
-    });
-  }, [refresh]);
+    setAllTypeOrders(getTypeOrders(typeTab));
+  }, [typeTab, fetchingData]);
 
   const getCategoriesOrders = (tab) => {
     return (
-      allOrders &&
-      allOrders.filter((item) => {
+      allTypeOrders &&
+      allTypeOrders.length > 0 &&
+      allTypeOrders.filter((item) => {
         return item.status === tab;
       })
       );
