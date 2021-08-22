@@ -19,8 +19,8 @@ export const OrderType = (props) => {
 
     getAllOrders().then((res) => {
       if (res.data.status === "success") {
-        dispatch(isFetching(false));
         setAllOrders(res.data.data);
+        dispatch(isFetching(false));
       }
     });
   }, [refresh]);

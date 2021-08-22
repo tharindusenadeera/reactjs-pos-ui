@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { OrderView } from "./OrderView";
 import { TabsCustom } from "../../components/tabs";
 import { Tabs } from "antd"; /* Tharindu try to remove this part */
@@ -8,11 +9,13 @@ const { TabPane } = Tabs;
 export const OrderGroup = (props) => {
   const { clickOK, getTypeOrders, typeTab } = props;
   const [currentTab, setCurrentTab] = useState("1");
-  const [allTypeOrders, setAllTypeOrders] = useState({});
+  const [allTypeOrders, setAllTypeOrders] = useState([]);
+
+  const fetchingData = useSelector((state) => state.common.isFetching);
 
   useEffect(() => {
     setAllTypeOrders(getTypeOrders(typeTab));
-  }, [typeTab]);
+  }, [typeTab, fetchingData]);
 
   const getCategoriesOrders = (tab) => {
     return (
