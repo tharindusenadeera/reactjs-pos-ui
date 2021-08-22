@@ -10,7 +10,7 @@ import { Calculator } from "../../components/calculator/index";
 import { DropdownCustom } from "../../components/dropdown";
 import { Menu } from "antd";
 //import { OrderView } from "../orders/OrderView";
-import { OrderGroup } from "../orders/OrderGroup";
+import { OrderType } from "../orders/OrderType";
 
 const Wrapper = styled.header`
   padding: 15px 0;
@@ -112,7 +112,7 @@ export const Header = () => {
                 isModalVisible={isModalVisible}
               >
                 {/* <OrderView clickOK={clickOK}/> */}
-                <OrderGroup clickOK={clickOK} refresh={refresh}/>
+                <OrderType clickOK={clickOK} refresh={refresh}/>
               </ModalCustom>
               <DropdownCustom
                 btnTitle={Theme.icons.$user}
