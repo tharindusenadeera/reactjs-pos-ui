@@ -134,31 +134,7 @@ export const ItemSection = () => {
     }
   }, [selectedProperties]);
 
-  const addons = [
-    {
-      id: 1,
-      name: "cheese",
-      label: "cheese",
-      value: "cheese",
-      status: 1,
-      pivot: {
-        manu_item_id: 1,
-        addon_id: 1,
-      },
-    },
-    {
-      id: 2,
-      name: "butter",
-      label: "butter",
-      value: "butter",
-      status: 1,
-      pivot: {
-        manu_item_id: 1,
-        addon_id: 2,
-      },
-    },
-  ];
-
+  
   const handleProducts = (data) => {
     let itemArr = [];
     data &&
@@ -177,7 +153,7 @@ export const ItemSection = () => {
           menu_item_addons: element.active_menu_item_addons.map((addon)=>{
             return {
               ...addon,
-              label : addon.name,
+              label : addon.name+" ( $"+ addon.pivot.amount+" )",
               value: addon.name
             }
           }),
@@ -243,7 +219,7 @@ export const ItemSection = () => {
 
   const handlePriceCalculation = (item, itemKey) => {
     // disounted value and total value should update with services
-    return { ...item, subtotal: item?.price * item?.quantity, key: itemKey };
+    return { ...item, subtotal: (parseFloat(item?.price) + item.addonCost) * item?.quantity, key: itemKey };
   };
 
   /**

@@ -23,7 +23,7 @@ export const getProducts = () => async (dispatch) => {
                   menu_item_addons: element.active_menu_item_addons.map((addon)=>{
                     return {
                       ...addon,
-                      label : addon.name,
+                      label : addon.name+" ( $"+ addon.pivot.amount+" )",
                       value: addon.name
                     }
                   }),

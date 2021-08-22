@@ -40,7 +40,7 @@ const ItemForm = styled.div`
 
 const TagRow = styled.div`
   margin-left: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 `;
 
 export const ItemView = ({
@@ -182,9 +182,20 @@ export const ItemView = ({
   };
 
   const handleAddonChange = (checkedValues) => {
+    let addonCost = 0;
+    
+    checkedValues.forEach((addon) => {
+      selectedProperties.menu_item_addons.forEach((item) => {
+        if (addon === item.name) {
+          addonCost += parseFloat(item.pivot.amount);
+        }
+      })
+    })
+
     updateSelectedproperties({
       ...selectedProperties,
       selectAddons: checkedValues,
+      addonCost: addonCost
     });
   };
 

@@ -138,7 +138,7 @@ export const ProductSection = () => {
 
   const handlePriceCalculation = (item, itemKey) => {
     // disounted value and total value should update with services
-    return { ...item, subtotal: item?.price * item?.quantity, key: itemKey };
+    return { ...item, subtotal: (parseFloat(item?.price) + item.addonCost) * item?.quantity, key: itemKey };
   };
 
   /**

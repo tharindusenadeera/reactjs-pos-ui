@@ -44,13 +44,18 @@ export const getFormattedOrder = (order, products) => {
 
         const convertedAddons = addons.map((addon)=> addon.name);
 
+        let addonCost = 0;
+        addons.forEach((addon) => {
+            addonCost += parseFloat(addon.order_menu_item_addon_price);
+        })
+
         const processedOrder = {
             ...fullProduct,
             selectAddons: convertedAddons,
             categories: array,
             quantity: quantity,
             order_menu_item_id: order_menu_item_id,
-            subtotal: fullProduct?.price * quantity,
+            subtotal: (parseFloat(fullProduct?.price) + addonCost) * quantity,
         }
 
         const uniqueKey = GenerateUniqueId(processedOrder);
