@@ -41,10 +41,10 @@ export const OrderGroup = (props) => {
           getTabOrders={getCategoriesOrders}
         />
       </TabPane>
-      <TabPane tab="Preparing Orders" key="2">
+      <TabPane tab="Prepared Orders" key="2">
         <OrderView 
           clickOK={clickOK} 
-          tab={"preparing"} 
+          tab={"prepared"} 
           getTabOrders={getCategoriesOrders}
         />
       </TabPane>

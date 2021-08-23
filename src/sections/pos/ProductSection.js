@@ -8,7 +8,7 @@ import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import SaveOrder from "../orders/SaveOrder";
+import { Tooltip } from 'antd';
 
 import {
   updateItem,
@@ -233,12 +233,22 @@ export const ProductSection = () => {
     setQuantityError(data);
   };
 
+  const addonToolTip = data => {
+    let addons = data.toString();
+    return "Addons : " + addons;
+  }
+
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       //fixed: "left",
+      render: (address, record) => (
+        <Tooltip placement="topLeft" title={addonToolTip(record.selectAddons)}>
+          {address}
+        </Tooltip>
+      ),
       width: 100,
     },
     {
@@ -351,7 +361,7 @@ export const ProductSection = () => {
       }
     });
   };
-
+console.log("tableContent", tableContent);
   return (
     <div>
       {/* <SelectNInputField
