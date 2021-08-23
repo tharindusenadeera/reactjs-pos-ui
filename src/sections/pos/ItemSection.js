@@ -218,8 +218,9 @@ export const ItemSection = () => {
    */
 
   const handlePriceCalculation = (item, itemKey) => {
+    const addonCost = item.addonCost ? item.addonCost : 0;
     // disounted value and total value should update with services
-    return { ...item, subtotal: (parseFloat(item?.price) + item.addonCost) * item?.quantity, key: itemKey };
+    return { ...item, subtotal: (parseFloat(item?.price) + addonCost) * item?.quantity, key: itemKey };
   };
 
   /**
