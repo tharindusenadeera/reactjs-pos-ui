@@ -46,7 +46,7 @@ const ButtonWrap = styled.div`
 `;
 
 const PayByCard = (props) => {
-  const { total, order, closePopUp } = props;
+  const { total, order, closePopUp, paymentSucessCallback} = props;
   const [bank, setBank] = useState("");
   const [card, setCard] = useState("");
   const [comment, setComment] = useState("");
@@ -69,7 +69,7 @@ const PayByCard = (props) => {
     let obj = {
       bank: bank,
       card: card,
-      order_id: order?.orderId,
+      order_id: order.id,
       payment_method: "card",
     };
 
@@ -87,10 +87,11 @@ const PayByCard = (props) => {
         dangerMode: true,
       }).then((willDelete) => {
         if (willDelete) {
-          placePayment(order?.orderId, obj)
+          placePayment(order.id, obj)
             .then((res) => {
               if (res.data.status == "success") {
                 swal(`${res.data.message}`, "", "success");
+                paymentSucessCallback();
                 closePopUp();
               } else {
                 swal(`${res.data.message}`, "Please Try Again!", "error");
