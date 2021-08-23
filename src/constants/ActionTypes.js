@@ -5,6 +5,7 @@ export const DELETE_ITEM = 'DELETE_ITEM';
 export const ALL_ITEMS = 'ALL_ITEMS';
 export const DELETE_ALL = 'DELETE_ALL';
 export const UPDATE_ALL = 'UPDATE_ALL';
+export const UPDATE_METADATA = 'UPDATE_METADATA';
 
 //---------- Customer ------------------//
 export const ADD_CUSTOMER_TRIGGERED = 'ADD_CUSTOMER_TRIGGERED';

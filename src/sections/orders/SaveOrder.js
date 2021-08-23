@@ -498,7 +498,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
 
   return (
     <ButtonCustom
-      disabled={!selectedItems.length}
+      disabled={!selectedItems.length || orderMetaData?.payment_status === "success"}
       width={width}
       type="primary"
       className={cls ? cls : "green"}
