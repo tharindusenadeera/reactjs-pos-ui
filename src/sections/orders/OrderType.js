@@ -47,7 +47,7 @@ export const OrderType = (props) => {
       <TabPane tab="Take Away" key="take_away">
         <OrderGroup clickOK={clickOK} getTypeOrders={getTypeOrders} typeTab={typeTab}/>
       </TabPane>
-      <TabPane tab="Diliver" key="deliver">
+      <TabPane tab="Deliver" key="deliver">
         <OrderGroup clickOK={clickOK} getTypeOrders={getTypeOrders} typeTab={typeTab}/>
       </TabPane>
     </TabsCustom>

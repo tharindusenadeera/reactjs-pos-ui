@@ -210,7 +210,7 @@ export const OrderView = (props) => {
                       <DeleteButton
                         confirm={() => handleConfirm(order?.id)}
                         cancel={handleCancel}
-                        disabled={order?.status === "preparing" ? true : false}
+                        disabled={order?.status === "prepared" ? true : false}
                       />
 
                       {order?.status === "placed" && (

@@ -5,6 +5,7 @@ import {
   ALL_ITEMS,
   DELETE_ALL,
   UPDATE_ALL,
+  UPDATE_METADATA
 } from "../constants/ActionTypes";
 
 const initilailState = {
@@ -44,6 +45,11 @@ const selectedItemReducer = (selectedItems = initilailState, action) => {
       return {
         metaData: action.payload.metaData,
         productList: action.payload.productList
+      };
+    case UPDATE_METADATA:
+      return {
+        ...selectedItems,
+        metaData: action.payload,
       };
 
     default:

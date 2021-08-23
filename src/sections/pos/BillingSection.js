@@ -309,7 +309,7 @@ export const BillingSection = (props) => {
             <SaveOrder
               type="update"
               width="block"
-              order_id={orderMetaData.order_id}
+              order_id={orderMetaData?.order_id}
             />
           </div>
         )
@@ -357,7 +357,9 @@ export const BillingSection = (props) => {
               disabled={
                 !(
                   addOrder?.status === "placed" ||
-                  orderMetaData?.status === "placed"
+                  addOrder?.status === "settled" ||
+                  orderMetaData?.status === "placed" ||
+                  orderMetaData?.status === "settled"
                 )
               }
               width="block"

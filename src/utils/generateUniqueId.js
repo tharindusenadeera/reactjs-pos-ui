@@ -96,7 +96,7 @@ const compareTwoArrays = (array1, array2) => {
         // if the item has only product key check the match
         // if matching then match item found |  if it is not matching move to next
         } else if (!(newAddonIdArray.length > 0 || newCategoryIdArray.length > 0)) {
-            if (newProductId === idArrayOld[0]) {
+            if (newProductId === oldProductId) {
                 isMatch = true;
                 matchedItem = item;
                 break;

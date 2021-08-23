@@ -56,7 +56,7 @@ const ButtonWrap = styled.div`
 `;
 
 const PayByCash = (props) => {
-  const { total, order, closePopUp } = props;
+  const { total, order, closePopUp, paymentSucessCallback } = props;
   const [amountToReturn, setAmountToReturn] = useState(0);
   const [amountPaid, setAmountPaid] = useState();
   const [error, setError] = useState(false);
@@ -64,9 +64,9 @@ const PayByCash = (props) => {
 
   const handleAmountToPay = (e) => {
     setError(false);
-    let paidAmount = e.target.value;
+    let paidAmount = e.target.value || 0;
     let returnAmount = "";
-    returnAmount = parseFloat(paidAmount) - parseFloat(total);
+    returnAmount = parseFloat(paidAmount).toFixed(2) - parseFloat(total).toFixed(2);
     setAmountPaid(paidAmount);
     setAmountToReturn(returnAmount);
   };
@@ -77,7 +77,7 @@ const PayByCash = (props) => {
     } else {
       let obj = {
         amount_paid: amountPaid,
-        order_id: order?.ordeId,
+        order_id: order.id,
         payment_method: "cash",
       };
 
@@ -93,10 +93,11 @@ const PayByCash = (props) => {
         dangerMode: true,
       }).then((willDelete) => {
         if (willDelete) {
-          placePayment(order?.orderId, obj)
+          placePayment(order.id, obj)
             .then((res) => {
               if (res.data.status == "success") {
                 swal(`${res.data.message}`, "", "success");
+                paymentSucessCallback();
                 closePopUp();
               } else {
                 swal(`${res.data.message}`, "Please Try Again!", "error");

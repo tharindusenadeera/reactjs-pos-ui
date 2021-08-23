@@ -1,4 +1,4 @@
-import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, ALL_ITEMS, DELETE_ALL, UPDATE_ALL } from '../constants/ActionTypes';
+import { ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, ALL_ITEMS, DELETE_ALL, UPDATE_ALL, UPDATE_METADATA } from '../constants/ActionTypes';
 
 /** add a product item to selected products list */
 export const addItem = (item) => {
@@ -43,6 +43,13 @@ export const deleteAllItems = () => {
 export const addAllItems = (data) => {
     return {
         type: UPDATE_ALL,
+        payload: data
+    }
+}
+
+export const updateMetaData = (data) => {
+    return {
+        type: UPDATE_METADATA,
         payload: data
     }
 }
