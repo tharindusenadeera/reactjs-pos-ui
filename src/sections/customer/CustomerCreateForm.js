@@ -305,18 +305,6 @@ export const CustomerCreateForm = (props) => {
           />
         </div>
 
-        {mealType == "dine_in" && (
-          <div className="col-12 col-sm-6">
-            <SelectField
-              showSearch={false}
-              label="Table Number"
-              options={tableArr && tableArr}
-              placeholder="Select a table"
-              onChange={handleSelectedTable}
-            />
-          </div>
-        )}
-
         <ButtonWrap>
           <ButtonCustom btnTitle={"Cancel"} onClick={handleCancel} />
 
