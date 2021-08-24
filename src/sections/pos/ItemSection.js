@@ -200,7 +200,7 @@ export const ItemSection = () => {
   const getFilteredProducts = (type, value) => {
     let obj = {};
     if (type === "id") {
-      obj.id = value;
+      obj.cat_id = value;
     } else {
       obj.item = value;
     }
