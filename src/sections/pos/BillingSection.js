@@ -76,6 +76,11 @@ const tableArr = [
 
 const calculateOrderSummary = (selectedItems, disc, id) => {
   let subTot = 0;
+  let totItems = 0;
+
+  selectedItems.forEach((item) => {
+    totItems += item?.quantity;
+  });
 
   selectedItems.forEach((item) => {
     subTot += item?.subtotal;
@@ -96,7 +101,7 @@ const calculateOrderSummary = (selectedItems, disc, id) => {
   );
 
   return {
-    totItems: selectedItems.length,
+    totItems: totItems,
     subTot: subT,
     discount: dis,
     tax: tax,
