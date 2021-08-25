@@ -75,7 +75,7 @@ const Count = styled.span`
 `;
 
 export const ContentModal = (props) => {
-  const { clickOk, clickCancel, disableOk, disableCancel, record, selectItem} = props;
+  const { clickOk, clickCancel, disableOk, disableCancel, record, selectItem, btnDisabled} = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -119,7 +119,7 @@ export const ContentModal = (props) => {
         <ButtonAnt
           type="ghost"
           onClick={showModal}
-          disabled={props.btnDisabled}
+          disabled={btnDisabled}
         >
           {props.btnContent}
         </ButtonAnt>

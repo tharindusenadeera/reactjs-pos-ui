@@ -92,6 +92,7 @@ const ProductImg = styled.img`
 export const ItemSection = () => {
   // const [products, setProducts] = useState([]);
   const products = useSelector((state) => state.products);
+  const orderMetaData = useSelector((state) => state.selectedItems.metaData);
 
   const [selectedItems, setSelectedItems] = useState(0);
   const [categories, setCategories] = useState([]);
@@ -366,6 +367,7 @@ export const ItemSection = () => {
                       <span className="prod-price">$ {item.price}</span>
                     </ProductCard>
                   }
+                  btnDisabled={orderMetaData && orderMetaData.payment_status === "success"}
                   btnClass="green"
                   okText="Add to order"
                   className="body-nonpadding"
