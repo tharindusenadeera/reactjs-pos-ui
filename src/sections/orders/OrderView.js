@@ -67,12 +67,13 @@ const PreLoader = styled.div`
 `;
 
 export const OrderView = (props) => {
-  const { clickOK, tab, getTabOrders} = props;
+  const { clickOK, tab, getCategoriesOrders } = props;
   const dispatch = useDispatch();
 
-  const orders = getTabOrders(tab);
   const products = useSelector((state) => state.products);
   const fetchingData = useSelector((state) => state.common.isFetching);
+
+  const orders = getCategoriesOrders(tab);
 
   const handleConfirm = (id) => {
     deleteOrder(id)
@@ -92,8 +93,7 @@ export const OrderView = (props) => {
       });
   };
 
-  const handleCancel = () => {
-  };
+  const handleCancel = () => {};
 
   const renderPaymentStatus = (status) => {
     let paymentStatus = "";
@@ -159,7 +159,7 @@ export const OrderView = (props) => {
         <Fragment>
           <div className="row">
             {orders &&
-              orders.map((order, key) => (
+              orders?.map((order, key) => (
                 <div className="col col-sm-6 col-md-4" key={key}>
                   <div className="order-box">
                     <h3>Order {order?.id}</h3>
@@ -228,7 +228,7 @@ export const OrderView = (props) => {
               ))}
           </div>
 
-          {!fetchingData && orders?.length == 0 ? (
+          {!fetchingData && orders?.length === 0 ? (
             <ErrorMessageDiv>
               <Typography.Text type="danger" strong>
                 No data Found
