@@ -325,7 +325,7 @@ export const ItemSection = () => {
   const qunatityErrorHandle = (data) => {
     setQuantityError(data);
   };
-
+console.log("SelectedProperties", selectedProperties);
   return (
     <Fragment>
       <Head>
