@@ -201,7 +201,7 @@ export const ItemSection = () => {
   const getFilteredProducts = (type, value) => {
     let obj = {};
     if (type === "id") {
-      obj.id = value;
+      obj.cat_id = value;
     } else {
       obj.item = value;
     }
@@ -326,7 +326,7 @@ export const ItemSection = () => {
   const qunatityErrorHandle = (data) => {
     setQuantityError(data);
   };
-
+console.log("SelectedProperties", selectedProperties);
   return (
     <Fragment>
       <Head>

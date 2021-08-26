@@ -8,7 +8,7 @@ import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import SaveOrder from "../orders/SaveOrder";
+import { Tooltip, Tag } from 'antd';
 
 import {
   updateItem,
@@ -103,6 +103,13 @@ export const ProductSection = () => {
   const isEmpty = (obj) => {
     return Object.keys(obj).length === 0;
   };
+
+  const tagCss = {
+    background: "#63b10e",
+    borderColor: "#58a208",
+    fontSize: "12px",
+    color: "#FFFFFF"
+  }
 
   useEffect(() => {
     setTableContent(alreadyAddedItems);
@@ -233,23 +240,52 @@ export const ProductSection = () => {
     setQuantityError(data);
   };
 
+  const addonToolTip = (data) => {
+    let addons = data?.selectAddons?.length > 0 ? data?.selectAddons.join(' , ').toString() : '';
+    let text = addons ? addons : "Not selected";
+
+    return "Addons : " + text;
+  }
+
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       //fixed: "left",
-      width: 100,
+      render: (address, record) => (
+        <Tooltip placement="topLeft" title={addonToolTip(record)}>
+          {address}
+        </Tooltip>
+      ),
+      width: 80,
+    },
+    {
+      title: 'Categories',
+      key: 'categories',
+      dataIndex: 'categories',
+      render: categories => (
+        <>
+          {categories?.map(category => {
+            return (
+              <Tag key={category?.id} style={{...tagCss}}>
+                {category?.tag}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+      width: 70,
     },
     {
       title: "Qty",
       dataIndex: "quantity",
-      width: 50,
+      width: 20,
     },
     {
       title: "Subtotal",
       dataIndex: "subtotal",
-      width: 70,
+      width: 40,
     },
     {
       title: "Actions",

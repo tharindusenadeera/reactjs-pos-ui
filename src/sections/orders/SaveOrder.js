@@ -68,6 +68,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
             order_menu_item_id: product?.order_menu_item_id,
             menu_option_category_menu_option_id:
               menu_option_category_menu_option_array,
+            menu_item_comment: product.menu_item_comment,
           });
         } else {
           order.push({
@@ -76,6 +77,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
             addon_id: addon_id,
             menu_option_category_menu_option_id:
               menu_option_category_menu_option_array,
+            menu_item_comment: product.orderComments,
           });
         }
       } else {
@@ -84,6 +86,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
           qty: product.quantity,
           menu_option_category_menu_option_id: [],
           addon_id: [],
+          menu_item_comment: ""
         });
       }
     });
@@ -498,7 +501,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
 
   return (
     <ButtonCustom
-      disabled={!selectedItems.length || orderMetaData?.payment_status === "success"}
+      disabled={
+        !selectedItems.length || orderMetaData?.payment_status === "success"
+      }
       width={width}
       type="primary"
       className={cls ? cls : "green"}

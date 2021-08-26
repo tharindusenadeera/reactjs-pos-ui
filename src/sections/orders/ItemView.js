@@ -5,6 +5,7 @@ import { TagCustom } from "../../components/tag";
 import styled from "styled-components";
 import Theme from "../../utils/Theme";
 import { CheckboxGroupField } from "../../components/field/CheckboxGroupField";
+import { TextAreaField } from "../../components/field/TextAreaField";
 
 import { Typography } from "antd";
 
@@ -183,19 +184,26 @@ export const ItemView = ({
 
   const handleAddonChange = (checkedValues) => {
     let addonCost = 0;
-    
+
     checkedValues.forEach((addon) => {
       selectedProperties.menu_item_addons.forEach((item) => {
         if (addon === item.name) {
           addonCost += parseFloat(item.pivot.amount);
         }
-      })
-    })
+      });
+    });
 
     updateSelectedproperties({
       ...selectedProperties,
       selectAddons: checkedValues,
-      addonCost: addonCost
+      addonCost: addonCost,
+    });
+  };
+
+  const handleComments = (comments) => {
+    updateSelectedproperties({
+      ...selectedProperties,
+      orderComments: comments,
     });
   };
 
@@ -268,6 +276,21 @@ export const ItemView = ({
               onClickPlus={onClickPlus}
               onClickMinus={onClickMinus}
               onChange={onChangeQuantity}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-12">
+            <TextAreaField
+              defaultValue={""}
+              value={
+                selectedProperties?.orderComments
+                  ? selectedProperties?.orderComments
+                  : undefined
+              }
+              label="Note (If Any)"
+              onChange={(e) => handleComments(e.target.value)}
             />
           </div>
         </div>
