@@ -11,6 +11,9 @@ import { DropdownCustom } from "../../components/dropdown";
 import { Menu } from "antd";
 //import { OrderView } from "../orders/OrderView";
 import { OrderType } from "../orders/OrderType";
+import { isFetching } from "../../actions/common";
+import { getAllOrders } from "../../api/order";
+import { useDispatch } from "react-redux";
 
 const Wrapper = styled.header`
   padding: 15px 0;
@@ -54,8 +57,20 @@ export const Header = () => {
   const history = useHistory();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(true);
+  const [allOrders, setAllOrders] = useState([]);
+  const dispatch = useDispatch();
+
   const currentDate = moment().format("dddd DD MMMM YYYY");
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  useEffect(() => {
+    getAllOrders().then((res) => {
+      if (res.data.status === "success") {
+        setAllOrders(res.data.data);
+        dispatch(isFetching(false));
+      }
+    });
+  }, [refresh]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -71,11 +86,11 @@ export const Header = () => {
   };
 
   const logout = () => {
-    localStorage.setItem('ACCESS_TOKEN', "");
+    localStorage.setItem("ACCESS_TOKEN", "");
     history.push({
       pathname: "/",
     });
-  }
+  };
 
   return (
     <Wrapper>
@@ -112,14 +127,16 @@ export const Header = () => {
                 isModalVisible={isModalVisible}
               >
                 {/* <OrderView clickOK={clickOK}/> */}
-                <OrderType clickOK={clickOK} refresh={refresh}/>
+                <OrderType clickOK={clickOK} allOrders={allOrders} />
               </ModalCustom>
               <DropdownCustom
                 btnTitle={Theme.icons.$user}
                 btnClass="ml-3 btn-nav"
               >
                 <Menu>
-                  <Menu.Item key="1" onClick={() => logout()}>{Theme.icons.$logout} Logout</Menu.Item>
+                  <Menu.Item key="1" onClick={() => logout()}>
+                    {Theme.icons.$logout} Logout
+                  </Menu.Item>
                 </Menu>
               </DropdownCustom>
             </NavControls>
