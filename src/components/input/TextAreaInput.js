@@ -29,7 +29,7 @@ const Wrapper = styled.div`
 
 export const TextAreaInput = (props) => {
   const { TextArea } = Input;
-  const { placeholder, onChange } = props;
+  const { placeholder, onChange, value } = props;
 
   return (
     <Wrapper>
@@ -37,6 +37,7 @@ export const TextAreaInput = (props) => {
         placeholder={placeholder}
         allowClear
         onChange={onChange}
+        value={value}
       />
     </Wrapper>
   );

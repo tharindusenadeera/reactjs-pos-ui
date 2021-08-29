@@ -8,7 +8,7 @@ import { ButtonCustom } from "../../components/button";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { ModalCustom } from "../../components/modal";
 import { ItemView } from "../orders/ItemView";
-import { Tooltip, Tag } from 'antd';
+import { Tooltip, Tag } from "antd";
 
 import {
   updateItem,
@@ -108,8 +108,8 @@ export const ProductSection = () => {
     background: "#63b10e",
     borderColor: "#58a208",
     fontSize: "12px",
-    color: "#FFFFFF"
-  }
+    color: "#FFFFFF",
+  };
 
   useEffect(() => {
     setTableContent(alreadyAddedItems);
@@ -146,7 +146,11 @@ export const ProductSection = () => {
   const handlePriceCalculation = (item, itemKey) => {
     const addonCost = item.addonCost ? item.addonCost : 0;
     // disounted value and total value should update with services
-    return { ...item, subtotal: (parseFloat(item?.price) + addonCost) * item?.quantity, key: itemKey };
+    return {
+      ...item,
+      subtotal: (parseFloat(item?.price) + addonCost) * item?.quantity,
+      key: itemKey,
+    };
   };
 
   /**
@@ -241,11 +245,14 @@ export const ProductSection = () => {
   };
 
   const addonToolTip = (data) => {
-    let addons = data?.selectAddons?.length > 0 ? data?.selectAddons.join(' , ').toString() : '';
+    let addons =
+      data?.selectAddons?.length > 0
+        ? data?.selectAddons.join(" , ").toString()
+        : "";
     let text = addons ? addons : "Not selected";
 
     return "Addons : " + text;
-  }
+  };
 
   const columns = [
     {
@@ -261,14 +268,14 @@ export const ProductSection = () => {
       width: 80,
     },
     {
-      title: 'Categories',
-      key: 'categories',
-      dataIndex: 'categories',
-      render: categories => (
+      title: "Categories",
+      key: "categories",
+      dataIndex: "categories",
+      render: (categories) => (
         <>
-          {categories?.map(category => {
+          {categories?.map((category) => {
             return (
-              <Tag key={category?.id} style={{...tagCss}}>
+              <Tag key={category?.id} style={{ ...tagCss }}>
                 {category?.tag}
               </Tag>
             );
@@ -299,7 +306,9 @@ export const ProductSection = () => {
           <Fragment>
             <ModalCustom
               btnTitle={Theme.icons.$edit}
-              btnDisabled={orderMetaData && orderMetaData.payment_status === "success"}
+              btnDisabled={
+                orderMetaData && orderMetaData.payment_status === "success"
+              }
               btnClass="mr-2 yellow"
               type="primary"
               title="Edit item in order"
@@ -396,6 +405,13 @@ export const ProductSection = () => {
         Selectplaceholder="Choose Type"
       /> */}
       <InputField label="Selected Product" onChange={handleSearch} />
+      {orderMetaData && orderMetaData.order_id ? (
+        <Fragment>
+          <b>Order Number -  {orderMetaData?.order_id}</b>
+        </Fragment>
+      ) : (
+        <Fragment />
+      )}
       <TableWarp>
         <TableCustom
           columns={columns}

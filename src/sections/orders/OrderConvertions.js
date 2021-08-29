@@ -18,6 +18,7 @@ export const getFormattedOrder = (order, products) => {
         const productId = orderProduct?.id;
         const order_menu_item_id = orderProduct?.order_menu_item_id;
         const addons = orderProduct.order_menu_item_addons || [];
+        const orderComments = orderProduct.order_menu_item_comment;
         let array = [];
 
         const fullProduct = products.find((product) => product.productKey === productId);
@@ -52,6 +53,7 @@ export const getFormattedOrder = (order, products) => {
         const processedOrder = {
             ...fullProduct,
             selectAddons: convertedAddons,
+            orderComments: orderComments,
             categories: array,
             quantity: quantity,
             order_menu_item_id: order_menu_item_id,

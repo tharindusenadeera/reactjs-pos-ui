@@ -66,9 +66,10 @@ const PayByCash = (props) => {
     setError(false);
     let paidAmount = e.target.value || 0;
     let returnAmount = "";
-    returnAmount = parseFloat(paidAmount).toFixed(2) - parseFloat(total).toFixed(2);
+    returnAmount =
+      parseFloat(paidAmount).toFixed(2) - parseFloat(total).toFixed(2);
     setAmountPaid(paidAmount);
-    setAmountToReturn(returnAmount);
+    setAmountToReturn(Math.round(returnAmount * 100) / 100);
   };
 
   const handleSubmit = () => {
@@ -132,14 +133,14 @@ const PayByCash = (props) => {
         <InputField
           type="number"
           // step="0.01"
-          label="Recived Amount ($)"
+          label="Received Amount ($)"
           errorMsg={error ? "Required" : ""}
           onChange={(e) => handleAmountToPay(e)}
         />
       </FieldRow>
 
       <Balance>
-        <h4>Due Amount :</h4>
+        <h4>Balance Amount :</h4>
         <h4>${amountToReturn}</h4>
       </Balance>
 

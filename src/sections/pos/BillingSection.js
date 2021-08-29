@@ -115,6 +115,7 @@ export const BillingSection = (props) => {
   // key 1 -> percentage  2 -> fixed value
   const dispatch = useDispatch();
   const initialDiscount = { key: "1", value: 0 };
+  const [tableNumber, setTableNumber] = useState("");
   const [dis, setDis] = useState(initialDiscount);
   const [savedDis, setSavedDis] = useState(initialDiscount);
 
@@ -126,7 +127,17 @@ export const BillingSection = (props) => {
   const mealType = useSelector((state) => state.common.mealType);
   const addOrder = useSelector((state) => state.order.addOrder);
 
-  const tableNumber = useSelector((state) => state.order.tableNumber);
+  React.useEffect(() => {
+    setTableNumber(addOrder?.table_id);
+    if (addOrder?.table_id) {
+      const table = tableArr.find((option) => {
+        return option.key === addOrder.table_id;
+      });
+      if (table) {
+        setTableNumber(table.value);
+      }
+    }
+  }, [addOrder]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -181,17 +192,17 @@ export const BillingSection = (props) => {
   };
 
   const handleSelectedTable = (value) => {
+    setTableNumber(value);
     dispatch(addTable(value));
   };
 
   const printButtonClicked = () => {
-    printBill(addOrder.id).then(res => {
-      let mywindow = window.open("", "", "width=700,height=700")
+    printBill(addOrder.id).then((res) => {
+      let mywindow = window.open("", "", "width=700,height=700");
       mywindow.document.write(res.data);
-      window.close()
-    })
+      window.close();
+    });
   };
-  
 
   const closePopUp = () => {
     setIsModalVisible(false);
@@ -234,11 +245,7 @@ export const BillingSection = (props) => {
               defa
               showSearch={false}
               label="Table Number"
-              // value={
-              //   tableNumber
-              //     ? tableArr.filter((option) => option.key == tableNumber)
-              //     : undefined
-              // }
+              value={tableNumber}
               options={tableArr && tableArr}
               placeholder="Select a table"
               onChange={handleSelectedTable}

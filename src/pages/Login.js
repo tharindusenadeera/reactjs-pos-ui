@@ -39,22 +39,22 @@ const Body = styled.div`
 export const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [email, setEmail] = useState("");
+  const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorObj, setErrorObj] = useState({});
   const [deviceName, setDeviceName] = useState("");
 
   const handleSubmit = () => {
-    if (!email && !password) {
+    if (!username && !password) {
       setErrorObj({
         all: "Required !",
-        email: "Required !",
+        username: "Required !",
         password: "Required !",
       });
       return;
-    } else if (!email) {
+    } else if (!username) {
       setErrorObj({
-        email: "Required !",
+        username: "Required !",
       });
       return;
     } else if (!password) {
@@ -65,7 +65,7 @@ export const Login = () => {
     } else {
       let device_name = deviceName ? deviceName : "localhost";
       let obj = {
-        email,
+        username,
         password,
         device_name,
       };
@@ -74,7 +74,6 @@ export const Login = () => {
           if (res.data.status == "success") {
             dispatch(authenticate(true));
             localStorage.setItem(ACCESS_TOKEN, `Bearer ${res.data.data.token}`);
-            swal("Successfully Logged In !", "", "success");
             history.push({
               pathname: "/dashboard",
             });
@@ -97,7 +96,7 @@ export const Login = () => {
         <Body>
           <div className="field-row">
             <InputField
-              label="Email"
+              label="Username"
               errorMsg={errorObj.email || errorObj.all ? errorObj.email : ""}
               onChange={(e) => {
                 setEmail(e.target.value);

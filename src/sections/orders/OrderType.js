@@ -7,7 +7,7 @@ import { OrderGroup } from "./OrderGroup";
 const { TabPane } = Tabs;
 
 export const OrderType = (props) => {
-  const { clickOK, allOrders } = props;
+  const { clickOK, allOrders, handleDelete } = props;
   const [typeTab, setTypeTab] = useState("dine_in");
 
   const getTypeOrders = (tab) => {
@@ -28,13 +28,25 @@ export const OrderType = (props) => {
   return (
     <TabsCustom tabCallback={typeCallback}>
       <TabPane tab="Dine In" key="dine_in">
-        <OrderGroup clickOK={clickOK} typedOrders={typedOrders} />
+        <OrderGroup
+          clickOK={clickOK}
+          typedOrders={typedOrders}
+          handleDelete={handleDelete}
+        />
       </TabPane>
       <TabPane tab="Take Away" key="take_away">
-        <OrderGroup clickOK={clickOK} typedOrders={typedOrders} />
+        <OrderGroup
+          clickOK={clickOK}
+          typedOrders={typedOrders}
+          handleDelete={handleDelete}
+        />
       </TabPane>
       <TabPane tab="Deliver" key="deliver">
-        <OrderGroup clickOK={clickOK} typedOrders={typedOrders} />
+        <OrderGroup
+          clickOK={clickOK}
+          typedOrders={typedOrders}
+          handleDelete={handleDelete}
+        />
       </TabPane>
     </TabsCustom>
   );

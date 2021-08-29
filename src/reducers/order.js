@@ -1,7 +1,7 @@
 import { ADD_ORDER, ORDER, TABLE_NUMBER } from "../constants/ActionTypes";
 
 const initialState = {
-  addOrder: [],
+  addOrder: {},
   order: {},
   tableNumber: null,
 };

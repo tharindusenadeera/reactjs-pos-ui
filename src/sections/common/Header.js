@@ -12,8 +12,9 @@ import { Menu } from "antd";
 //import { OrderView } from "../orders/OrderView";
 import { OrderType } from "../orders/OrderType";
 import { isFetching } from "../../actions/common";
-import { getAllOrders } from "../../api/order";
+import { deleteOrder, getAllOrders } from "../../api/order";
 import { useDispatch } from "react-redux";
+import swal from "sweetalert";
 
 const Wrapper = styled.header`
   padding: 15px 0;
@@ -64,13 +65,18 @@ export const Header = () => {
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
+    dispatch(isFetching(true));
+    getOrderList();
+  }, [refresh]);
+
+  const getOrderList = () => {
     getAllOrders().then((res) => {
       if (res.data.status === "success") {
         setAllOrders(res.data.data);
         dispatch(isFetching(false));
       }
     });
-  }, [refresh]);
+  };
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -90,6 +96,25 @@ export const Header = () => {
     history.push({
       pathname: "/",
     });
+  };
+
+  const handleDelete = (id) => {
+    deleteOrder(id)
+      .then((res) => {
+        if (res.data.status === "success") {
+          getOrderList();
+          // if (tab == "settled") {
+          //   swal("Order Deleted Successfully", "", "success");
+          // } else {
+          swal(`${res.data.message}`, "", "success");
+          // }
+        } else {
+          swal(`${res.data.message}`, "Please Try Again!", "error");
+        }
+      })
+      .catch((error) => {
+        swal("Something Went Wrong !", "Please Try Again!", "error");
+      });
   };
 
   return (
@@ -118,7 +143,7 @@ export const Header = () => {
               <ModalCustom
                 btnTitle={Theme.icons.$folder}
                 btnClass="ml-3 btn-nav"
-                count={5}
+                count={allOrders.length}
                 title="Draft Orders"
                 type="primary"
                 handleOk={clickOK}
@@ -127,7 +152,7 @@ export const Header = () => {
                 isModalVisible={isModalVisible}
               >
                 {/* <OrderView clickOK={clickOK}/> */}
-                <OrderType clickOK={clickOK} allOrders={allOrders} />
+                <OrderType clickOK={clickOK} allOrders={allOrders} handleDelete={handleDelete}/>
               </ModalCustom>
               <DropdownCustom
                 btnTitle={Theme.icons.$user}

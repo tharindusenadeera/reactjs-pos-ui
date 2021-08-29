@@ -6,7 +6,7 @@ import { Tabs } from "antd"; /* Tharindu try to remove this part */
 const { TabPane } = Tabs;
 
 export const OrderGroup = (props) => {
-  const { clickOK, typedOrders } = props;
+  const { clickOK, typedOrders, handleDelete } = props;
   const [currentTab, setCurrentTab] = useState("1");
 
   const getCategoriesOrders = (tab) => {
@@ -30,6 +30,7 @@ export const OrderGroup = (props) => {
           clickOK={clickOK}
           tab={"placed"}
           getCategoriesOrders={getCategoriesOrders}
+          handleDelete={handleDelete}
         />
       </TabPane>
       <TabPane tab="Prepared Orders" key="prepared">
@@ -37,6 +38,7 @@ export const OrderGroup = (props) => {
           clickOK={clickOK}
           tab={"prepared"}
           getCategoriesOrders={getCategoriesOrders}
+          handleDelete={handleDelete}
         />
       </TabPane>
       <TabPane tab="Draft Orders" key="draft">
@@ -44,6 +46,7 @@ export const OrderGroup = (props) => {
           clickOK={clickOK}
           tab={"draft"}
           getCategoriesOrders={getCategoriesOrders}
+          handleDelete={handleDelete}
         />
       </TabPane>
       <TabPane tab="Settled Orders" key="settled">
@@ -51,6 +54,7 @@ export const OrderGroup = (props) => {
           clickOK={clickOK}
           tab={"settled"}
           getCategoriesOrders={getCategoriesOrders}
+          handleDelete={handleDelete}
         />
       </TabPane>
     </TabsCustom>

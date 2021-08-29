@@ -102,7 +102,11 @@ export const CustomerCreateForm = (props) => {
       errors.lastName = "Last Name Required !";
     } else if (!data.phoneNumber) {
       errors.phoneNumber = "Phone number Required !";
-    } else if (!mobileNoRegex.test(data.phoneNumber)) {
+    } else if (
+      !mobileNoRegex.test(data.phoneNumber) ||
+      data.phoneNumber.length !== 10 ||
+      isNaN(data.phoneNumber)
+    ) {
       errors.phoneNumber = "Invalid Phone number !";
     }
     setErrorObj(errors);

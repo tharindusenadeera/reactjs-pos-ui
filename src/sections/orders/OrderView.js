@@ -14,11 +14,12 @@ import {
   customerDetails,
 } from "../../actions/customer";
 
+import { addOrder, addTable } from "../../actions/order";
+
 import { getFormattedOrder } from "./OrderConvertions";
 import { Typography } from "antd";
 import { Fragment } from "react";
 import { printBill } from "../../api/common";
-import swal from "sweetalert";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -67,31 +68,13 @@ const PreLoader = styled.div`
 `;
 
 export const OrderView = (props) => {
-  const { clickOK, tab, getCategoriesOrders } = props;
+  const { clickOK, tab, getCategoriesOrders, handleDelete } = props;
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.products);
   const fetchingData = useSelector((state) => state.common.isFetching);
 
   const orders = getCategoriesOrders(tab);
-
-  const handleConfirm = (id) => {
-    deleteOrder(id)
-      .then((res) => {
-        if (res.data.status === "success") {
-          if (tab == "settled") {
-            swal("Order Deleted Successfully", "", "success");
-          } else {
-            swal(`${res.data.message}`, "", "success");
-          }
-        } else {
-          swal(`${res.data.message}`, "Please Try Again!", "error");
-        }
-      })
-      .catch((error) => {
-        swal("Something Went Wrong !", "Please Try Again!", "error");
-      });
-  };
 
   const handleCancel = () => {};
 
@@ -130,6 +113,8 @@ export const OrderView = (props) => {
         dispatch(addDeliveryInformations(shippingDetail));
         dispatch(customerDetails(order?.customer));
 
+        dispatch(addTable(order?.table_id));
+        dispatch(addOrder(order));
         const selectedItems = getFormattedOrder(order, products);
         dispatch(addAllItems(selectedItems));
       }
@@ -148,6 +133,15 @@ export const OrderView = (props) => {
       window.close();
     });
   };
+
+  const getTotalItems = (order) => {
+    let totItems = 0;
+
+    order?.order_menu_items_full?.forEach((item) => {
+      totItems += item?.order_menu_item_qty;
+    });
+    return totItems || 0;
+  }
 
   return (
     <Wrapper>
@@ -190,7 +184,7 @@ export const OrderView = (props) => {
                     <div className="d-flex">
                       <p>
                         <label>Total Items</label>
-                        {order?.order_menu_items_full?.length}
+                        {getTotalItems(order)}
                       </p>
                     </div>
 
@@ -208,7 +202,7 @@ export const OrderView = (props) => {
                       />
 
                       <DeleteButton
-                        confirm={() => handleConfirm(order?.id)}
+                        confirm={() => handleDelete(order?.id)}
                         cancel={handleCancel}
                         disabled={order?.status === "prepared" ? true : false}
                       />

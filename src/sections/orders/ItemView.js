@@ -280,26 +280,26 @@ export const ItemView = ({
           </div>
         </div>
 
-        <div className="row">
+        {quantityError && quantityError?.status === 1 && (
+          <Typography.Text type="danger" strong>
+            {quantityError.message}
+          </Typography.Text>
+        )}
+
+        <div className="row mt-3">
           <div className="col-12">
             <TextAreaField
-              defaultValue={""}
+              // defaultValue={""}
               value={
                 selectedProperties?.orderComments
                   ? selectedProperties?.orderComments
-                  : undefined
+                  : ""
               }
               label="Note (If Any)"
               onChange={(e) => handleComments(e.target.value)}
             />
           </div>
         </div>
-
-        {quantityError && quantityError?.status === 1 && (
-          <Typography.Text type="danger" strong>
-            {quantityError.message}
-          </Typography.Text>
-        )}
       </ItemForm>
     </ItemDetail>
   );

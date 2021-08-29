@@ -68,7 +68,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
             order_menu_item_id: product?.order_menu_item_id,
             menu_option_category_menu_option_id:
               menu_option_category_menu_option_array,
-            menu_item_comment: product.menu_item_comment,
+            menu_item_comment: product.orderComments,
           });
         } else {
           order.push({
@@ -338,6 +338,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
 
   const handleUpdateDraftOrder = async () => {
     const order = createUpdateOrder();
+    if (orderType?.mealType == "dine_in") {
+      order.table_id = tableNumber;
+    }
     const data = await dispatch(updateItem(order));
     let obj = {};
 
@@ -364,6 +367,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
 
   const handleDraftOrder = async () => {
     const order = createOrder();
+    if (orderType?.mealType == "dine_in") {
+      order.table_id = tableNumber;
+    }
     const data = await dispatch(addItem(order));
     let obj = {};
 
