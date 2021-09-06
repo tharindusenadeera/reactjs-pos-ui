@@ -14,6 +14,7 @@ const InputAnt = styled(Input)`
       color: ${Theme.colors.$grey};
     }
   }
+
   &.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
     border-color: ${Theme.colors.$primary};
   }
@@ -25,7 +26,8 @@ const InputAnt = styled(Input)`
 `;
 
 export const InputCustom = (props) => {
-  const { placeholder, value, disabled, type, onChange, step, onKeyDown } = props;
+  const { placeholder, value, disabled, type, onChange, step, onKeyDown } =
+    props;
 
   const DisableState = useRef("");
   if (disabled === true) {

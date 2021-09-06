@@ -23,7 +23,8 @@ const AutoCompleteAnt = styled(AutoComplete)`
 `;
 
 export const AutoCompleteCustom = (props) => {
-  const { placeholder, value, disabled, options, onSelect, onSearch } = props;
+  const { placeholder, value, disabled, options, onSelect, onSearch, onClear } =
+    props;
 
   return (
     <AutoCompleteAnt
@@ -32,6 +33,11 @@ export const AutoCompleteCustom = (props) => {
       allowClear
       onSelect={onSelect}
       onSearch={onSearch}
+      onClear={() => {
+        if (onClear) {
+          onClear();
+        }
+      }}
       disabled={disabled}
       options={options}
     />

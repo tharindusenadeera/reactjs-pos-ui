@@ -48,16 +48,31 @@ export const CustomerCreateForm = (props) => {
   const [phoneNumberArr, setPhoneNumberArr] = useState([]);
   const [customer, setCustomer] = useState({});
   const [selectedTable, setSelectedTable] = useState("");
+  const [inputDisabled, setDisabled] = useState(false);
   const emailRegex = RegExp(
     '^(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
   );
   const mobileNoRegex = RegExp("^([0-9]+)$");
+  const mealTypeState = useSelector((state) => state.common);
+  const [isDelivery, setIsDelivery] = useState(false);
+
+  useEffect(() => {
+    if (mealTypeState?.mealType === "deliver") {
+      setIsDelivery(true);
+    } else {
+      setIsDelivery(false);
+    }
+    setErrorObj({});
+  }, [mealTypeState]);
 
   useEffect(() => {
     handleAllCustomers();
   }, []);
 
   useEffect(() => {
+    if (phoneNumber.length === 10) {
+      setDisabled(true);
+    }
     setFirstName(customer.first_name);
     setLastName(customer.last_name);
     setEmail(customer.email);
@@ -67,7 +82,12 @@ export const CustomerCreateForm = (props) => {
 
   useEffect(() => {
     if (storedCustomerDetails) {
-      setFirstName(storedCustomerDetails.first_name);
+      if (Object.keys(storedCustomerDetails).length === 0) {
+        setPhoneNumber("");
+      }
+      if (storedCustomerDetails) {
+        setFirstName(storedCustomerDetails.first_name);
+      }
     }
   }, [storedCustomerDetails]);
 
@@ -98,14 +118,15 @@ export const CustomerCreateForm = (props) => {
     let errors = {};
     if (!data.firstName) {
       errors.firstName = "First Name Required !";
-    } else if (!data.lastName) {
+    } else if (!data.lastName && isDelivery) {
       errors.lastName = "Last Name Required !";
-    } else if (!data.phoneNumber) {
+    } else if (!data.phoneNumber && isDelivery) {
       errors.phoneNumber = "Phone number Required !";
     } else if (
-      !mobileNoRegex.test(data.phoneNumber) ||
-      data.phoneNumber.length !== 10 ||
-      isNaN(data.phoneNumber)
+      (!mobileNoRegex.test(data.phoneNumber) ||
+        data.phoneNumber.length !== 10 ||
+        isNaN(data.phoneNumber)) &&
+      isDelivery
     ) {
       errors.phoneNumber = "Invalid Phone number !";
     }
@@ -123,6 +144,15 @@ export const CustomerCreateForm = (props) => {
     props.handleCancel();
   };
 
+  const clearForm = () => {
+    setFirstName("");
+    setLastName("");
+    setPhoneNumber("");
+    setEmail("");
+    setFirstAddressLine("");
+    setSecondAddressLine("");
+  };
+
   const handleSubmit = () => {
     let obj = {
       firstName,
@@ -130,14 +160,19 @@ export const CustomerCreateForm = (props) => {
       phoneNumber,
       email,
     };
-    if (!firstName || !lastName || !phoneNumber) {
+    if (mealType === "delivery" && (!firstName || !lastName || !phoneNumber)) {
       setErrorObj({
         all: "all",
         firstName: "Required !",
         lastName: "Required !",
         phoneNumber: "Required !",
       });
+
       return;
+    } else if (!firstName) {
+      setErrorObj({
+        firstName: "Required !",
+      });
     } else {
       const errors = validate(obj);
       let newCustomer = {
@@ -161,10 +196,11 @@ export const CustomerCreateForm = (props) => {
           buttons: true,
           dangerMode: true,
         }).then((willDelete) => {
-          if (willDelete) {
+          if (willDelete && isDelivery) {
             addCustomer(newCustomer)
               .then((res) => {
                 if (res.data.status == "success") {
+                  console.log(res.data.data);
                   dispatch(customerDetails(res.data.data));
                   setFirstName("");
                   setLastName("");
@@ -181,6 +217,17 @@ export const CustomerCreateForm = (props) => {
               .catch((error) => {
                 swal("Something Went Wrong !", "Please Try Again!", "error");
               });
+          } else if (!isDelivery) {
+            const customer = {
+              first_name: firstName,
+              last_name: lastName,
+              contact_number: phoneNumber,
+              address_line_1: firstAddressLine,
+              address_line_2: secondAddressLine,
+            };
+            dispatch(customerDetails(customer));
+            swal("Successfully Submitted !", "", "success");
+            props.handleCancel();
           } else {
             swal("Process Terminated!");
           }
@@ -211,6 +258,12 @@ export const CustomerCreateForm = (props) => {
   };
 
   const handlePhoneNumberSearch = (value) => {
+    if (value.length < 10) {
+      setDisabled(false);
+      clearForm();
+    } else if (value.length === 10) {
+      setDisabled(true);
+    }
     setErrorObj({});
     setPhoneNumber(value);
   };
@@ -229,6 +282,8 @@ export const CustomerCreateForm = (props) => {
             placeholder="Select a phone number"
             onSearch={handlePhoneNumberSearch}
             onSelect={handlePhoneNumberSelect}
+            onClear={clearForm}
+            value={phoneNumber}
             options={phoneNumberArr}
             errorMsg={
               errorObj.phoneNumber || errorObj.all ? errorObj.phoneNumber : ""
@@ -241,6 +296,7 @@ export const CustomerCreateForm = (props) => {
             label="Email"
             placeholder="Enter email address"
             value={email ? email : undefined}
+            disabled={inputDisabled}
             errorMsg={errorObj.email ? errorObj.email : ""}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -253,6 +309,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="First Name"
             placeholder="Type a name"
+            disabled={inputDisabled}
             value={firstName ? firstName : undefined}
             errorMsg={
               errorObj.firstName || errorObj.all ? errorObj.firstName : ""
@@ -268,6 +325,7 @@ export const CustomerCreateForm = (props) => {
           <InputField
             label="Last Name"
             placeholder="Type a name"
+            disabled={inputDisabled}
             value={lastName ? lastName : undefined}
             errorMsg={
               errorObj.lastName || errorObj.all ? errorObj.lastName : ""
@@ -282,6 +340,7 @@ export const CustomerCreateForm = (props) => {
         <div className="col-12 col-sm-6">
           <InputField
             label="Address Line 1"
+            disabled={inputDisabled}
             placeholder="Type first address line"
             value={firstAddressLine ? firstAddressLine : undefined}
             // errorMsg={
@@ -297,6 +356,7 @@ export const CustomerCreateForm = (props) => {
         <div className="col-12 col-sm-6">
           <InputField
             label="Address Line 2"
+            disabled={inputDisabled}
             placeholder="Type second address line"
             value={secondAddressLine ? secondAddressLine : undefined}
             // errorMsg={

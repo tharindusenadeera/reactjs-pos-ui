@@ -70,7 +70,9 @@ export const Header = () => {
   }, [refresh]);
 
   const getOrderList = () => {
-    getAllOrders().then((res) => {
+    let date = moment().format("YYYY-MM-DD");
+    // let date = "2021-09-05";
+    getAllOrders({ date: date }).then((res) => {
       if (res.data.status === "success") {
         setAllOrders(res.data.data);
         dispatch(isFetching(false));
@@ -143,7 +145,7 @@ export const Header = () => {
               <ModalCustom
                 btnTitle={Theme.icons.$folder}
                 btnClass="ml-3 btn-nav"
-                count={allOrders.length}
+                count={allOrders && allOrders?.length}
                 title="Draft Orders"
                 type="primary"
                 handleOk={clickOK}
@@ -152,7 +154,11 @@ export const Header = () => {
                 isModalVisible={isModalVisible}
               >
                 {/* <OrderView clickOK={clickOK}/> */}
-                <OrderType clickOK={clickOK} allOrders={allOrders} handleDelete={handleDelete}/>
+                <OrderType
+                  clickOK={clickOK}
+                  allOrders={allOrders}
+                  handleDelete={handleDelete}
+                />
               </ModalCustom>
               <DropdownCustom
                 btnTitle={Theme.icons.$user}

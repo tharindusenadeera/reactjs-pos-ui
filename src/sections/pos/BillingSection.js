@@ -74,7 +74,13 @@ const tableArr = [
   { key: 5, value: "T05" },
 ];
 
-const calculateOrderSummary = (selectedItems, disc, id) => {
+const calculateOrderSummary = (
+  selectedItems,
+  disc,
+  id,
+  shippingCost,
+  mealType
+) => {
   let subTot = 0;
   let totItems = 0;
 
@@ -85,20 +91,22 @@ const calculateOrderSummary = (selectedItems, disc, id) => {
   selectedItems.forEach((item) => {
     subTot += item?.subtotal;
   });
-
+console.log("subTot", subTot);
   const discount = disc.key === "1" ? subTot * (disc.value / 100) : disc.value;
-  const taxPer = 0.03; // tax harcoded as 3%
-  const shipping = subTot === 0 ? 0 : 0; // shipping harcoded as 0
+  const taxPer = 0.0; // tax harcoded as 3%
+  const shipping = mealType == "deliver" ? parseFloat(shippingCost) : 0.0;
 
   /*  Decimal Translations  */
   const subT = convertToDecimal(subTot, 2);
   const dis = convertToDecimal(discount, 2);
   const tax = convertToDecimal(subTot * taxPer, 2);
   const ship = convertToDecimal(shipping, 2);
-  const tot = convertToDecimal(
-    subTot - discount + subTot * taxPer + shipping,
-    2
-  );
+  let tot = 0;
+  if (mealType == "deliver") {
+    tot = convertToDecimal(subTot - discount + subTot * taxPer + shipping, 2);
+  } else {
+    tot = convertToDecimal(subTot - discount + subTot * taxPer, 2);
+  }
 
   return {
     totItems: totItems,
@@ -121,11 +129,37 @@ export const BillingSection = (props) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [orderSnapShot, setOrderSnapShot] = useState({});
-
+  const shippingState = useSelector((state) => state?.customer?.selectedCity);
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
   const mealType = useSelector((state) => state.common.mealType);
   const addOrder = useSelector((state) => state.order.addOrder);
+  const halfPayState = useSelector((state) => state.halfPayOrder);
+  const [buttonTitle, setButtonTitle] = useState("confirmPay");
+  const [payButtonDisabled, setPayButtonDisabled] = useState(false);
+  const [shippingCost, setShippingCost] = useState(0);
+
+  React.useEffect(() => {
+    if (shippingState) {
+      if (!isNaN(shippingState?.deliveryCharge)) {
+        setShippingCost(parseFloat(shippingState?.deliveryCharge));
+      }
+    }
+  }, [shippingState]);
+
+  React.useEffect(() => {
+    if (selectedItems.length === 0) {
+      setTableNumber("");
+    }
+  }, [selectedItems]);
+
+  React.useEffect(() => {
+    if (halfPayState?.amountRemain !== null) {
+      setButtonTitle("payDueAmount");
+    } else {
+      setButtonTitle("confirmPay");
+    }
+  }, [halfPayState]);
 
   React.useEffect(() => {
     setTableNumber(addOrder?.table_id);
@@ -136,6 +170,11 @@ export const BillingSection = (props) => {
       if (table) {
         setTableNumber(table.value);
       }
+    }
+
+    if (addOrder?.order_discount_amount) {
+      let type = addOrder?.discount_type == "percentage" ? 1 : 2;
+      setSavedDis({ key: type, value: addOrder?.order_discount_amount });
     }
   }, [addOrder]);
 
@@ -148,7 +187,6 @@ export const BillingSection = (props) => {
   };
 
   const clickCancel = () => {};
-
   const onChange = (type, event) => {
     if (type === "name") {
       const { key } = event;
@@ -175,7 +213,13 @@ export const BillingSection = (props) => {
   };
 
   const { totItems, subTot, discount, tax, shipping, tot } =
-    calculateOrderSummary(selectedItems, savedDis);
+    calculateOrderSummary(
+      selectedItems,
+      savedDis,
+      addOrder.id,
+      shippingCost,
+      mealType
+    );
 
   const DiscountLabel = `Discount  (${savedDis.value} ${
     savedDis.key === "1" ? "%)" : "$)"
@@ -185,9 +229,10 @@ export const BillingSection = (props) => {
     const orderBillSummary = calculateOrderSummary(
       orderSnapshot?.productList,
       savedDis,
-      addOrder.id
+      addOrder.id,
+      shippingCost,
+      mealType
     );
-
     setOrderSnapShot({ orderBillSummary: orderBillSummary });
   };
 
@@ -223,7 +268,7 @@ export const BillingSection = (props) => {
             hideSubmit={true}
           />
         </div>
-        {mealType == "deliver" ? (
+        {mealType === "deliver" ? (
           <div className="col-12">
             <SelectField
               showSearch={true}
@@ -239,7 +284,7 @@ export const BillingSection = (props) => {
           <Fragment />
         )}
 
-        {mealType == "dine_in" ? (
+        {mealType === "dine_in" ? (
           <div className="col-12">
             <SelectField
               defa
@@ -309,10 +354,19 @@ export const BillingSection = (props) => {
           // already added draft orders changes saving
           <div className="d-flex justify-content-between mt-4">
             <div style={{ width: "48%" }}>
-              <SaveOrder type="updateDraft" width="block" />
+              <SaveOrder
+                type="updateDraft"
+                width="block"
+                discounts={savedDis}
+              />
             </div>
             <div style={{ width: "48%" }}>
-              <SaveOrder type="add" width="block" prevType="draft" />
+              <SaveOrder
+                type="add"
+                width="block"
+                prevType="draft"
+                discounts={savedDis}
+              />
             </div>
           </div>
         ) : (
@@ -322,6 +376,7 @@ export const BillingSection = (props) => {
               type="update"
               width="block"
               order_id={orderMetaData?.order_id}
+              discounts={savedDis}
             />
           </div>
         )
@@ -329,10 +384,10 @@ export const BillingSection = (props) => {
         // newly adding or drafting orders
         <div className="d-flex justify-content-between mt-4">
           <div style={{ width: "48%" }}>
-            <SaveOrder type="draft" width="block" />
+            <SaveOrder type="draft" width="block" discounts={savedDis} />
           </div>
           <div style={{ width: "48%" }}>
-            <SaveOrder type="add" width="block" />
+            <SaveOrder type="add" width="block" discounts={savedDis} />
           </div>
         </div>
       )}
@@ -343,12 +398,12 @@ export const BillingSection = (props) => {
             <ModalCustom
               btnTitle="Confirm & Pay"
               customButton={true}
-              customButtonType="confirmPay"
+              customButtonType={buttonTitle}
               callBackCutomButton={confirmAndPayClicked}
               printDisable={true}
               type="primary"
               btnClass="mb-3 w-100 green"
-              btnDisabled={!selectedItems.length}
+              btnDisabled={payButtonDisabled}
               title="Payment"
               okText="Pay Now"
               showModal={showModal}

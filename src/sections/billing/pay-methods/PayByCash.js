@@ -7,7 +7,8 @@ import { InputField } from "../../../components/field/InputField";
 import { TextAreaField } from "../../../components/field/TextAreaField";
 import { ButtonCustom } from "../../../components/button";
 import { placePayment } from "../../../api/order";
-
+import { useDispatch } from "react-redux";
+import { halfPayTheOrder, fullSettledTheOrder } from "../../../actions/order";
 const FieldRow = styled.div`
   display: flex;
   align-items: center;
@@ -61,15 +62,30 @@ const PayByCash = (props) => {
   const [amountPaid, setAmountPaid] = useState();
   const [error, setError] = useState(false);
   const [comment, setComment] = useState("");
+  const [realBalance, setRealBalance] = useState(null);
+  const [totalAmount, setTotalAmount] = useState(total);
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    if (order?.amount_paid) {
+      let amount = total - parseFloat(order.amount_paid);
+      setTotalAmount(amount.toFixed(2));
+    }
+  }, [order]);
 
   const handleAmountToPay = (e) => {
     setError(false);
     let paidAmount = e.target.value || 0;
     let returnAmount = "";
     returnAmount =
-      parseFloat(paidAmount).toFixed(2) - parseFloat(total).toFixed(2);
+      parseFloat(paidAmount).toFixed(2) - parseFloat(totalAmount).toFixed(2);
+
     setAmountPaid(paidAmount);
-    setAmountToReturn(Math.round(returnAmount * 100) / 100);
+    if (Math.round(returnAmount * 100) / 100 < 0) {
+      setAmountToReturn((Math.round(returnAmount * 100) / 100) * -1);
+    } else {
+      setAmountToReturn(Math.round(returnAmount * 100) / 100);
+    }
+    setRealBalance(Math.round(returnAmount * 100) / 100);
   };
 
   const handleSubmit = () => {
@@ -77,7 +93,7 @@ const PayByCash = (props) => {
       setError(true);
     } else {
       let obj = {
-        amount_paid: amountPaid,
+        amount: amountPaid,
         order_id: order.id,
         payment_method: "cash",
       };
@@ -97,8 +113,25 @@ const PayByCash = (props) => {
           placePayment(order.id, obj)
             .then((res) => {
               if (res.data.status == "success") {
+                if (realBalance < 0) {
+                  dispatch(
+                    halfPayTheOrder({
+                      totalAmount: parseFloat(total),
+                      amountRemain: realBalance,
+                      fullyPaid: false,
+                    })
+                  );
+                } else if (realBalance >= 0) {
+                  dispatch(
+                    fullSettledTheOrder({
+                      totalAmount: null,
+                      amountRemain: null,
+                      fullyPaid: true,
+                    })
+                  );
+                }
                 swal(`${res.data.message}`, "", "success");
-                paymentSucessCallback();
+                paymentSucessCallback({ valueNeedToPay: realBalance });
                 closePopUp();
               } else {
                 swal(`${res.data.message}`, "Please Try Again!", "error");
@@ -126,7 +159,7 @@ const PayByCash = (props) => {
     <Fragment>
       <FieldRow className="total">
         <Label label="Total Amount to Pay" className="custom-label" />
-        <p>$ {total}</p>
+        <p>$ {totalAmount}</p>
       </FieldRow>
 
       <FieldRow>

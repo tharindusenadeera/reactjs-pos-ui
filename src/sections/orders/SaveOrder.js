@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ButtonCustom } from "../../components/button";
 import swal from "sweetalert";
@@ -13,22 +13,54 @@ import {
 import { getProducts } from "../../actions/products";
 import { getFormattedOrder } from "./OrderConvertions";
 
-const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
+const SaveOrder = ({
+  type,
+  prevType,
+  order_id,
+  width,
+  cls,
+  callBack,
+  discounts,
+}) => {
   const dispatch = useDispatch();
   const selectedItems = useSelector((state) => state.selectedItems.productList);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
 
   const customer = useSelector((state) => state.customer);
   const orderType = useSelector((state) => state.common);
-  const tableNumber = useSelector((state) => state.order.tableNumber);
-  const products = useSelector((state) => state.products);
+  const order = useSelector((state) => state.order);
+  const [tableNumber, setTableNumber] = useState("");
+  const halfPaystate = useSelector((state) => state.halfPayOrder);
 
+  const products = useSelector((state) => state.products);
+  const [disableOptionEnable, setDisabledOptionEnable] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const addOrder = type === "add";
   const updateOrder = type === "update";
   const updateDraft = type === "updateDraft";
   const confirmPay = type === "confirmPay";
   const draftOrder = type === "draft";
+  const payDueAmount = type === "payDueAmount";
 
+  React.useEffect(() => {
+    if (halfPaystate?.fullyPaid) {
+      setDisableButton(true);
+      setDisabledOptionEnable(true);
+    } else if (halfPaystate?.fullyPaid === false) {
+      setDisabledOptionEnable(true);
+      setDisableButton(false);
+    } else {
+      setDisabledOptionEnable(false);
+    }
+  }, [halfPaystate]);
+
+  React.useEffect(() => {
+    if (order?.tableNumber) {
+      setTableNumber(order.tableNumber);
+    } else if (order?.addOrder?.table_id) {
+      setTableNumber(order.addOrder.table_id);
+    }
+  }, [order]);
   /**
    * * mandatory order details will be extracted and formatted in this func
    * @param {parameter for update} isUpdate
@@ -86,7 +118,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
           qty: product.quantity,
           menu_option_category_menu_option_id: [],
           addon_id: [],
-          menu_item_comment: ""
+          menu_item_comment: "",
         });
       }
     });
@@ -215,7 +247,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     } else {
       return {
         order_type: orderType?.mealType,
-        customer_id: customer?.customerDetails?.id,
+        customer_name: customer?.customerDetails?.first_name,
         order_menu_items: orderMenuItemsObj,
         status: saveType,
       };
@@ -279,8 +311,13 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
   const handleUpdateOrder = async () => {
     const order = createUpdateOrder();
     let obj = {};
-    if (orderType?.mealType == "dine_in") {
+    if (orderType?.mealType === "dine_in") {
       order.table_id = tableNumber;
+    }
+
+    if (discounts) {
+      order.discount_type = discounts.key == "1" ? "percentage" : "fixed";
+      order.discount_value = discounts.value;
     }
     const data = await dispatch(updateItem(order));
 
@@ -307,9 +344,15 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
 
   const handleAddOrder = async () => {
     const order = createOrder();
-    if (orderType?.mealType == "dine_in") {
+    if (orderType?.mealType === "dine_in") {
       order.table_id = tableNumber;
     }
+
+    if (discounts) {
+      order.discount_type = discounts.key == "1" ? "percentage" : "fixed";
+      order.discount_value = discounts.value;
+    }
+
     let obj = {};
     const data = await dispatch(addItem(order));
 
@@ -338,9 +381,15 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
 
   const handleUpdateDraftOrder = async () => {
     const order = createUpdateOrder();
-    if (orderType?.mealType == "dine_in") {
+    if (orderType?.mealType === "dine_in") {
       order.table_id = tableNumber;
     }
+
+    if (discounts) {
+      order.discount_type = discounts.key == "1" ? "percentage" : "fixed";
+      order.discount_value = discounts.value;
+    }
+
     const data = await dispatch(updateItem(order));
     let obj = {};
 
@@ -367,7 +416,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
 
   const handleDraftOrder = async () => {
     const order = createOrder();
-    if (orderType?.mealType == "dine_in") {
+    if (orderType?.mealType === "dine_in") {
       order.table_id = tableNumber;
     }
     const data = await dispatch(addItem(order));
@@ -422,7 +471,7 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     }).then((value) => {
       if (value) {
         orderHandle().then((res) => {
-          if (res.status == "success") {
+          if (res.status === "success") {
             swal(res.message, "", "success");
           } else {
             swal(res.message, "Please Try Again!", "error");
@@ -445,9 +494,10 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     const handleFunc = orderMetaData?.order_id
       ? handleUpdateOrder
       : handleAddOrder;
+    const title = payDueAmount ? "Pay the Due Amount?" : "Confirm Order ?";
 
     swal({
-      title: "Confirm Order ?",
+      title: title,
       text: "",
       icon: "warning",
       buttons: true,
@@ -477,9 +527,13 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
     // need to check if (delivery order) => both should be there
 
     const diliveryDetailsObj = getOrderDiliveryDetails();
-
     let deliveryInfoMissing = false;
-    let customerInfoMissing = !customer?.customerDetails?.id;
+    let customerInfoMissing = null;
+    if (customer?.customerDetails == null) {
+      customerInfoMissing = {};
+    }
+    // let customerInfoMissing =
+    //   Object.keys(customer?.customerDetails).length === 0;
 
     if (orderType?.mealType === "deliver") {
       for (const detailKey in diliveryDetailsObj) {
@@ -489,15 +543,16 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
       }
     }
 
-    if (deliveryInfoMissing || customerInfoMissing) {
-      const message = customerInfoMissing
-        ? "Please add customer details !"
-        : "Please add delivery details !";
+    if (deliveryInfoMissing) {
+      const message =
+        customerInfoMissing && orderType?.mealType === "deliver"
+          ? "Please add customer details !"
+          : "Please add delivery details !";
       swal(message, "", "error");
     } else if (orderType?.mealType === "dine_in" && !tableNumber) {
       swal("Please select a table", "", "error");
     } else {
-      if (confirmPay) {
+      if (confirmPay || payDueAmount) {
         handleConfirmAndPay();
       } else {
         handleOrder();
@@ -508,7 +563,9 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
   return (
     <ButtonCustom
       disabled={
-        !selectedItems.length || orderMetaData?.payment_status === "success"
+        disableOptionEnable
+          ? disableButton
+          : !selectedItems.length || orderMetaData?.payment_status === "success"
       }
       width={width}
       type="primary"
@@ -522,6 +579,8 @@ const SaveOrder = ({ type, prevType, order_id, width, cls, callBack }) => {
           ? "Update Draft"
           : confirmPay
           ? "Confirm & Pay"
+          : payDueAmount
+          ? "Pay Due Amount"
           : "Draft Order"
       }
       onClick={handleClick}

@@ -66,16 +66,15 @@ const ButtonWarp = styled.div`
   margin-top: 15px;
 
   .ant-btn {
-      margin-left: 10px;
-    }
+    margin-left: 10px;
+  }
 
-    @media ${Theme.device.xs} {
-      width: 100%;
+  @media ${Theme.device.xs} {
+    width: 100%;
 
-      &:last-child {
-        margin-left: unset;
-        margin-top: 15px;
-      }
+    &:last-child {
+      margin-left: unset;
+      margin-top: 15px;
     }
   }
 `;
@@ -407,7 +406,7 @@ export const ProductSection = () => {
       <InputField label="Selected Product" onChange={handleSearch} />
       {orderMetaData && orderMetaData.order_id ? (
         <Fragment>
-          <b>Order Number -  {orderMetaData?.order_id}</b>
+          <b>Order Number - {orderMetaData?.order_id}</b>
         </Fragment>
       ) : (
         <Fragment />
@@ -416,7 +415,7 @@ export const ProductSection = () => {
         <TableCustom
           columns={columns}
           dataSource={tableContent}
-          scroll={{ x: 730, y: 200 }}
+          scroll={{ x: 730, y: 500 }}
         />
       </TableWarp>
 

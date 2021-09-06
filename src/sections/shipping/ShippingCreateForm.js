@@ -150,9 +150,12 @@ export const ShippingCreateForm = (props) => {
   const handleSelectedCity = (value) => {
     setErrorObj({});
     setSelectedCity(value);
-    let cityDetails = city.filter((item) => {
-      return item.id == value;
+    console.log(value);
+    const cityDetails = city.filter((item) => {
+      console.log(item);
+      return item.key === value;
     });
+    console.log(cityDetails);
     dispatch(selectedCityDetails(cityDetails && cityDetails[0]));
   };
 
@@ -243,7 +246,7 @@ export const ShippingCreateForm = (props) => {
               setErrorObj({});
             }}
             disabled={
-              isSame || mealType == "dine_in" || mealType == "take_away"
+              isSame || mealType === "dine_in" || mealType === "take_away"
                 ? true
                 : false
             }
@@ -260,7 +263,7 @@ export const ShippingCreateForm = (props) => {
               setErrorObj({});
             }}
             disabled={
-              isSame || mealType == "dine_in" || mealType == "take_away"
+              isSame || mealType === "dine_in" || mealType === "take_away"
                 ? true
                 : false
             }
@@ -282,7 +285,7 @@ export const ShippingCreateForm = (props) => {
               setErrorObj({});
             }}
             disabled={
-              isSame || mealType == "dine_in" || mealType == "take_away"
+              isSame || mealType === "dine_in" || mealType === "take_away"
                 ? true
                 : false
             }
@@ -304,7 +307,7 @@ export const ShippingCreateForm = (props) => {
               setErrorObj({});
             }}
             disabled={
-              isSame || mealType == "dine_in" || mealType == "take_away"
+              isSame || mealType === "dine_in" || mealType === "take_away"
                 ? true
                 : false
             }

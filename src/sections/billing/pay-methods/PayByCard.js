@@ -7,7 +7,8 @@ import { InputField } from "../../../components/field/InputField";
 import { TextAreaField } from "../../../components/field/TextAreaField";
 import { ButtonCustom } from "../../../components/button";
 import { placePayment } from "../../../api/order";
-
+import { halfPayTheOrder, fullSettledTheOrder } from "../../../actions/order";
+import { useDispatch } from "react-redux";
 const FieldRow = styled.div`
   display: flex;
   align-items: center;
@@ -46,12 +47,13 @@ const ButtonWrap = styled.div`
 `;
 
 const PayByCard = (props) => {
-  const { total, order, closePopUp, paymentSucessCallback} = props;
+  const { total, order, closePopUp, paymentSucessCallback } = props;
   const [bank, setBank] = useState("");
   const [card, setCard] = useState("");
   const [comment, setComment] = useState("");
   const [errorObj, setErrorObj] = useState({});
-
+  const [totalAmount, setTotalAmount] = useState(total);
+  const dispatch = useDispatch();
   const validate = (data) => {
     let errors = {};
 
@@ -89,7 +91,14 @@ const PayByCard = (props) => {
         if (willDelete) {
           placePayment(order.id, obj)
             .then((res) => {
-              if (res.data.status == "success") {
+              if (res.data.status === "success") {
+                dispatch(
+                  fullSettledTheOrder({
+                    totalAmount: null,
+                    amountRemain: null,
+                    fullyPaid: true,
+                  })
+                );
                 swal(`${res.data.message}`, "", "success");
                 paymentSucessCallback();
                 closePopUp();
@@ -127,7 +136,7 @@ const PayByCard = (props) => {
     <Fragment>
       <FieldRow className="total">
         <Label label="Total Amount to Pay" className="custom-label" />
-        <p>$ {total}</p>
+        <p>$ {totalAmount}</p>
       </FieldRow>
 
       <FieldRow>

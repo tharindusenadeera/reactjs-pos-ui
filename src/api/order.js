@@ -7,8 +7,8 @@ export const getAllOrders = (params = {}) => {
       headers: {
         Authorization: localStorage.ACCESS_TOKEN,
       },
+      params
     },
-    params
   );
 };
 

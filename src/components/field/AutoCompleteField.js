@@ -16,7 +16,18 @@ errorMsg = String {Error message}
 */
 
 export const AutoCompleteField = (props) => {
-  const { label, plusComp, placeholder, value, disabled, errorMsg, options, onSearch, onSelect } = props;
+  const {
+    label,
+    plusComp,
+    placeholder,
+    value,
+    disabled,
+    errorMsg,
+    options,
+    onSearch,
+    onSelect,
+    onClear,
+  } = props;
   return (
     <div className="field-row">
       <Label label={label} plusComp={plusComp} />
@@ -27,6 +38,7 @@ export const AutoCompleteField = (props) => {
         onSearch={onSearch}
         onSelect={onSelect}
         options={options}
+        onClear={onClear}
       />
       <Error errorMsg={errorMsg} />
     </div>

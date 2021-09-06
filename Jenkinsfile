@@ -20,6 +20,8 @@ pipeline {
                 sshCommand remote: remote, command: 'docker stack rm rms'
                 sleep(20)
                 sshCommand remote: remote, command: 'docker stack deploy -c /home/snpbaravinda/lampp/rms.yml rms'
+                sleep(20)
+                sshCommand remote: remote, command: 'docker system prune -f'
             }
             }
         }

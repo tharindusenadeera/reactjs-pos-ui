@@ -22,6 +22,7 @@ import { Fragment } from "react";
 import { printBill } from "../../api/common";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { paymentStatus } from "../../constants/Constants";
 
 const antIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />;
 
@@ -75,20 +76,26 @@ export const OrderView = (props) => {
   const fetchingData = useSelector((state) => state.common.isFetching);
 
   const orders = getCategoriesOrders(tab);
-
   const handleCancel = () => {};
 
   const renderPaymentStatus = (status) => {
-    let paymentStatus = "";
-    if (status == 1) {
-      paymentStatus = "Paid";
-    } else if (status == 0) {
-      paymentStatus = "Pending";
-    } else {
-      paymentStatus = "Cancelled";
-    }
+    let statusColor = "";
+    let renderStatus = "";
+    let renderKey;
 
-    return paymentStatus;
+    paymentStatus.map((item, key) => {
+      if (status == item.key) {
+        statusColor = item.color;
+        renderStatus = item.value;
+        renderKey = key;
+      }
+    });
+
+    return (
+      <Typography.Text type={statusColor} strong key={renderKey}>
+        {renderStatus}
+      </Typography.Text>
+    );
   };
 
   const getOrderDetails = (id) => {
@@ -141,7 +148,90 @@ export const OrderView = (props) => {
       totItems += item?.order_menu_item_qty;
     });
     return totItems || 0;
-  }
+  };
+
+  const renderOrderDetails = (order, key) => {
+    let customerName = (
+      <>
+        {order?.customer?.first_name} {order?.customer?.last_name}{" "}
+      </>
+    );
+    return (
+      <div className="col col-sm-6 col-md-4" key={key}>
+        <div className="order-box">
+          <h3>Order {order?.id}</h3>
+
+          <div className="d-flex">
+            <p>
+              <label>Name</label>
+              {order?.customer_name ? order?.customer_name : customerName}
+            </p>
+          </div>
+
+          <div className="d-flex">
+            <p>
+              <label>Address</label>
+              {order?.customer?.address_line_1} {" "}
+              {order?.customer?.address_line_2}
+            </p>
+          </div>
+
+          {order?.table_id && (
+            <div className="d-flex">
+              <p>
+                <label>Table Number</label>
+                {order?.table_id}
+              </p>
+            </div>
+          )}
+
+          <div className="d-flex">
+            <p>
+              <label>Payment Status</label>
+              {renderPaymentStatus(order?.payment_status)}
+            </p>
+          </div>
+
+          <div className="d-flex">
+            <p>
+              <label>Total Items</label>
+              {getTotalItems(order)}
+            </p>
+          </div>
+
+          <div className="d-flex">
+            <p>
+              <label>Due/Balance Amount</label>$ {order?.order_total}
+            </p>
+          </div>
+
+          <ActionButtons>
+            <PayEditButton
+              btnClass="mr-2 yellow"
+              type="primary"
+              onClick={() => handlePay(order?.id)}
+            />
+
+            <DeleteButton
+              confirm={() => handleDelete(order?.id)}
+              cancel={handleCancel}
+              disabled={order?.status === "prepared" ? true : false}
+            />
+
+            {order?.status === "placed" && (
+              <PrintButton>
+                <PdfButton
+                  onClick={() => printButtonClicked(order?.id)}
+                  disabled={false}
+                  record={order}
+                />
+              </PrintButton>
+            )}
+          </ActionButtons>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <Wrapper>
@@ -153,73 +243,13 @@ export const OrderView = (props) => {
         <Fragment>
           <div className="row">
             {orders &&
-              orders?.map((order, key) => (
-                <div className="col col-sm-6 col-md-4" key={key}>
-                  <div className="order-box">
-                    <h3>Order {order?.id}</h3>
-
-                    <div className="d-flex">
-                      <p>
-                        <label>Name</label>
-                        {order?.customer?.first_name}{" "}
-                        {order?.customer?.last_name}
-                      </p>
-                    </div>
-
-                    <div className="d-flex">
-                      <p>
-                        <label>Address</label>
-                        {order?.customer?.address_line_1},{" "}
-                        {order?.customer?.address_line_2}
-                      </p>
-                    </div>
-
-                    {/* <div className="d-flex">
-                  <p>
-                    <label>Payment Status</label>
-                    {renderPaymentStatus(order?.status)}
-                  </p>
-                </div> */}
-
-                    <div className="d-flex">
-                      <p>
-                        <label>Total Items</label>
-                        {getTotalItems(order)}
-                      </p>
-                    </div>
-
-                    <div className="d-flex">
-                      <p>
-                        <label>Due Amount</label>$ {order?.order_total}
-                      </p>
-                    </div>
-
-                    <ActionButtons>
-                      <PayEditButton
-                        btnClass="mr-2 yellow"
-                        type="primary"
-                        onClick={() => handlePay(order?.id)}
-                      />
-
-                      <DeleteButton
-                        confirm={() => handleDelete(order?.id)}
-                        cancel={handleCancel}
-                        disabled={order?.status === "prepared" ? true : false}
-                      />
-
-                      {order?.status === "placed" && (
-                        <PrintButton>
-                          <PdfButton
-                            onClick={() => printButtonClicked(order?.id)}
-                            disabled={false}
-                            record={order}
-                          />
-                        </PrintButton>
-                      )}
-                    </ActionButtons>
-                  </div>
-                </div>
-              ))}
+              orders?.map((order, key) => {
+                if (tab == "completed" && order?.payment_status == "sucess") {
+                  return renderOrderDetails(order, key);
+                } else {
+                  return renderOrderDetails(order, key);
+                }
+              })}
           </div>
 
           {!fetchingData && orders?.length === 0 ? (

@@ -110,7 +110,7 @@ export const ModalCustom = (props) => {
     customButtonType,
     customButton,
     callBackCutomButton,
-    maskClosable
+    maskClosable,
   } = props;
   // const [isModalVisible, setIsModalVisible] = useState(false);
   const [disablePropertiesCancel, setDisablePropertiesCancel] = useState({});
@@ -175,27 +175,31 @@ export const ModalCustom = (props) => {
   const onClick = (record) => {
     showModal();
 
-    if (editRow ) {
+    if (editRow) {
       editRow(record);
     }
-  }
+  };
 
-  const clickCustomButton = (orderSnapshot) =>{
+  const clickCustomButton = (orderSnapshot) => {
     onClick();
-    
+
     if (orderSnapshot) {
-      callBackCutomButton(orderSnapshot)
+      callBackCutomButton(orderSnapshot);
     }
-  }
+  };
 
   return (
     <Fragment>
-      
-      { customButton ? (
+      {customButton ? (
         <ButtonWrap>
-          <SaveOrder type={customButtonType} width="block" cls={btnClass} callBack={clickCustomButton}/>
+          <SaveOrder
+            type={customButtonType}
+            width="block"
+            cls={btnClass}
+            callBack={clickCustomButton}
+          />
         </ButtonWrap>
-       ): (
+      ) : (
         <ButtonWrap>
           <ButtonCustom
             type={type}
@@ -207,7 +211,7 @@ export const ModalCustom = (props) => {
           {CountComp.current}
         </ButtonWrap>
       )}
-      
+
       <ModalAnt
         title={title}
         visible={isModalVisible}

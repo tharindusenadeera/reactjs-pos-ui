@@ -13,10 +13,7 @@ const PaymentCompWrap = styled.div`
   padding: 25px 0;
 `;
 
-export const Payment = ({
-  orderSnapShot,
-  closePopUp
-}) => {
+export const Payment = ({ orderSnapShot, closePopUp }) => {
   // order bill properties
   const { orderBillSummary } = orderSnapShot;
   // order other details
@@ -28,9 +25,9 @@ export const Payment = ({
 
   // after payment sucess the metadata update
   const paymentSucessCallback = () => {
-    const metaData = {...orderMetaData, payment_status: "success"};
+    const metaData = { ...orderMetaData, payment_status: "success" };
     dispatch(updateMetaData(metaData));
-  }
+  };
 
   const PaymentComponent = () => {
     switch (paymentMethod) {

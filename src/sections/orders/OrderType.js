@@ -11,6 +11,14 @@ export const OrderType = (props) => {
   const [typeTab, setTypeTab] = useState("dine_in");
 
   const getTypeOrders = (tab) => {
+    if (tab === "online") {
+      return (
+        allOrders &&
+        allOrders.filter((item) => {
+          return item.order_source === tab;
+        })
+      );
+    }
     return (
       allOrders &&
       allOrders.filter((item) => {
@@ -32,6 +40,7 @@ export const OrderType = (props) => {
           clickOK={clickOK}
           typedOrders={typedOrders}
           handleDelete={handleDelete}
+          orderType="dine_in"
         />
       </TabPane>
       <TabPane tab="Take Away" key="take_away">
@@ -39,6 +48,15 @@ export const OrderType = (props) => {
           clickOK={clickOK}
           typedOrders={typedOrders}
           handleDelete={handleDelete}
+          orderType="take_away"
+        />
+      </TabPane>
+      <TabPane tab="Online" key="online">
+        <OrderGroup
+          clickOK={clickOK}
+          typedOrders={typedOrders}
+          handleDelete={handleDelete}
+          orderType="online"
         />
       </TabPane>
       <TabPane tab="Deliver" key="deliver">
@@ -46,6 +64,7 @@ export const OrderType = (props) => {
           clickOK={clickOK}
           typedOrders={typedOrders}
           handleDelete={handleDelete}
+          orderType="deliver"
         />
       </TabPane>
     </TabsCustom>
