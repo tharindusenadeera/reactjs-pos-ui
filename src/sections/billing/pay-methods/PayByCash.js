@@ -9,6 +9,11 @@ import { ButtonCustom } from "../../../components/button";
 import { placePayment } from "../../../api/order";
 import { useDispatch } from "react-redux";
 import { halfPayTheOrder, fullSettledTheOrder } from "../../../actions/order";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const FieldRow = styled.div`
   display: flex;
   align-items: center;
@@ -65,12 +70,17 @@ const PayByCash = (props) => {
   const [realBalance, setRealBalance] = useState(null);
   const [totalAmount, setTotalAmount] = useState(total);
   const dispatch = useDispatch();
+  const [showSnackMessage, setShowSnackMessage] = useState(false);
+  const [snackMessage, setSnackMessage] = useState({
+    severity: "",
+    message: "",
+  });
   React.useEffect(() => {
     if (order?.amount_paid) {
       let amount = total - parseFloat(order.amount_paid);
       setTotalAmount(amount.toFixed(2));
     }
-  }, [order]);
+  }, [order, total]);
 
   const handleAmountToPay = (e) => {
     setError(false);
@@ -86,6 +96,14 @@ const PayByCash = (props) => {
       setAmountToReturn(Math.round(returnAmount * 100) / 100);
     }
     setRealBalance(Math.round(returnAmount * 100) / 100);
+  };
+
+  const cleanState = () => {
+    setAmountToReturn(0);
+    setAmountPaid();
+    setError(false);
+    setComment("");
+    setRealBalance(null);
   };
 
   const handleSubmit = () => {
@@ -112,7 +130,7 @@ const PayByCash = (props) => {
         if (willDelete) {
           placePayment(order.id, obj)
             .then((res) => {
-              if (res.data.status == "success") {
+              if (res.data.status === "success") {
                 if (realBalance < 0) {
                   dispatch(
                     halfPayTheOrder({
@@ -130,18 +148,34 @@ const PayByCash = (props) => {
                     })
                   );
                 }
-                swal(`${res.data.message}`, "", "success");
-                paymentSucessCallback({ valueNeedToPay: realBalance });
+                //swal(`${res.data.message}`, "", "success");
+                paymentSucessCallback(order.id);
                 closePopUp();
+                cleanState();
               } else {
-                swal(`${res.data.message}`, "Please Try Again!", "error");
+                //swal(`${res.data.message}`, "Please Try Again!", "error");
+                setSnackMessage({
+                  severity: "error",
+                  message: "Please Try Again!",
+                });
+                setShowSnackMessage(true);
               }
             })
             .catch((error) => {
-              swal("Something Went Wrong !", "Please Try Again!", "error");
+              //swal("Something Went Wrong !", "Please Try Again!", "error");
+              setSnackMessage({
+                severity: "error",
+                message: "Something Went Wrong !",
+              });
+              setShowSnackMessage(true);
             });
         } else {
-          swal("Process Terminated!");
+          //swal("Process Terminated!");
+          setSnackMessage({
+            severity: "error",
+            message: "Process Terminated!",
+          });
+          setShowSnackMessage(true);
         }
       });
     }
@@ -155,8 +189,32 @@ const PayByCash = (props) => {
     setComment(data);
   };
 
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowSnackMessage(false);
+  };
+
+  const vertical = "bottom";
+  const horizontal = "center";
+
   return (
     <Fragment>
+      <Snackbar
+        open={showSnackMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseSnack}
+        anchorOrigin={{ vertical, horizontal }}
+      >
+        <Alert
+          onClose={handleCloseSnack}
+          severity={snackMessage?.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackMessage?.message}
+        </Alert>
+      </Snackbar>
       <FieldRow className="total">
         <Label label="Total Amount to Pay" className="custom-label" />
         <p>$ {totalAmount}</p>

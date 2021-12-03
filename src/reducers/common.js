@@ -4,13 +4,15 @@ import {
   RESET_MEAL_TYPE,
   AUTHENTICATED,
   IS_FETCHING,
+  CLICKED_ORDER_TAB
 } from "../constants/ActionTypes";
 
 const initialState = {
   isError: false,
   mealType: "dine_in",
   authenticated: false,
-  isFetching: false
+  isFetching: false,
+  clickedOrderTab: 'dine_in'
 };
 
 const commonReducer = (state = initialState, action) => {
@@ -25,6 +27,8 @@ const commonReducer = (state = initialState, action) => {
       return { ...state, authenticated: action.payload };
     case IS_FETCHING:
       return { ...state, isFetching: action.payload };
+    case CLICKED_ORDER_TAB:
+      return { ...state, clickedOrderTab: action.payload};
     default:
       return state;
   }

@@ -1,15 +1,12 @@
 import axios from "axios";
 
 export const getAllOrders = (params = {}) => {
-  return axios.get(
-    `${process.env.REACT_APP_API_URL}/v1/orders`,
-    {
-      headers: {
-        Authorization: localStorage.ACCESS_TOKEN,
-      },
-      params
+  return axios.get(`${process.env.REACT_APP_API_URL}/v1/orders`, {
+    headers: {
+      Authorization: localStorage.ACCESS_TOKEN,
     },
-  );
+    params,
+  });
 };
 
 export const addOrder = (newOrder) => {
@@ -62,4 +59,12 @@ export const deleteOrder = (id) => {
       },
     }
   );
+};
+
+export const getOderAccordingToType = (type) => {
+  return axios.get(`${process.env.REACT_APP_API_URL}/v1/orders/${type}`, {
+    headers: {
+      Authorization: localStorage.ACCESS_TOKEN,
+    },
+  });
 };

@@ -35,6 +35,7 @@ export const TableCustom = (props) => {
       //   props.pagination
       // } /* Example :- pagination={{ pageSize: 20 }} */
       scroll={props.scroll} /* Example :- scroll={{ x: 1500, y: 300 }} */
+      pagination={props.pagination}
     />
   );
 };

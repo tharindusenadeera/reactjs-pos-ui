@@ -5,24 +5,35 @@ import Theme from "../../utils/Theme";
 import { DeleteButton } from "../../components/button/DeleteButton";
 import { PayEditButton } from "../../components/button/PayEditButton";
 import { PdfButton } from "../../components/button/PdfButton";
-import { deleteOrder, getOrder } from "../../api/order";
+import { getOrder } from "../../api/order";
 
 import { addAllItems } from "../../actions/selectedItems";
 import { addMealType } from "../../actions/common";
 import {
   addDeliveryInformations,
   customerDetails,
+  selectedCityDetails,
 } from "../../actions/customer";
 
 import { addOrder, addTable } from "../../actions/order";
+import { halfPayTheOrder } from "../../actions/order";
 
 import { getFormattedOrder } from "./OrderConvertions";
 import { Typography } from "antd";
 import { Fragment } from "react";
-import { printBill } from "../../api/common";
+import {
+  printBillBar,
+  printBillKitchen,
+  printBillCustomer,
+} from "../../api/common";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import { paymentStatus } from "../../constants/Constants";
+import {
+  orderStatus,
+  paymentStatus,
+  tableArr,
+} from "../../constants/Constants";
+import { Tag } from "antd";
 
 const antIcon = <LoadingOutlined style={{ fontSize: 50 }} spin />;
 
@@ -68,14 +79,20 @@ const PreLoader = styled.div`
   align-items: center;
 `;
 
+const Note = styled.div`
+  color: ${Theme.colors.$black};
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 21px;
+`;
+
 export const OrderView = (props) => {
-  const { clickOK, tab, getCategoriesOrders, handleDelete } = props;
+  const { clickOK, tab, orders, handleDelete } = props;
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.products);
   const fetchingData = useSelector((state) => state.common.isFetching);
 
-  const orders = getCategoriesOrders(tab);
   const handleCancel = () => {};
 
   const renderPaymentStatus = (status) => {
@@ -98,10 +115,29 @@ export const OrderView = (props) => {
     );
   };
 
+  const renderOrderStatus = (status) => {
+    let statusColor = "";
+    let renderStatus = "";
+    let renderKey;
+
+    orderStatus.map((item, key) => {
+      if (status == item.key) {
+        statusColor = item.color;
+        renderStatus = item.value;
+        renderKey = key;
+      }
+    });
+
+    return (
+      <Typography.Text type={statusColor} strong key={renderKey}>
+        {renderStatus}
+      </Typography.Text>
+    );
+  };
+
   const getOrderDetails = (id) => {
     getOrder(id).then((res) => {
       if (res.data.status === "success") {
-        // dispatch(orderById(res.data.data));
         const order = res.data.data;
 
         const order_type = order?.order_type;
@@ -115,10 +151,22 @@ export const OrderView = (props) => {
           delivery_phone_number: order?.delivery_phone_number,
         };
 
+        const shippingCostDetails = {
+          deliveryCharge: order?.delivery_charge,
+        };
+
+        const paymentObj = {
+          totalAmount: parseFloat(order?.order_total),
+          amountRemain: parseFloat(order?.order_due_amount),
+          fullyPaid: parseFloat(order?.order_due_amount) <= 0,
+        };
+        dispatch(halfPayTheOrder(paymentObj));
+
         // populating stores with selected order
         dispatch(addMealType(order_type));
         dispatch(addDeliveryInformations(shippingDetail));
         dispatch(customerDetails(order?.customer));
+        dispatch(selectedCityDetails(shippingCostDetails));
 
         dispatch(addTable(order?.table_id));
         dispatch(addOrder(order));
@@ -134,10 +182,10 @@ export const OrderView = (props) => {
   };
 
   const printButtonClicked = (id) => {
-    printBill(id).then((res) => {
-      let mywindow = window.open("", "", "width=700,height=700");
-      mywindow.document.write(res.data);
-      window.close();
+    printBillCustomer(id).then((res) => {
+      // let mywindow = window.open("", "", "width=700,height=700");
+      // mywindow.document.write(res.data.data.html_data);
+      // window.close();
     });
   };
 
@@ -156,10 +204,47 @@ export const OrderView = (props) => {
         {order?.customer?.first_name} {order?.customer?.last_name}{" "}
       </>
     );
+
+    const getNotes = (order) => {
+      let notes = [];
+      order?.order_menu_items_full?.forEach((item) => {
+        if (item.order_menu_item_comment) {
+          notes.push({
+            note: item.order_menu_item_comment,
+            id: item.order_menu_item_id,
+            name: item.name,
+          });
+        }
+      });
+
+      return notes;
+    };
+
+    const handleTableName = (id) => {
+      return (
+        <Fragment>
+          {tableArr.map((item, key) => {
+            if (id == item.key) {
+              return <b key={key}>{item.value}</b>;
+            }
+          })}
+        </Fragment>
+      );
+    };
+
     return (
       <div className="col col-sm-6 col-md-4" key={key}>
         <div className="order-box">
-          <h3>Order {order?.id}</h3>
+          <div className="d-flex">
+            <h3>Order {order?.id}</h3> &nbsp;&nbsp;
+            <div style={{ color: "blue" }}>
+              {order?.order_source == "online" ? (
+                <Tag color="#108ee9">Online</Tag>
+              ) : (
+                <Fragment />
+              )}
+            </div>
+          </div>
 
           <div className="d-flex">
             <p>
@@ -171,7 +256,7 @@ export const OrderView = (props) => {
           <div className="d-flex">
             <p>
               <label>Address</label>
-              {order?.customer?.address_line_1} {" "}
+              {order?.customer?.address_line_1}{" "}
               {order?.customer?.address_line_2}
             </p>
           </div>
@@ -179,11 +264,18 @@ export const OrderView = (props) => {
           {order?.table_id && (
             <div className="d-flex">
               <p>
-                <label>Table Number</label>
-                {order?.table_id}
+                <label>Table </label>
+                {handleTableName(order?.table_id)}
               </p>
             </div>
           )}
+
+          <div className="d-flex">
+            <p>
+              <label>Order Status</label>
+              {renderOrderStatus(order?.status)}
+            </p>
+          </div>
 
           <div className="d-flex">
             <p>
@@ -201,9 +293,26 @@ export const OrderView = (props) => {
 
           <div className="d-flex">
             <p>
-              <label>Due/Balance Amount</label>$ {order?.order_total}
+              <label>Due/Balance Amount</label>$ {order?.order_due_amount}
             </p>
           </div>
+
+          {getNotes(order) && getNotes(order).length > 0 && (
+            <div className="d-flex">
+              <Note>
+                <label>Notes</label>
+                <ul>
+                  {getNotes(order)?.map((note) => {
+                    return (
+                      <li key={note.id}>
+                        {note.name} : {note.note}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Note>
+            </div>
+          )}
 
           <ActionButtons>
             <PayEditButton
@@ -218,15 +327,15 @@ export const OrderView = (props) => {
               disabled={order?.status === "prepared" ? true : false}
             />
 
-            {order?.status === "placed" && (
-              <PrintButton>
-                <PdfButton
-                  onClick={() => printButtonClicked(order?.id)}
-                  disabled={false}
-                  record={order}
-                />
-              </PrintButton>
-            )}
+            {/* {order?.status === "placed" && ( */}
+            <PrintButton>
+              <PdfButton
+                onClick={() => printButtonClicked(order?.id)}
+                disabled={false}
+                record={order}
+              />
+            </PrintButton>
+            {/* )} */}
           </ActionButtons>
         </div>
       </div>
@@ -244,15 +353,17 @@ export const OrderView = (props) => {
           <div className="row">
             {orders &&
               orders?.map((order, key) => {
-                if (tab == "completed" && order?.payment_status == "sucess") {
-                  return renderOrderDetails(order, key);
-                } else {
+                if (
+                  order?.order_source == "pos" ||
+                  (order?.order_source == "online" &&
+                    order?.status === "accepted")
+                ) {
                   return renderOrderDetails(order, key);
                 }
               })}
           </div>
 
-          {!fetchingData && orders?.length === 0 ? (
+          {(!fetchingData && !orders) || orders?.length === 0 ? (
             <ErrorMessageDiv>
               <Typography.Text type="danger" strong>
                 No data Found

@@ -416,6 +416,7 @@ export const ProductSection = () => {
           columns={columns}
           dataSource={tableContent}
           scroll={{ x: 730, y: 500 }}
+          pagination={false} 
         />
       </TableWarp>
 

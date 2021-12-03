@@ -10,7 +10,7 @@ import { GenerateUniqueId } from '../../utils/generateUniqueId';
  */
 export const getFormattedOrder = (order, products) => {
     const formattedOrder = [];
-    const {customer, customer_id, order_type, status, id, billing_address_1, billing_address_2, payment_status } = order;
+    const {customer, customer_id, order_type, status, id, billing_address_1, billing_address_2, payment_status, order_due_amount, amount_paid} = order;
 
 
     order?.order_menu_items_full?.forEach((orderProduct) => {
@@ -75,7 +75,9 @@ export const getFormattedOrder = (order, products) => {
             order_type: order_type,
             status: status,
             order_id: id,
-            payment_status: payment_status
+            payment_status: payment_status,
+            order_due_amount: order_due_amount,
+            amount_paid:amount_paid,
         }
     };
 }

@@ -1,4 +1,9 @@
-import { ADD_ORDER, ORDER, TABLE_NUMBER } from "../constants/ActionTypes";
+import {
+  ADD_ORDER,
+  DELETE_ALL,
+  ORDER,
+  TABLE_NUMBER,
+} from "../constants/ActionTypes";
 
 const initialState = {
   addOrder: {},
@@ -14,6 +19,8 @@ const orderReducer = (state = initialState, action) => {
       return { ...state, order: action.payload };
     case TABLE_NUMBER:
       return { ...state, tableNumber: action.payload };
+    case DELETE_ALL:
+      return initialState;
     default:
       return state;
   }

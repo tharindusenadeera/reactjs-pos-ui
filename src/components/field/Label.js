@@ -7,6 +7,7 @@ import { CustomerCreateForm } from "../../sections/customer/CustomerCreateForm";
 import { ShippingCreateForm } from "../../sections/shipping/ShippingCreateForm";
 import { DiscountForm } from "../../sections/billing/DiscountForm";
 import { ShippingCost } from "../../sections/billing/ShippingCost";
+import TableSelectForm from "../../sections/billing/TableSelectForm";
 
 /* Props
 
@@ -49,7 +50,6 @@ export const Label = (props) => {
     onChange,
     clickCancel,
     onModalClicked,
-
   } = props;
   const ModalStat = useRef("");
   const ModalComponent = useRef("");
@@ -60,7 +60,7 @@ export const Label = (props) => {
     setIsModalVisible(true);
 
     if (onModalClicked) {
-      onModalClicked()
+      onModalClicked();
     }
   };
 
@@ -70,7 +70,7 @@ export const Label = (props) => {
     }
     setIsModalVisible(false);
   };
-  
+
   const handleCancel = () => {
     if (clickCancel) {
       clickCancel();
@@ -85,11 +85,16 @@ export const Label = (props) => {
     ModalComponent.current = <ShippingCreateForm handleCancel={handleCancel} />;
     ModalTitle.current = "Add a Delivery address";
   } else if (plusComp === "discount") {
-    ModalComponent.current = <DiscountForm handleCancel={handleCancel} onChange={onChange}/>;
+    ModalComponent.current = (
+      <DiscountForm handleCancel={handleCancel} onChange={onChange} />
+    );
     ModalTitle.current = "Add Discount";
   } else if (plusComp === "shipping-cost") {
     ModalComponent.current = <ShippingCost />;
     ModalTitle.current = "Add Shipping Cost";
+  } else if (plusComp === "select-table") {
+    ModalComponent.current = <TableSelectForm handleCancel={handleCancel} />;
+    ModalTitle.current = "Select a Table";
   }
 
   if (!!plusComp) {

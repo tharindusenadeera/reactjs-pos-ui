@@ -13,6 +13,7 @@ import "antd/dist/antd.css";
 import App from "./App";
 import { Dashboard } from "./pages/Dashboard";
 import { Login } from "./pages/Login";
+
 import reducers from "./reducers";
 
 import RequireAuth from "./pages/RequireAuth";
@@ -28,9 +29,9 @@ window.onbeforeunload = (event) => {
   // Cancel the event
   e.preventDefault();
   if (e) {
-    e.returnValue = ''; // Legacy method for cross browser support
+    e.returnValue = ""; // Legacy method for cross browser support
   }
-  return ''; // Legacy method for cross browser support
+  return ""; // Legacy method for cross browser support
 };
 
 ReactDOM.render(

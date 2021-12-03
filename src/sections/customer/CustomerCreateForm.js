@@ -16,7 +16,11 @@ import {
 } from "../../api/customer";
 import { AutoCompleteField } from "../../components/field/AutoCompleteField";
 import swal from "sweetalert";
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const ButtonWrap = styled.div`
   margin-top: 5px;
   display: flex;
@@ -46,6 +50,7 @@ export const CustomerCreateForm = (props) => {
   const [secondAddressLine, setSecondAddressLine] = useState("");
   const [errorObj, setErrorObj] = useState({});
   const [phoneNumberArr, setPhoneNumberArr] = useState([]);
+  const [showPhoneNumbes, setShowPhoneNumbers] = useState([]);
   const [customer, setCustomer] = useState({});
   const [selectedTable, setSelectedTable] = useState("");
   const [inputDisabled, setDisabled] = useState(false);
@@ -55,7 +60,11 @@ export const CustomerCreateForm = (props) => {
   const mobileNoRegex = RegExp("^([0-9]+)$");
   const mealTypeState = useSelector((state) => state.common);
   const [isDelivery, setIsDelivery] = useState(false);
-
+  const [showSnackMessage, setShowSnackMessage] = useState(false);
+  const [snackMessage, setSnackMessage] = useState({
+    severity: "",
+    message: "",
+  });
   useEffect(() => {
     if (mealTypeState?.mealType === "deliver") {
       setIsDelivery(true);
@@ -103,7 +112,7 @@ export const CustomerCreateForm = (props) => {
     let newArr = [];
     data.forEach((element) => {
       let obj = {};
-      if (element.status == 1) {
+      if (element.status === 1) {
         obj = {
           key: element.id,
           value: element.contact_number,
@@ -209,13 +218,20 @@ export const CustomerCreateForm = (props) => {
                   setFirstAddressLine("");
                   setSecondAddressLine("");
                   handleAllCustomers();
-                  swal("Successfully Submitted !", "", "success");
+                  //swal("Successfully Submitted !", "", "success");
+
                   props.handleCancel();
                 } else {
                 }
               })
               .catch((error) => {
-                swal("Something Went Wrong !", "Please Try Again!", "error");
+                console.log("Error is", error);
+                //swal("Something Went Wrong !", "Please Try Again!", "error");
+                setSnackMessage({
+                  severity: "error",
+                  message: "Error occured when submitting data!",
+                });
+                setShowSnackMessage(true);
               });
           } else if (!isDelivery) {
             const customer = {
@@ -227,9 +243,15 @@ export const CustomerCreateForm = (props) => {
             };
             dispatch(customerDetails(customer));
             swal("Successfully Submitted !", "", "success");
+
             props.handleCancel();
           } else {
-            swal("Process Terminated!");
+            //swal("Process Terminated!");
+            setSnackMessage({
+              severity: "error",
+              message: "Process Terminated!",
+            });
+            setShowSnackMessage(true);
           }
         });
       }
@@ -238,7 +260,7 @@ export const CustomerCreateForm = (props) => {
 
   const getCustomer = (id) => [
     getCustomerById(id).then((res) => {
-      if (res.data.status == "success") {
+      if (res.data.status === "success") {
         setCustomer(res.data.data);
       }
     }),
@@ -246,7 +268,7 @@ export const CustomerCreateForm = (props) => {
 
   const selectedPhoneNumberId = (phoneNumber) => {
     let customerId = phoneNumberArr.filter((item) => {
-      return item.value == phoneNumber;
+      return item.value === phoneNumber;
     });
     getCustomer(customerId[0].key);
   };
@@ -258,11 +280,29 @@ export const CustomerCreateForm = (props) => {
   };
 
   const handlePhoneNumberSearch = (value) => {
+    if (value.length === 0) {
+      setShowPhoneNumbers(phoneNumberArr);
+      setDisabled(false);
+    } else {
+      const length = value.length;
+      const sorted = [];
+      for (let i = 0; i < phoneNumberArr.length; i++) {
+        if (phoneNumberArr[i].value.substring(0, length) === value) {
+          sorted.push(phoneNumberArr[i]);
+        }
+      }
+      setShowPhoneNumbers(sorted);
+    }
     if (value.length < 10) {
       setDisabled(false);
       clearForm();
     } else if (value.length === 10) {
-      setDisabled(true);
+      setDisabled(false);
+      for (let i = 0; i < phoneNumberArr.length; i++) {
+        if (phoneNumberArr[i].value === value) {
+          setDisabled(true);
+        }
+      }
     }
     setErrorObj({});
     setPhoneNumber(value);
@@ -273,8 +313,31 @@ export const CustomerCreateForm = (props) => {
     setSelectedTable(value);
   };
 
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowSnackMessage(false);
+  };
+
+  const vertical = "bottom";
+  const horizontal = "center";
   return (
     <Fragment>
+      <Snackbar
+        open={showSnackMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseSnack}
+        anchorOrigin={{ vertical, horizontal }}
+      >
+        <Alert
+          onClose={handleCloseSnack}
+          severity={snackMessage?.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackMessage?.message}
+        </Alert>
+      </Snackbar>
       <div className="row">
         <div className="col-12 col-sm-6">
           <AutoCompleteField
@@ -284,7 +347,7 @@ export const CustomerCreateForm = (props) => {
             onSelect={handlePhoneNumberSelect}
             onClear={clearForm}
             value={phoneNumber}
-            options={phoneNumberArr}
+            options={showPhoneNumbes}
             errorMsg={
               errorObj.phoneNumber || errorObj.all ? errorObj.phoneNumber : ""
             }

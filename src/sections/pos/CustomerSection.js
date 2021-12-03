@@ -4,8 +4,6 @@ import { SelectField } from "../../components/field/SelectField";
 const customerArr = [{ key: 1, value: "Walk in Customer" }];
 
 export const CustomerSection = () => {
-
-  
   return (
     <div className="row">
       <div className="col-12 col-sm-6">

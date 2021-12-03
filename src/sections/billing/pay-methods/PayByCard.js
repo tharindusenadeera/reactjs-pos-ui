@@ -9,6 +9,11 @@ import { ButtonCustom } from "../../../components/button";
 import { placePayment } from "../../../api/order";
 import { halfPayTheOrder, fullSettledTheOrder } from "../../../actions/order";
 import { useDispatch } from "react-redux";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 const FieldRow = styled.div`
   display: flex;
   align-items: center;
@@ -53,7 +58,20 @@ const PayByCard = (props) => {
   const [comment, setComment] = useState("");
   const [errorObj, setErrorObj] = useState({});
   const [totalAmount, setTotalAmount] = useState(total);
+  const [showSnackMessage, setShowSnackMessage] = useState(false);
+  const [snackMessage, setSnackMessage] = useState({
+    severity: "",
+    message: "",
+  });
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    if (order?.amount_paid) {
+      let amount = total - parseFloat(order.amount_paid);
+      setTotalAmount(amount.toFixed(2));
+    }
+  }, [total, order]);
+
   const validate = (data) => {
     let errors = {};
 
@@ -72,6 +90,7 @@ const PayByCard = (props) => {
       bank: bank,
       card: card,
       order_id: order.id,
+      amount: totalAmount,
       payment_method: "card",
     };
 
@@ -99,18 +118,34 @@ const PayByCard = (props) => {
                     fullyPaid: true,
                   })
                 );
-                swal(`${res.data.message}`, "", "success");
-                paymentSucessCallback();
+                // swal(`${res.data.message}`, "", "success");
+                paymentSucessCallback(order.id);
                 closePopUp();
+                cleanState();
               } else {
-                swal(`${res.data.message}`, "Please Try Again!", "error");
+                //swal(`${res.data.message}`, "Please Try Again!", "error");
+                setSnackMessage({
+                  severity: "error",
+                  message: "Please Try Again!",
+                });
+                setShowSnackMessage(true);
               }
             })
             .catch((error) => {
-              swal("Something Went Wrong !", "Please Try Again!", "error");
+              //swal("Something Went Wrong !", "Please Try Again!", "error");
+              setSnackMessage({
+                severity: "error",
+                message: "Something Went Wrong !",
+              });
+              setShowSnackMessage(true);
             });
         } else {
-          swal("Process Terminated!");
+          //swal("Process Terminated!");
+          setSnackMessage({
+            severity: "error",
+            message: "Process Terminated!",
+          });
+          setShowSnackMessage(true);
         }
       });
     }
@@ -132,8 +167,38 @@ const PayByCard = (props) => {
     setCard(data);
   };
 
+  const cleanState = () => {
+    setComment();
+    setBank();
+    setCard();
+    setErrorObj();
+  };
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowSnackMessage(false);
+  };
+
+  const vertical = "bottom";
+  const horizontal = "center";
+
   return (
     <Fragment>
+      <Snackbar
+        open={showSnackMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseSnack}
+        anchorOrigin={{ vertical, horizontal }}
+      >
+        <Alert
+          onClose={handleCloseSnack}
+          severity={snackMessage?.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackMessage?.message}
+        </Alert>
+      </Snackbar>
       <FieldRow className="total">
         <Label label="Total Amount to Pay" className="custom-label" />
         <p>$ {totalAmount}</p>

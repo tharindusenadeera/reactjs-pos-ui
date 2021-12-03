@@ -7,7 +7,9 @@ import CardPayment from "./pay-methods/PayByCard";
 import styled from "styled-components";
 import * as Constants from "../../constants/Constants";
 
+import { getOrder } from "../../api/order";
 import { updateMetaData } from "../../actions/selectedItems";
+import { addOrder } from "../../actions/order";
 
 const PaymentCompWrap = styled.div`
   padding: 25px 0;
@@ -24,9 +26,29 @@ export const Payment = ({ orderSnapShot, closePopUp }) => {
   const dispatch = useDispatch();
 
   // after payment sucess the metadata update
-  const paymentSucessCallback = () => {
-    const metaData = { ...orderMetaData, payment_status: "success" };
-    dispatch(updateMetaData(metaData));
+  const paymentSucessCallback = (orderId) => {
+    // const metaData = { ...orderMetaData, payment_status: "success" };
+    getOrder(orderId).then((res) => {
+      if (res.data.status === "success") {
+        const order = res.data.data;
+        const metaData =  { 
+          ordercustomer: order.customer,
+          customer_id: order.customer_id,
+          billing_address_1: order.billing_address_1,
+          billing_address_2: order.billing_address_2,
+          order_type: order.order_type,
+          status: order.status,
+          order_id: order.id,
+          payment_status: order.payment_status,
+          amount_paid: order.amount_paid,
+          order_due_amount: order.order_due_amount,
+        }
+        
+        // update both these because different part of the application both has used
+        dispatch(updateMetaData(metaData));
+        dispatch(addOrder(order));
+      }
+    });
   };
 
   const PaymentComponent = () => {

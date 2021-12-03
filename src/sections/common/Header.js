@@ -13,7 +13,8 @@ import { Menu } from "antd";
 import { OrderType } from "../orders/OrderType";
 import { isFetching } from "../../actions/common";
 import { deleteOrder, getAllOrders } from "../../api/order";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ButtonCustom } from "../../components/button";
 import swal from "sweetalert";
 
 const Wrapper = styled.header`
@@ -63,18 +64,37 @@ export const Header = () => {
 
   const currentDate = moment().format("dddd DD MMMM YYYY");
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const clickedOrderTab = useSelector((state) => state.common.clickedOrderTab);
 
   useEffect(() => {
-    dispatch(isFetching(true));
-    getOrderList();
+    getOrderList(clickedOrderTab);
   }, [refresh]);
 
-  const getOrderList = () => {
-    let date = moment().format("YYYY-MM-DD");
-    // let date = "2021-09-05";
-    getAllOrders({ date: date }).then((res) => {
+  const getOrderList = (tab) => {
+    dispatch(isFetching(true));
+    let obj = {
+      // date: "2021-09-21",
+      date: moment().format("YYYY-MM-DD"),
+    };
+
+    if (tab && tab != "draft") {
+      obj.order_type = tab;
+    }
+
+    getAllOrders(obj).then((res) => {
       if (res.data.status === "success") {
-        setAllOrders(res.data.data);
+        let filteredOrders = [];
+        if (tab == "draft") {
+          filteredOrders = res?.data?.data?.filter((item) => {
+            return item?.status === "draft";
+          });
+        } else {
+          filteredOrders = res?.data?.data?.filter((item) => {
+            return item?.status !== "cancelled" && item?.status !== "draft";
+          });
+        }
+
+        setAllOrders(filteredOrders);
         dispatch(isFetching(false));
       }
     });
@@ -104,12 +124,8 @@ export const Header = () => {
     deleteOrder(id)
       .then((res) => {
         if (res.data.status === "success") {
-          getOrderList();
-          // if (tab == "settled") {
-          //   swal("Order Deleted Successfully", "", "success");
-          // } else {
+          getOrderList(clickedOrderTab);
           swal(`${res.data.message}`, "", "success");
-          // }
         } else {
           swal(`${res.data.message}`, "Please Try Again!", "error");
         }
@@ -117,6 +133,10 @@ export const Header = () => {
       .catch((error) => {
         swal("Something Went Wrong !", "Please Try Again!", "error");
       });
+  };
+
+  const handleClickedTab = (tab) => {
+    getOrderList(tab);
   };
 
   return (
@@ -146,7 +166,7 @@ export const Header = () => {
                 btnTitle={Theme.icons.$folder}
                 btnClass="ml-3 btn-nav"
                 count={allOrders && allOrders?.length}
-                title="Draft Orders"
+                title="All Orders"
                 type="primary"
                 handleOk={clickOK}
                 handleCancel={clickCancel}
@@ -158,6 +178,7 @@ export const Header = () => {
                   clickOK={clickOK}
                   allOrders={allOrders}
                   handleDelete={handleDelete}
+                  clickedTab={handleClickedTab}
                 />
               </ModalCustom>
               <DropdownCustom

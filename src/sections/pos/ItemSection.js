@@ -90,8 +90,8 @@ const ProductImg = styled.img`
 `;
 
 export const ItemSection = () => {
-  // const [products, setProducts] = useState([]);
-  const products = useSelector((state) => state.products);
+  const [products, setProducts] = useState([]);
+  const productsFromStore = useSelector((state) => state.products);
   const orderMetaData = useSelector((state) => state.selectedItems.metaData);
 
   const [selectedItems, setSelectedItems] = useState(0);
@@ -100,11 +100,17 @@ export const ItemSection = () => {
   const [selectedProperties, setSelectedProperties] = useState({});
   const [disableOk, setDisableOk] = useState(true);
   const [quantityError, setQuantityError] = useState({});
+  const [search, setSearch] = useState('');
 
   const alreadyAddedItems = useSelector(
     (state) => state.selectedItems.productList
   );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setSearch('');
+    setProducts(productsFromStore);
+  },[productsFromStore])
 
   useEffect(() => {
     getAllProducts();
@@ -135,7 +141,7 @@ export const ItemSection = () => {
     }
   }, [selectedProperties]);
 
-  const handleProducts = (data) => {
+  const handleProducts = (data, isFilteredProduct) => {
     let itemArr = [];
     data &&
       data.forEach((element) => {
@@ -179,7 +185,11 @@ export const ItemSection = () => {
       });
 
     // setProducts(itemArr);
-    dispatch({ type: SAVE_PRODUCT, payload: itemArr });
+    if (!isFilteredProduct) {
+      dispatch({ type: SAVE_PRODUCT, payload: itemArr });
+    } else {
+      setProducts(itemArr);
+    }
   };
 
   const handleItemsSelect = (value) => {
@@ -205,7 +215,8 @@ export const ItemSection = () => {
       obj.item = value;
     }
     productsList(obj).then((res) => {
-      handleProducts(res.data.data);
+      // passing tag for to identify filered products
+      handleProducts(res.data.data, true);
     });
   };
 
@@ -319,6 +330,7 @@ export const ItemSection = () => {
     let value = e.target.value;
     let strLength = value.length;
 
+    setSearch(value);
     if (strLength % 3 === 0) {
       getFilteredProducts("item", value);
     } else {
@@ -346,6 +358,7 @@ export const ItemSection = () => {
             <InputField
               placeholder="Type item to search"
               onChange={handleSearch}
+              value={search}
             />
           </div>
         </div>

@@ -3,6 +3,7 @@ import {
   ADD_CUSTOMER,
   CUSTOMER_DETAILS,
   SELECTED_CITY,
+  DELETE_ALL,
   DELIVERY_INFORMATIONS,
 } from "../constants/ActionTypes";
 
@@ -27,6 +28,8 @@ const customerReducer = (state = initialState, action) => {
       return { ...state, selectedCity: action.payload };
     case DELIVERY_INFORMATIONS:
       return { ...state, deliveryInformations: action.payload };
+    case DELETE_ALL:
+      return initialState;
     default:
       return state;
   }

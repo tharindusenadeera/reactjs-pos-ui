@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { SelectCustom } from "../select/index";
 import { Label } from "./Label";
 import { Error } from "./Error";
@@ -29,6 +29,7 @@ export const SelectField = (props) => {
     value,
     hideCancel,
     hideSubmit,
+    hideSelect,
   } = props;
 
   return (
@@ -40,13 +41,17 @@ export const SelectField = (props) => {
         hideCancel={hideCancel}
         hideSubmit={hideSubmit}
       />
-      <SelectCustom
-        showSearch={showSearch}
-        placeholder={placeholder}
-        options={options}
-        onChange={onChange}
-        value={value}
-      />
+      {hideSelect ? (
+        <Fragment />
+      ) : (
+        <SelectCustom
+          showSearch={showSearch}
+          placeholder={placeholder}
+          options={options}
+          onChange={onChange}
+          value={value}
+        />
+      )}
       <Error errorMsg={errorMsg} />
     </div>
   );

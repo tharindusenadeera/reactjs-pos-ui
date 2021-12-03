@@ -4,7 +4,11 @@ import { ButtonCustom } from "../../components/button";
 import swal from "sweetalert";
 
 import { addItem, addTable, updateItem } from "../../actions/order";
-import { deleteAllItems, addAllItems } from "../../actions/selectedItems";
+import {
+  deleteAllItems,
+  addAllItems,
+  updateMetaData,
+} from "../../actions/selectedItems";
 import { resetMealType, addMealType } from "../../actions/common";
 import {
   addDeliveryInformations,
@@ -12,6 +16,7 @@ import {
 } from "../../actions/customer";
 import { getProducts } from "../../actions/products";
 import { getFormattedOrder } from "./OrderConvertions";
+import { printBillBar, printBillKitchen } from "../../api/common";
 
 const SaveOrder = ({
   type,
@@ -41,6 +46,7 @@ const SaveOrder = ({
   const confirmPay = type === "confirmPay";
   const draftOrder = type === "draft";
   const payDueAmount = type === "payDueAmount";
+  const pay = type === "pay";
 
   React.useEffect(() => {
     if (halfPaystate?.fullyPaid) {
@@ -287,8 +293,25 @@ const SaveOrder = ({
     dispatch(addDeliveryInformations(shippingDetail));
     dispatch(customerDetails(order?.customer));
 
-    const selectedItems = getFormattedOrder(order, products);
-    dispatch(addAllItems(selectedItems));
+    // remove following bcz of anormal behaviour (think no need to update all)
+    // dispatch(addAllItems(selectedItems));
+    // const selectedItems = getFormattedOrder(order, products);
+
+    // update meta data only
+    dispatch(
+      updateMetaData({
+        customer: order.customer,
+        customer_id: order.customer_id,
+        billing_address_1: order.billing_address_1,
+        billing_address_2: order.billing_address_2,
+        order_type: order.order_type,
+        status: order.status,
+        order_id: order.id,
+        payment_status: order.payment_status,
+        amount_paid: order.amount_paid,
+        order_due_amount: order.order_due_amount,
+      })
+    );
   };
 
   /**
@@ -298,6 +321,7 @@ const SaveOrder = ({
   const updateProducts = async (order) => {
     await dispatch(getProducts());
 
+    // only execute for placed orders not drafts
     if (order) {
       updateStoresWithPlacedOrder(order);
     }
@@ -357,6 +381,8 @@ const SaveOrder = ({
     const data = await dispatch(addItem(order));
 
     if (data?.status === "success") {
+      printBillBar(data?.data.id);
+      printBillKitchen(data?.data.id);
       // cleanStores();
       updateProducts(data?.data);
       dispatch(addTable(null));
@@ -491,10 +517,12 @@ const SaveOrder = ({
 
   const handleConfirmAndPay = () => {
     // if there is a order id then it should be existing order --> update order
+    // update order funtion remove 'handleUpdateOrder' because of immediate change in 15-09-2021 10.35pm
+    
     const handleFunc = orderMetaData?.order_id
-      ? handleUpdateOrder
+      ? ''
       : handleAddOrder;
-    const title = payDueAmount ? "Pay the Due Amount?" : "Confirm Order ?";
+    const title = payDueAmount ? "Pay the Due Amount?" : pay ? "Pay ?" : "Confirm Order ?";
 
     swal({
       title: title,
@@ -504,19 +532,32 @@ const SaveOrder = ({
       dangerMode: true,
     }).then((value) => {
       if (value) {
-        handleFunc().then((res) => {
-          if (res.status === "success") {
-            const orderSnapshot = Object.assign(
-              {},
-              { productList: selectedItems }
-            );
-            cleanStores();
-            updateProducts();
-            callBack(orderSnapshot);
-          } else {
-            swal(res.message, "Please Try Again!", "error");
-          }
-        });
+        if (handleFunc) {
+          handleFunc().then((res) => {
+            if (res.status === "success") {
+              const orderSnapshot = Object.assign(
+                {},
+                { productList: selectedItems }
+              );
+              // cleanStores();
+              updateProducts();
+              callBack(orderSnapshot);
+            } else {
+              swal(res.message, "Please Try Again!", "error");
+            }
+          });
+        } else {
+          // already added
+          console.log('alreadt adding confirm and pay');
+          const orderSnapshot = Object.assign(
+            {},
+            { productList: selectedItems }
+          );
+          // cleanStores();
+          updateProducts();
+          callBack(orderSnapshot);
+        }
+
       } else {
         swal("Process Terminated!");
       }
@@ -552,7 +593,7 @@ const SaveOrder = ({
     } else if (orderType?.mealType === "dine_in" && !tableNumber) {
       swal("Please select a table", "", "error");
     } else {
-      if (confirmPay || payDueAmount) {
+      if (confirmPay || payDueAmount || pay) {
         handleConfirmAndPay();
       } else {
         handleOrder();
@@ -581,6 +622,8 @@ const SaveOrder = ({
           ? "Confirm & Pay"
           : payDueAmount
           ? "Pay Due Amount"
+          : pay
+          ? "Pay"
           : "Draft Order"
       }
       onClick={handleClick}

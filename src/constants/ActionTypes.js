@@ -21,6 +21,7 @@ export const RESET_MEAL_TYPE = "RESET_MEAL_TYPE";
 export const AUTHENTICATED = "AUTHENTICATED";
 export const ACCESS_TOKEN = "ACCESS_TOKEN";
 export const IS_FETCHING = "IS_FETCHING";
+export const CLICKED_ORDER_TAB = "CLICKED_ORDER_TAB";
 
 //---------- Order ------------------//
 export const ADD_ORDER = "ADD_ORDER";
@@ -33,3 +34,6 @@ export const SAVE_PRODUCT = "SAVE_PRODUCT";
 //---------- Half Pay ------------------//
 export const HALF_PAY_ORDER = "HALF_PAY_ORDER";
 export const ORDER_FULL_SETTLED = "ORDER_FULL_SETTLED";
+
+//--------- Table Reservation ---------//
+export const SELECT_TABLE = "SELECT_TABLE";

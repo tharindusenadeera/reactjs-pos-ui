@@ -3,12 +3,11 @@ import * as api from '../api/products';
 
 export const getProducts = () => async (dispatch) => {
     try {
-        const {res} = await api.productsList();
-
-        if (res?.status === "success") {
+        const res = await api.productsList();
+        if (res?.data.status === "success") {
             let itemArr = [];
 
-            res?.data.forEach((element) => {
+            res?.data?.data.forEach((element) => {
                 let obj = {
                   productKey: element.id,
                   category: element.menu_category,

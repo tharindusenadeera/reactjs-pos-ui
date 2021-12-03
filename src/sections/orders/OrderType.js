@@ -1,36 +1,21 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { TabsCustom } from "../../components/tabs";
 import { Tabs } from "antd"; /* Tharindu try to remove this part */
-
 import { OrderGroup } from "./OrderGroup";
+import { clickedOrderTab } from "../../actions/common";
 
 const { TabPane } = Tabs;
 
 export const OrderType = (props) => {
-  const { clickOK, allOrders, handleDelete } = props;
+  const { clickOK, allOrders, handleDelete, clickedTab } = props;
+  const dispatch = useDispatch();
   const [typeTab, setTypeTab] = useState("dine_in");
 
-  const getTypeOrders = (tab) => {
-    if (tab === "online") {
-      return (
-        allOrders &&
-        allOrders.filter((item) => {
-          return item.order_source === tab;
-        })
-      );
-    }
-    return (
-      allOrders &&
-      allOrders.filter((item) => {
-        return item.order_type === tab;
-      })
-    );
-  };
-  const typedOrders = getTypeOrders(typeTab);
-
   const typeCallback = (tab) => {
-    // current tab can be get from currentTab if necessary
     setTypeTab(tab);
+    clickedTab(tab);
+    dispatch(clickedOrderTab(tab));
   };
 
   return (
@@ -38,7 +23,7 @@ export const OrderType = (props) => {
       <TabPane tab="Dine In" key="dine_in">
         <OrderGroup
           clickOK={clickOK}
-          typedOrders={typedOrders}
+          typedOrders={allOrders}
           handleDelete={handleDelete}
           orderType="dine_in"
         />
@@ -46,25 +31,33 @@ export const OrderType = (props) => {
       <TabPane tab="Take Away" key="take_away">
         <OrderGroup
           clickOK={clickOK}
-          typedOrders={typedOrders}
+          typedOrders={allOrders}
           handleDelete={handleDelete}
           orderType="take_away"
         />
       </TabPane>
-      <TabPane tab="Online" key="online">
+      {/* <TabPane tab="Online" key="online">
         <OrderGroup
           clickOK={clickOK}
-          typedOrders={typedOrders}
+          typedOrders={allOrders}
           handleDelete={handleDelete}
           orderType="online"
         />
-      </TabPane>
-      <TabPane tab="Deliver" key="deliver">
+      </TabPane> */}
+      <TabPane tab="Delivery" key="deliver">
         <OrderGroup
           clickOK={clickOK}
-          typedOrders={typedOrders}
+          typedOrders={allOrders}
           handleDelete={handleDelete}
           orderType="deliver"
+        />
+      </TabPane>
+      <TabPane tab="Draft" key="draft">
+        <OrderGroup
+          clickOK={clickOK}
+          typedOrders={allOrders}
+          handleDelete={handleDelete}
+          orderType="draft"
         />
       </TabPane>
     </TabsCustom>
